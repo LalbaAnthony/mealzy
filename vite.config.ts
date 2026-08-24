@@ -13,11 +13,36 @@ function requireEnv(env: Record<string, string>, key: string): string {
   return value;
 }
 
+function requireBooleanEnv(env: Record<string, string>, key: string): boolean {
+  const value = requireEnv(env, key);
+  if (value === 'true') {
+    return true;
+  }
+  if (value === 'false') {
+    return false;
+  }
+  throw new Error(
+    `Environment variable ${key} must be either "true" or "false", but it is "${value}".`,
+  );
+}
+
+function requirePositiveIntegerEnv(env: Record<string, string>, key: string): number {
+  const value = requireEnv(env, key);
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    throw new Error(
+      `Environment variable ${key} must be a positive integer, but it is "${value}".`,
+    );
+  }
+  return parsed;
+}
+
 const themeColor = '#8f4c38';
 const backgroundColor = '#fff8f6';
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_');
+  const devEnv = loadEnv(mode, process.cwd(), 'DEV_');
 
   return {
     resolve: {
@@ -25,6 +50,16 @@ export default defineConfig(({ mode }) => {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
+    ...(command === 'serve'
+      ? {
+          server: {
+            watch: {
+              usePolling: requireBooleanEnv(devEnv, 'DEV_WATCH_POLLING'),
+              interval: requirePositiveIntegerEnv(devEnv, 'DEV_WATCH_INTERVAL'),
+            },
+          },
+        }
+      : {}),
     build: {
       target: 'es2023',
       sourcemap: mode !== 'production',

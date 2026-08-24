@@ -37,6 +37,8 @@ A working local set of values:
 ```
 HOST_BIND=127.0.0.1
 DEV_PORT=5173
+DEV_WATCH_POLLING=true
+DEV_WATCH_INTERVAL=300
 PROD_PORT=8080
 NGINX_PORT=8080
 VITE_APP_NAME=Mealzy
@@ -60,8 +62,10 @@ docker compose --profile prod up --build
 ```
 
 The development profile serves Vite with hot module replacement and a bind mount of the source tree.
-The production profile builds the application and serves the static output from nginx as a non-root
-user. Full details, including the variable list, are in [docs/docker.md](docs/docker.md).
+Set `DEV_WATCH_POLLING=true` when the bind mount does not deliver file system events, which is the
+case on Docker Desktop for Windows and macOS; without it nothing reloads. The production profile
+builds the application and serves the static output from nginx as a non-root user. Full details,
+including the variable list, are in [docs/docker.md](docs/docker.md).
 
 ## npm scripts
 

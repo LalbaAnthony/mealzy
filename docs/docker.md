@@ -11,7 +11,9 @@ There is **no default value anywhere** in the Docker configuration. Compose uses
 loudly instead of silently starting on a port nobody expected.
 
 The same principle reaches into the application: `vite.config.ts` calls `requireEnv` for each
-`VITE_`-prefixed variable and throws a named error if one is missing or empty.
+`VITE_`-prefixed variable and throws a named error if one is missing or empty. The dev server's
+`DEV_WATCH_` variables go through the same gate, with `requireBooleanEnv` and
+`requirePositiveIntegerEnv` rejecting a value that is present but not of the expected shape.
 
 ## Required variables
 
@@ -21,6 +23,8 @@ Copy `.env.example` to `.env` and fill in every value. All of them are required.
 | ---------------------- | -------------------------- | ----------------------------------------------------- |
 | `HOST_BIND`            | Compose                    | Host interface to publish on, for example `127.0.0.1` |
 | `DEV_PORT`             | Compose, `Dockerfile.dev`  | Vite port, inside the container and on the host       |
+| `DEV_WATCH_POLLING`    | Vite dev server            | `true` or `false`, whether the watcher polls          |
+| `DEV_WATCH_INTERVAL`   | Vite dev server            | Polling interval in milliseconds, a positive integer  |
 | `PROD_PORT`            | Compose                    | Host port for the production service                  |
 | `NGINX_PORT`           | Compose, `Dockerfile.prod` | Port nginx listens on inside the container            |
 | `VITE_APP_NAME`        | Vite build                 | Application name, used in the manifest and page title |
@@ -49,6 +53,37 @@ entrypoint so that Ctrl-C reaches Vite rather than being swallowed by PID 1.
 
 Hot module replacement works over the published port because Vite is bound to `0.0.0.0` and the host
 port matches the container port.
+
+### File watching across the bind mount
+
+Vite reloads on a file change only if its watcher receives a file system event. A bind mount does not
+always deliver one. On Docker Desktop for Windows and macOS the host tree is exposed through a
+translation layer that does not forward `inotify`, so a save on the host reaches the container's
+files but never wakes the watcher. The page then sits on the last build until it is reloaded by hand,
+which reads as hot module replacement being broken when the watcher simply never fired.
+
+`DEV_WATCH_POLLING` selects the strategy and `DEV_WATCH_INTERVAL` sets its period in milliseconds.
+`vite.config.ts` reads both through `requireEnv`, so neither has a default and an unset value stops
+the dev server with a named error rather than starting a container that silently never reloads. The
+values are read only when the Vite command is `serve`, which is why the production image, whose build
+arguments carry no `DEV_` variable, is unaffected.
+
+| Host                                  | Value   | Why                                                      |
+| ------------------------------------- | ------- | -------------------------------------------------------- |
+| Docker Desktop, Windows or macOS      | `true`  | The bind mount forwards no `inotify` event               |
+| Linux, or the source tree inside WSL2 | `false` | `inotify` crosses the mount, and polling would waste CPU |
+| `npm run dev` with no container       | `false` | Native events, no translation layer in the way           |
+
+Polling costs CPU in proportion to the number of watched files divided by the interval. 300 ms is a
+reasonable starting point: a save is picked up faster than it takes to switch to the browser, and the
+idle cost stays low. Lower it if reloads feel slow, raise it if the container's CPU use is noticeable
+while idle. Only the source tree is polled; `node_modules` is outside Vite's watch set.
+
+Moving the checkout into the WSL2 file system and running Compose from there removes the translation
+layer altogether, restores native events, and is faster on every file operation, not only watching.
+That is the better fix where the workflow allows it, and it is why polling stayed a variable rather
+than becoming a hard-coded setting. See
+`docs/adr/0009-polling-file-watcher-for-the-containerised-dev-server.md`.
 
 ## `Dockerfile.prod`
 

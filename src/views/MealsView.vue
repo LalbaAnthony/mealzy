@@ -25,7 +25,7 @@ const confirmDialog = useConfirmDialog();
 const filterOptions: readonly SegmentedOption[] = [
   { value: 'planned', label: 'Planned', icon: null },
   { value: 'eaten', label: 'Eaten', icon: null },
-  { value: 'all', label: 'All meal', icon: null },
+  { value: 'all', label: 'All meals', icon: null },
 ];
 
 const slotOptions: readonly SelectOption[] = [
