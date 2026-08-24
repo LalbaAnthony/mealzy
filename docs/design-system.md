@@ -9,17 +9,17 @@ component framework were rejected; see
 `src/styles/tokens.css` defines the MD3 system tokens as CSS custom properties. Nothing else in the
 codebase may contain a hard-coded colour, spacing value, radius, font size or shadow.
 
-| Group      | Prefix                                                   | Notes                                              |
-| ---------- | -------------------------------------------------------- | -------------------------------------------------- |
-| Colour     | `--md-sys-color-*`                                       | The full MD3 role set, light and dark              |
-| State      | `--md-sys-state-*-opacity`                               | Hover, focus, pressed, disabled                    |
-| Typography | `--md-sys-typescale-*`                                   | Size, line height, weight and tracking per role    |
-| Shape      | `--md-sys-shape-corner-*`                                | `none` through `extra-large` and `full`            |
-| Elevation  | `--md-sys-elevation-level0-5`                            | Ready-made `box-shadow` values                     |
-| Motion     | `--md-sys-motion-duration-*`, `--md-sys-motion-easing-*` | Includes `duration-instant` for reduced motion     |
-| Spacing    | `--md-sys-spacing-0` to `-16`                            | A 4px scale                                        |
-| Size       | `--md-sys-size-*`                                        | Touch target, icon size, rail width, content width |
-| Z index    | `--md-sys-z-index-*`                                     | Named layers rather than scattered magic numbers   |
+| Group      | Prefix                                                   | Notes                                                    |
+| ---------- | -------------------------------------------------------- | -------------------------------------------------------- |
+| Colour     | `--md-sys-color-*`                                       | The full MD3 role set, light and dark                    |
+| State      | `--md-sys-state-*-opacity`                               | Hover, focus, pressed, disabled                          |
+| Typography | `--md-sys-typescale-*`                                   | Size, line height, weight and tracking per role          |
+| Shape      | `--md-sys-shape-corner-*`                                | `none` through `extra-large` and `full`                  |
+| Elevation  | `--md-sys-elevation-level0-5`                            | Ready-made `box-shadow` values                           |
+| Motion     | `--md-sys-motion-duration-*`, `--md-sys-motion-easing-*` | Includes `duration-instant` for reduced motion           |
+| Spacing    | `--md-sys-spacing-0` to `-16`                            | A 4px scale                                              |
+| Size       | `--md-sys-size-*`                                        | Touch target, icon size, navigation sizes, content width |
+| Z index    | `--md-sys-z-index-*`                                     | Named layers rather than scattered magic numbers         |
 
 The colour scheme is generated from the source colour `#8f4c38`.
 
@@ -52,31 +52,43 @@ stored preference.
 `src/components/md/` holds framework-level primitives. They know about tokens and accessibility and
 nothing else. A primitive that knows what a recipe is would be a defect.
 
-| Component           | Notes                                                             |
-| ------------------- | ----------------------------------------------------------------- |
-| `MdButton`          | filled, tonal, elevated, outlined and text variants               |
-| `MdIconButton`      | standard, filled and tonal; requires an accessible `label`        |
-| `MdFab`             | regular and extended                                              |
-| `MdTextField`       | label bound by `for`/`id`, `aria-invalid` and `aria-describedby`  |
-| `MdSelect`          | same labelling and error contract as the text field               |
-| `MdCheckbox`        | `hideLabel` moves the label to `aria-label` for dense list rows   |
-| `MdSwitch`          | `role="switch"` with `aria-checked`, optional visible label       |
-| `MdChip`            | assist, filter and input variants, optionally removable           |
-| `MdSegmentedButton` | `role="group"` with `aria-pressed` per option                     |
-| `MdCard`            | elevated, filled and outlined                                     |
-| `MdList`            | list container with an optional accessible name                   |
-| `MdListItem`        | leading, content, details and trailing slots                      |
-| `MdDialog`          | `role="dialog"`, `aria-modal`, focus trap, Escape and scrim close |
-| `MdSnackbar`        | rendered inside a live region host                                |
-| `MdTopAppBar`       | sticky, with leading and action slots                             |
-| `MdNavigationBar`   | bottom bar on compact viewports, rail on expanded                 |
-| `MdMenu`            | `role="menu"` with a backdrop and Escape close                    |
-| `MdMenuItem`        | `role="menuitem"`, with a destructive variant                     |
-| `MdIcon`            | the only component that touches the icon font                     |
+| Component           | Notes                                                                  |
+| ------------------- | ---------------------------------------------------------------------- |
+| `MdButton`          | filled, tonal, elevated, outlined and text variants                    |
+| `MdIconButton`      | standard, filled and tonal; requires an accessible `label`             |
+| `MdFab`             | regular and extended                                                   |
+| `MdTextField`       | label bound by `for`/`id`, `aria-invalid` and `aria-describedby`       |
+| `MdSelect`          | same labelling and error contract as the text field                    |
+| `MdCheckbox`        | `hideLabel` moves the label to `aria-label` for dense list rows        |
+| `MdSwitch`          | `role="switch"` with `aria-checked`, optional visible label            |
+| `MdChip`            | assist, filter and input variants, optionally removable                |
+| `MdSegmentedButton` | `role="group"` with `aria-pressed` per option                          |
+| `MdCard`            | elevated, filled and outlined                                          |
+| `MdList`            | list container with an optional accessible name                        |
+| `MdListItem`        | leading, content, details and trailing slots                           |
+| `MdDialog`          | `role="dialog"`, `aria-modal`, focus trap, Escape and scrim close      |
+| `MdSnackbar`        | rendered inside a live region host, docked clear of the navigation bar |
+| `MdTopAppBar`       | sticky, with leading and action slots                                  |
+| `MdNavigationBar`   | bottom bar on compact viewports, rail on expanded                      |
+| `MdMenu`            | `role="menu"` with a backdrop and Escape close                         |
+| `MdMenuItem`        | `role="menuitem"`, with a destructive variant                          |
+| `MdIcon`            | the only component that touches the icon font                          |
 
 Application-specific components live in `src/components/app/` and compose these primitives:
 `MealListItem`, `ShoppingLineItem`, `ConfirmDialog`, `EmptyState`, `SnackbarHost`, `QuantityField`
 and `PwaUpdatePrompt`.
+
+### Overlay placement
+
+Two overlays float above the shell and must not collide with each other or with the navigation.
+`PwaUpdatePrompt` is pinned to the top inset, so `SnackbarHost` stays at the bottom. On compact and
+medium viewports the bottom navigation bar occupies that edge, so the host is offset by
+`--md-sys-size-navigation-bar` plus one spacing step plus `env(safe-area-inset-bottom)`, which keeps
+the snackbar clear of both the bar and any content docked just above it. From 840px the navigation
+becomes a rail and the offset falls back to a single spacing step.
+
+`--md-sys-size-navigation-bar` is also the `min-block-size` of `.md-navigation--bar`, so the bar
+height and the snackbar offset cannot drift apart.
 
 ## Icons
 

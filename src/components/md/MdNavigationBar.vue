@@ -35,6 +35,7 @@ const props = withDefaults(defineProps<MdNavigationBarProps>(), { rail: false })
   position: sticky;
   inset-block-end: 0;
   justify-content: space-around;
+  min-block-size: var(--md-sys-size-navigation-bar);
   padding-block: var(--md-sys-spacing-2);
   padding-inline: var(--md-sys-spacing-1);
   border-block-start: 1px solid var(--md-sys-color-outline-variant);

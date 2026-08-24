@@ -23,7 +23,9 @@ const { messages } = storeToRefs(ui);
 <style scoped>
 .snackbar-host {
   position: fixed;
-  inset-block-end: var(--md-sys-spacing-4);
+  inset-block-end: calc(
+    var(--md-sys-size-navigation-bar) + var(--md-sys-spacing-4) + env(safe-area-inset-bottom, 0px)
+  );
   inset-inline: var(--md-sys-spacing-4);
   display: flex;
   flex-direction: column;
@@ -37,5 +39,11 @@ const { messages } = storeToRefs(ui);
   pointer-events: auto;
   inline-size: 100%;
   max-inline-size: 30rem;
+}
+
+@media (min-width: 840px) {
+  .snackbar-host {
+    inset-block-end: var(--md-sys-spacing-4);
+  }
 }
 </style>
