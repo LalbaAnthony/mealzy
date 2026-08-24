@@ -226,7 +226,7 @@ onMounted(async () => {
 
 .meals-view__fab {
   position: fixed;
-  inset-block-end: var(--md-sys-spacing-16);
+  inset-block-end: var(--md-sys-spacing-22);
   inset-inline-end: var(--md-sys-spacing-4);
 }
 </style>
