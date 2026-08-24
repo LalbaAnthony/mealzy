@@ -1,0 +1,35 @@
+name: guards
+
+on:
+  workflow_call:
+
+jobs:
+  guards:
+    name: repository guards
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up Node
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Forbid emoji
+        run: npm run guard:emoji
+
+      - name: Forbid em dashes
+        run: npm run guard:em-dash
+
+      - name: Enforce type declaration locations
+        run: npm run guard:type-locations
+
+      - name: Verify the generated icon font matches the icon name union
+        run: |
+          npm run build:icons
+          git diff --exit-code -- src/assets/icons

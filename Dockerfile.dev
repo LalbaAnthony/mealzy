@@ -1,0 +1,16 @@
+FROM node:24-alpine
+
+WORKDIR /app
+
+RUN apk add --no-cache tini
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY . .
+
+ARG DEV_PORT
+EXPOSE ${DEV_PORT}
+
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD ["sh", "-c", "npm run dev -- --host 0.0.0.0 --port \"$DEV_PORT\""]

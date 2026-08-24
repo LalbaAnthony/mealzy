@@ -1,0 +1,90 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  block-size: 100%;
+}
+
+body {
+  margin: var(--md-sys-spacing-0);
+  min-block-size: 100%;
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    roboto,
+    helvetica,
+    arial,
+    sans-serif;
+  font-size: var(--md-sys-typescale-body-large-size);
+  line-height: var(--md-sys-typescale-body-large-line-height);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: var(--md-sys-spacing-0);
+}
+
+ul,
+ol {
+  margin: var(--md-sys-spacing-0);
+  padding: var(--md-sys-spacing-0);
+  list-style: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+img,
+svg {
+  display: block;
+  max-inline-size: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+#app {
+  min-block-size: 100vh;
+  min-block-size: 100dvh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: var(--md-sys-motion-duration-instant);
+    animation-iteration-count: 1;
+    transition-duration: var(--md-sys-motion-duration-instant);
+    scroll-behavior: auto;
+  }
+}

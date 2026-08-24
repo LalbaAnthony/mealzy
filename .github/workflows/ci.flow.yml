@@ -1,0 +1,35 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    uses: ./.github/workflows/lint.inc.yml
+
+  typecheck:
+    uses: ./.github/workflows/typecheck.inc.yml
+
+  guards:
+    uses: ./.github/workflows/guards.inc.yml
+
+  tests:
+    uses: ./.github/workflows/tests.inc.yml
+
+  build:
+    needs:
+      - lint
+      - typecheck
+      - guards
+      - tests
+    uses: ./.github/workflows/build.inc.yml

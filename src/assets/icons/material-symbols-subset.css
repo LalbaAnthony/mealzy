@@ -1,0 +1,154 @@
+@font-face {
+  font-family: "Material Symbols Rounded Subset";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("./material-symbols-subset.woff2") format("woff2");
+}
+
+.md-icon {
+  display: inline-block;
+  flex: none;
+  inline-size: 1em;
+  block-size: 1em;
+  font-family: "Material Symbols Rounded Subset";
+  font-size: var(--md-sys-size-icon);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizelegibility;
+}
+
+.md-icon--add::before {
+  content: "\e145";
+}
+
+.md-icon--arrow_back::before {
+  content: "\e5c4";
+}
+
+.md-icon--arrow_downward::before {
+  content: "\e5db";
+}
+
+.md-icon--arrow_upward::before {
+  content: "\e5d8";
+}
+
+.md-icon--brightness_auto::before {
+  content: "\e1ab";
+}
+
+.md-icon--check::before {
+  content: "\e5ca";
+}
+
+.md-icon--check_circle::before {
+  content: "\e86c";
+}
+
+.md-icon--close::before {
+  content: "\e14c";
+}
+
+.md-icon--content_copy::before {
+  content: "\e14d";
+}
+
+.md-icon--dark_mode::before {
+  content: "\e51c";
+}
+
+.md-icon--delete::before {
+  content: "\e872";
+}
+
+.md-icon--download::before {
+  content: "\e171";
+}
+
+.md-icon--edit::before {
+  content: "\e150";
+}
+
+.md-icon--error::before {
+  content: "\e000";
+}
+
+.md-icon--expand_less::before {
+  content: "\e5ce";
+}
+
+.md-icon--expand_more::before {
+  content: "\e5cf";
+}
+
+.md-icon--info::before {
+  content: "\e88e";
+}
+
+.md-icon--inventory_2::before {
+  content: "\e1a1";
+}
+
+.md-icon--kitchen::before {
+  content: "\eb47";
+}
+
+.md-icon--light_mode::before {
+  content: "\e518";
+}
+
+.md-icon--menu_book::before {
+  content: "\ea19";
+}
+
+.md-icon--more_vert::before {
+  content: "\e5d4";
+}
+
+.md-icon--restart_alt::before {
+  content: "\f053";
+}
+
+.md-icon--restaurant_menu::before {
+  content: "\e556";
+}
+
+.md-icon--search::before {
+  content: "\e8b6";
+}
+
+.md-icon--settings::before {
+  content: "\e8b8";
+}
+
+.md-icon--shopping_cart::before {
+  content: "\e547";
+}
+
+.md-icon--storage::before {
+  content: "\e1db";
+}
+
+.md-icon--system_update::before {
+  content: "\e62a";
+}
+
+.md-icon--undo::before {
+  content: "\e166";
+}
+
+.md-icon--upload_file::before {
+  content: "\e9fc";
+}
+
+.md-icon--warning::before {
+  content: "\e002";
+}

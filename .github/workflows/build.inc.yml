@@ -1,0 +1,79 @@
+name: build
+
+on:
+  workflow_call:
+
+env:
+  HOST_BIND: 127.0.0.1
+  DEV_PORT: '5173'
+  PROD_PORT: '8080'
+  NGINX_PORT: '8080'
+  VITE_APP_NAME: Mealzy
+  VITE_APP_SHORT_NAME: Mealzy
+  VITE_APP_DESCRIPTION: Offline-first meal planning and shopping list
+  VITE_APP_VERSION: ci
+
+jobs:
+  build:
+    name: production bundle and image
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up Node
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build the production bundle
+        run: npm run build
+
+      - name: Build the production image
+        run: |
+          docker build \
+            --file Dockerfile.prod \
+            --build-arg NGINX_PORT="${NGINX_PORT}" \
+            --build-arg VITE_APP_NAME="${VITE_APP_NAME}" \
+            --build-arg VITE_APP_SHORT_NAME="${VITE_APP_SHORT_NAME}" \
+            --build-arg VITE_APP_DESCRIPTION="${VITE_APP_DESCRIPTION}" \
+            --build-arg VITE_APP_VERSION="${VITE_APP_VERSION}" \
+            --tag mealzy:ci \
+            .
+
+      - name: Start the production image
+        run: |
+          docker run --detach --name mealzy-ci \
+            --env NGINX_PORT="${NGINX_PORT}" \
+            --publish "${PROD_PORT}:${NGINX_PORT}" \
+            mealzy:ci
+
+      - name: Wait for the application to answer
+        run: |
+          for attempt in $(seq 1 30); do
+            if curl --silent --fail "http://127.0.0.1:${PROD_PORT}/" > /dev/null; then
+              echo "the application answered on attempt ${attempt}"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "the application never answered"
+          docker logs mealzy-ci
+          exit 1
+
+      - name: Check the service worker and manifest are served
+        run: |
+          curl --silent --fail "http://127.0.0.1:${PROD_PORT}/sw.js" > /dev/null
+          curl --silent --fail "http://127.0.0.1:${PROD_PORT}/manifest.webmanifest" > /dev/null
+
+      - name: Check the history fallback serves the application shell
+        run: |
+          curl --silent --fail "http://127.0.0.1:${PROD_PORT}/shopping" | grep -q "<div id=\"app\">"
+
+      - name: Stop the production image
+        if: always()
+        run: docker rm --force mealzy-ci

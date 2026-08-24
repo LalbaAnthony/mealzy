@@ -1,0 +1,49 @@
+services:
+  web-dev:
+    profiles:
+      - dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      args:
+        DEV_PORT: ${DEV_PORT}
+    environment:
+      DEV_PORT: ${DEV_PORT}
+      VITE_APP_NAME: ${VITE_APP_NAME}
+      VITE_APP_SHORT_NAME: ${VITE_APP_SHORT_NAME}
+      VITE_APP_DESCRIPTION: ${VITE_APP_DESCRIPTION}
+      VITE_APP_VERSION: ${VITE_APP_VERSION}
+    ports:
+      - '${HOST_BIND}:${DEV_PORT}:${DEV_PORT}'
+    volumes:
+      - .:/app
+      - dev-node-modules:/app/node_modules
+    stdin_open: true
+    tty: true
+
+  web-prod:
+    profiles:
+      - prod
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+      args:
+        NGINX_PORT: ${NGINX_PORT}
+        VITE_APP_NAME: ${VITE_APP_NAME}
+        VITE_APP_SHORT_NAME: ${VITE_APP_SHORT_NAME}
+        VITE_APP_DESCRIPTION: ${VITE_APP_DESCRIPTION}
+        VITE_APP_VERSION: ${VITE_APP_VERSION}
+    environment:
+      NGINX_PORT: ${NGINX_PORT}
+    ports:
+      - '${HOST_BIND}:${PROD_PORT}:${NGINX_PORT}'
+    healthcheck:
+      test: ['CMD', 'wget', '--quiet', '--spider', '--tries=1', 'http://127.0.0.1:${NGINX_PORT}/']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  dev-node-modules:

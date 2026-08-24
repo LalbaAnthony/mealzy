@@ -1,0 +1,89 @@
+{
+  "name": "mealzy",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline-first meal planning and shopping list PWA",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:style": "stylelint \"src/**/*.css\" \"src/**/*.vue\"",
+    "lint:style:fix": "stylelint \"src/**/*.css\" \"src/**/*.vue\" --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "guard:emoji": "node scripts/check-no-emoji.ts",
+    "guard:em-dash": "node scripts/check-no-em-dash.ts",
+    "guard:type-locations": "node scripts/check-type-locations.ts",
+    "guards": "npm run guard:emoji && npm run guard:em-dash && npm run guard:type-locations",
+    "build:icons": "node scripts/build-icon-font.ts",
+    "verify": "npm run typecheck && npm run lint && npm run lint:style && npm run format:check && npm run guards && npm run test:coverage",
+    "prepare": "simple-git-hooks"
+  },
+  "dependencies": {
+    "@material-symbols/font-400": "^0.36.0",
+    "idb": "^8.0.3",
+    "pinia": "^4.0.3",
+    "vue": "^3.5.41",
+    "vue-router": "^5.2.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.1.0",
+    "@eslint/js": "^10.0.1",
+    "@types/fontkit": "^2.0.9",
+    "@types/node": "^24.10.1",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vitest/coverage-v8": "^4.1.11",
+    "@vue/compiler-core": "^3.5.41",
+    "@vue/compiler-sfc": "^3.5.41",
+    "@vue/test-utils": "^2.4.11",
+    "eslint": "^10.9.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "^10.10.0",
+    "fontkit": "^2.0.4",
+    "globals": "^17.11.0",
+    "happy-dom": "^20.11.6",
+    "lint-staged": "^17.0.1",
+    "postcss-html": "^2.0.0",
+    "prettier": "^3.6.2",
+    "simple-git-hooks": "^2.13.1",
+    "stylelint": "^17.14.1",
+    "stylelint-config-standard": "^40.0.0",
+    "stylelint-declaration-strict-value": "^1.10.11",
+    "subset-font": "^2.5.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "^8.67.0",
+    "vite": "^8.2.2",
+    "vite-plugin-pwa": "^1.3.0",
+    "vitest": "^4.1.11",
+    "vue-tsc": "3.3.11"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged && npm run guards",
+    "commit-msg": "npx commitlint --edit \"$1\""
+  },
+  "lint-staged": {
+    "*.{ts,vue}": [
+      "eslint --max-warnings 0",
+      "prettier --check"
+    ],
+    "*.{css,vue}": [
+      "stylelint"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --check"
+    ]
+  }
+}

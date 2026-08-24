@@ -1,0 +1,67 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "plugins": ["stylelint-declaration-strict-value"],
+  "ignoreFiles": ["dist/**", "coverage/**", "node_modules/**", "src/assets/icons/**"],
+  "overrides": [
+    {
+      "files": ["**/*.vue"],
+      "customSyntax": "postcss-html"
+    }
+  ],
+  "rules": {
+    "custom-property-pattern": null,
+    "selector-class-pattern": null,
+    "declaration-property-value-no-unknown": true,
+    "scale-unlimited/declaration-strict-value": [
+      [
+        "/color/",
+        "fill",
+        "stroke",
+        "/^border-radius/",
+        "/^padding/",
+        "/^margin/",
+        "gap",
+        "row-gap",
+        "column-gap",
+        "font-size",
+        "font-weight",
+        "line-height",
+        "letter-spacing",
+        "box-shadow",
+        "z-index",
+        "transition-duration",
+        "transition-timing-function"
+      ],
+      {
+        "ignoreValues": [
+          "0",
+          "auto",
+          "none",
+          "inherit",
+          "initial",
+          "unset",
+          "currentColor",
+          "transparent",
+          "normal",
+          "1",
+          "100%",
+          "50%",
+          "0 0",
+          "0 auto"
+        ],
+        "disableFix": true
+      }
+    ],
+    "color-hex-length": null,
+    "custom-property-empty-line-before": null,
+    "number-max-precision": [5],
+    "no-descending-specificity": null,
+    "media-feature-range-notation": ["prefix"],
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["deep", "slotted", "global"]
+      }
+    ]
+  }
+}
