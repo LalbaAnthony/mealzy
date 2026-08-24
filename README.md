@@ -76,6 +76,10 @@ pipeline reruns monthly so base image security patches reach production without 
 required repository secrets and the rollback procedure are in
 [docs/deployment.md](docs/deployment.md).
 
+`apache.conf` at the repository root is the reverse proxy virtual host. It is a reference copy of
+what is installed on the server, kept in step by hand: nothing in the pipeline reads it, deploys it
+or notices when it drifts.
+
 ## npm scripts
 
 | Script                         | What it does                                                   |

@@ -67,16 +67,16 @@ copied there.
 
 Six are consumed by `deploy.inc.yml`, two by `build.inc.yml`. All are required.
 
-| Secret               | What it is                                                     |
-| -------------------- | -------------------------------------------------------------- |
-| `DOCKERHUB_USERNAME` | Docker Hub account that owns the image repository              |
-| `DOCKERHUB_TOKEN`    | Docker Hub access token with write scope                       |
-| `SSH_HOST`           | Server hostname or address                                     |
-| `SSH_USER`           | Account to connect as                                          |
-| `SSH_PORT`           | SSH port                                                       |
-| `SSH_PRIVATE_KEY`    | Private key for that account, the whole PEM block              |
-| `DEPLOY_DIRECTORY`   | Absolute path on the server, for example `/home/deploy/mealzy` |
-| `PROD_PORT`          | Host port the container publishes on, behind the reverse proxy |
+| Secret               | What it is                                                                               |
+| -------------------- | ---------------------------------------------------------------------------------------- |
+| `DOCKERHUB_USERNAME` | Docker Hub account that owns the image repository                                        |
+| `DOCKERHUB_TOKEN`    | Docker Hub access token with write scope                                                 |
+| `SSH_HOST`           | Server hostname or address                                                               |
+| `SSH_USER`           | Account to connect as                                                                    |
+| `SSH_PORT`           | SSH port                                                                                 |
+| `SSH_PRIVATE_KEY`    | Private key for that account, the whole PEM block                                        |
+| `DEPLOY_DIRECTORY`   | Absolute path on the server, for example `/home/deploy/mealzy`                           |
+| `PROD_PORT`          | Host port the container publishes on. Must match `ProxyPass` in `apache.conf`, so `4555` |
 
 The `deploy` job runs in the `production` GitHub environment, so an approval rule or a branch
 restriction can be attached there without touching the workflow.
@@ -119,6 +119,103 @@ set of security headers, but it does not terminate TLS, and a PWA needs a secure
 browser will register its service worker. Without HTTPS in front, the offline behaviour this whole
 application is built around does not start. Set `HOST_BIND` to `0.0.0.0` in `deploy.inc.yml` only if
 you accept both consequences.
+
+The proxy that satisfies this is documented below and reproduced in `apache.conf`.
+
+## The reverse proxy
+
+`apache.conf` at the repository root is the Apache virtual host that sits in front of the container.
+Its own header states the contract: it is **not generated and not deployed by anything**. The
+pipeline never reads it, never copies it and never reloads Apache. It is a reference copy that has to
+be kept identical to what is actually installed on the server, by hand, or it is worse than having no
+copy at all.
+
+The request path is:
+
+```
+browser --> Apache :443 (TLS, HTTP/2) --> 127.0.0.1:4555 --> container nginx :8080
+```
+
+Apache terminates TLS and proxies cleartext to the loopback address. It serves no files of its own
+apart from the ACME challenge directory.
+
+### The port contract
+
+`ProxyPass / http://127.0.0.1:4555/` is the single point where the two halves of this document meet.
+The `PROD_PORT` secret **must be `4555`**, because that is the host port `docker-compose.yml`
+publishes the container on. Change one and the other has to follow, or the proxy will answer 503
+while a perfectly healthy container listens on a port nobody is asking about.
+
+`HOST_BIND` being `127.0.0.1` is what makes the loopback target valid, and what keeps the container
+off the public interface. The two settings are consistent as they stand.
+
+### Required Apache modules
+
+`http2`, `ssl`, `rewrite`, `proxy`, `proxy_http`, `headers`. The file lists them in its own header.
+`a2enmod` them before the first `apachectl configtest`, or the vhost will not load.
+
+### TLS and certificates
+
+Certificates come from Let's Encrypt at `/etc/letsencrypt/live/mealzy.dev-it.app/`. The `:80` vhost
+exists only to serve the ACME challenge from `/var/www/certbot/` and to redirect everything else to
+HTTPS. The `RewriteCond` excludes `/.well-known/acme-challenge/` from that redirect, which is what
+keeps unattended renewals working: certbot's webroot check must reach a real file over plain HTTP,
+and a blanket redirect would break it.
+
+`Protocols h2 http/1.1` is on the TLS vhost only. `h2c`, the cleartext variant, is deliberately not
+enabled. `SSLProtocol` floors the negotiation at TLS 1.2, which HTTP/2 requires for ALPN anyway.
+
+This is also what makes the PWA work at all. A service worker is only registered in a secure context,
+so without this vhost the offline behaviour the application is built around never starts.
+
+### Two layers of security headers
+
+Both Apache and the container's nginx set security headers, and they do not agree everywhere.
+
+| Header                       | nginx (`default.conf.template`)    | Apache (`apache.conf`)                         |
+| ---------------------------- | ---------------------------------- | ---------------------------------------------- |
+| `X-Content-Type-Options`     | `nosniff`                          | `nosniff`                                      |
+| `X-Frame-Options`            | `DENY`                             | `SAMEORIGIN`                                   |
+| `Referrer-Policy`            | `no-referrer`                      | `strict-origin-when-cross-origin`              |
+| `Content-Security-Policy`    | `'self'`, `frame-ancestors 'none'` | not set                                        |
+| `Cross-Origin-Opener-Policy` | `same-origin`                      | not set                                        |
+| `Strict-Transport-Security`  | not set                            | `max-age=63072000; includeSubDomains; preload` |
+| `Permissions-Policy`         | not set                            | `camera=(), microphone=(), geolocation=(self)` |
+
+The additions are unambiguous: HSTS and `Permissions-Policy` belong at the TLS terminator, and nginx
+inside the container has no business setting HSTS on a connection it does not terminate.
+
+The two overlaps are worth checking after the first deployment. Apache uses `Header always set`,
+which writes to `err_headers_out` rather than replacing the value the backend already sent in
+`headers_out`, so a proxied 200 can carry **both** headers rather than only Apache's. Browsers
+resolve the duplicates differently: conflicting `X-Frame-Options` values are treated as `DENY`, while
+`Referrer-Policy` is parsed as a token list where the last valid token wins.
+
+In practice framing is settled regardless, because nginx's `frame-ancestors 'none'` takes precedence
+over `X-Frame-Options` in every browser that supports CSP Level 2. `Referrer-Policy` is the one that
+genuinely resolves to whichever value arrives last. Confirm what is actually on the wire rather than
+reasoning about it:
+
+```bash
+curl -sSI https://mealzy.dev-it.app/ | grep -i -E 'x-frame|referrer|strict-transport|content-security'
+```
+
+If the duplicates are unwanted, the fix belongs in one layer or the other, deliberately, and the
+decision belongs in this document.
+
+### A stale comment in the file
+
+The `# Node` comment above the `ProxyPass` pair does not describe this deployment. There is no Node
+process on the server: the proxy target is nginx serving a static bundle, and the only Node in the
+project runs inside the builder stage of `Dockerfile.prod`, in CI. The comment is harmless, and the
+file is reproduced here exactly as it is installed, so it has been left alone.
+
+### It is in the build context
+
+`.dockerignore` does not exclude `apache.conf`, so it is copied into the builder stage by `COPY . .`.
+It does not reach the runtime image, which takes only `dist` from the builder, so nothing is served
+or shipped. The file holds a domain name and certificate paths rather than credentials, and the cost
+is 2 KB of build context. Excluding it would be tidier and changes nothing about the result.
 
 ## Restart rather than down and up
 
@@ -165,9 +262,12 @@ Required, in this order:
    `StrictHostKeyChecking=accept-new`, so no `known_hosts` entry has to be prepared.
 3. Install Docker and the Compose plugin on the server, and allow the deployment account to run
    `docker` without `sudo`.
-4. Point the reverse proxy at `127.0.0.1:<PROD_PORT>` and give it a certificate. This is not
-   cosmetic: without a secure context the browser refuses to register the service worker, and the
-   offline behaviour the application exists for never starts.
+4. Install the reverse proxy. `apache.conf` is the vhost, reproduced from the server; copy it into
+   `/etc/apache2/sites-available/`, `a2enmod http2 ssl rewrite proxy proxy_http headers`, issue the
+   certificate with certbot, then `a2ensite` and reload. Nothing in the pipeline does this, and
+   nothing in the pipeline will notice if it drifts. This step is not cosmetic: without a secure
+   context the browser refuses to register the service worker, and the offline behaviour the
+   application exists for never starts.
 5. Ensure `.github/workflows/deploy.flow.yml` is **on `main`**. A workflow only responds to
    `push: main` once the file itself is on that branch, so the first merge that carries it into
    `main` is also the first deployment.
