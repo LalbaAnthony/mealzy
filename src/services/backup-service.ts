@@ -1,8 +1,9 @@
-import type { BackupContents, BackupDocument } from '../types/backup';
+import type { BackupContents, BackupDocument, BackupExport } from '../types/backup';
 import type { AppRepositories, Repository } from '../types/persistence';
 import type { BackupService, ServiceDependencies } from '../types/services';
 import type { DomainResult } from '../types/validation';
 import { ok } from '../domain/validation/result';
+import { buildBackupFileName } from '../domain/export/backup-file-name';
 
 async function replaceAll<TEntity extends { readonly id: string }>(
   repository: Repository<TEntity, string>,
@@ -53,14 +54,17 @@ export function createBackupService(dependencies: ServiceDependencies): BackupSe
   const { repositories, backupCodec, clock, schemaVersion } = dependencies;
 
   return {
-    async exportDocument(): Promise<string> {
+    async exportDocument(): Promise<BackupExport> {
       const contents = await readEverything(repositories);
       const document: BackupDocument = {
         schemaVersion,
         exportedAt: clock.now(),
         ...contents,
       };
-      return backupCodec.serialise(document);
+      return {
+        fileName: buildBackupFileName(document.exportedAt),
+        json: backupCodec.serialise(document),
+      };
     },
 
     async importDocument(rawJson: string): Promise<DomainResult<void>> {

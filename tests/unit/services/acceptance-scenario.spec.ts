@@ -225,7 +225,7 @@ describe('acceptance scenario', () => {
     const expectedRecipes = await services.recipes.list();
 
     const wiped = createTestHarness();
-    const result = await wiped.services.backup.importDocument(backup);
+    const result = await wiped.services.backup.importDocument(backup.json);
     expect(result).toMatchObject({ ok: true });
 
     const restoredSnapshot = await wiped.services.shoppingList.getSnapshot();

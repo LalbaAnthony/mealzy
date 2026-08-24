@@ -43,7 +43,7 @@ describe('full data backup', () => {
   it('exports a document carrying the schema version and every collection', async () => {
     await buildSampleState();
 
-    const json = await harness.services.backup.exportDocument();
+    const { json } = await harness.services.backup.exportDocument();
     const parsed: unknown = JSON.parse(json);
 
     expect(parsed).toMatchObject({
@@ -60,9 +60,17 @@ describe('full data backup', () => {
     expect(json).toContain('"purchasedKeys"');
   });
 
+  it('names the downloaded file after the moment of the export', async () => {
+    harness.advanceTo(new Date(2026, 7, 25, 14, 30, 5).getTime());
+
+    const { fileName } = await harness.services.backup.exportDocument();
+
+    expect(fileName).toBe('mealzy-backup-2026-08-25-143005.json');
+  });
+
   it('restores an identical state after a wipe', async () => {
     await buildSampleState();
-    const json = await harness.services.backup.exportDocument();
+    const { json } = await harness.services.backup.exportDocument();
     const before = await harness.services.shoppingList.getSnapshot();
 
     const wiped = createTestHarness();
@@ -77,7 +85,7 @@ describe('full data backup', () => {
 
   it('replaces the entire dataset rather than merging it', async () => {
     await buildSampleState();
-    const json = await harness.services.backup.exportDocument();
+    const { json } = await harness.services.backup.exportDocument();
 
     const other = createTestHarness();
     await seedCatalogue(other);

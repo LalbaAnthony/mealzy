@@ -131,6 +131,12 @@ retried from there. Where the browser does not support the Storage API the state
 `BackupService.exportDocument` writes a single JSON document containing `schemaVersion`, `exportedAt`
 and every entity collection, including the purchased keys and the theme preference.
 
+It returns that document alongside the file name to download it under. The name is built by
+`buildBackupFileName` from the same `exportedAt` the document carries, as
+`mealzy-backup-YYYY-MM-DD-HHMMSS.json` in the local time zone, matching the local sense of "today"
+the rest of the application uses. Backups therefore sort chronologically in a file manager, and two
+exports taken in the same minute do not collide.
+
 `importDocument` parses the document through `backupDocumentSchema` **before** touching the database.
 An invalid document is rejected with an actionable message and a list of the specific schema
 violations, and nothing is written, so a broken import is never partially applied. A valid document

@@ -18,6 +18,11 @@ export interface BackupDocument {
   readonly preferences: AppPreferences;
 }
 
+export interface BackupExport {
+  readonly fileName: string;
+  readonly json: string;
+}
+
 export interface BackupContents {
   readonly categories: readonly Category[];
   readonly ingredients: readonly Ingredient[];

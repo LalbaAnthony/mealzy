@@ -52,8 +52,8 @@ async function onThemeChange(value: string): Promise<void> {
 
 async function exportBackup(): Promise<void> {
   const services = useServices();
-  const json = await services.backup.exportDocument();
-  services.platform.download.download('mealzy-backup.json', json, 'application/json');
+  const backup = await services.backup.exportDocument();
+  services.platform.download.download(backup.fileName, backup.json, 'application/json');
   ui.notifySuccess('Backup downloaded.');
 }
 

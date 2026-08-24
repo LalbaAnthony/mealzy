@@ -14,6 +14,7 @@ import type { Recipe } from './recipe';
 import type { AdHocItem, ShoppingLine, ShoppingListGroup, Staple } from './shopping';
 import type { Quantity } from './units';
 import type { DomainResult } from './validation';
+import type { BackupExport } from './backup';
 import type { AppRepositories } from './persistence';
 import type { BackupCodec, Clock, IdGenerator, StoragePersistencePort } from './ports';
 import type {
@@ -118,7 +119,7 @@ export interface ShoppingListService {
 }
 
 export interface BackupService {
-  exportDocument(): Promise<string>;
+  exportDocument(): Promise<BackupExport>;
   importDocument(rawJson: string): Promise<DomainResult<void>>;
 }
 
