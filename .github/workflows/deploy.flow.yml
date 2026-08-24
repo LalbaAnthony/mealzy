@@ -1,0 +1,86 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 3 10 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  IMAGE: docker.io/lalbaanthony/mealzy
+
+jobs:
+  metadata:
+    name: release metadata
+    runs-on: ubuntu-24.04
+    outputs:
+      image: ${{ steps.compute.outputs.image }}
+      image-reference: ${{ steps.compute.outputs.image-reference }}
+      app-version: ${{ steps.compute.outputs.app-version }}
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Compute the image reference and the application version
+        id: compute
+        run: |
+          package_version="$(jq -r .version package.json)"
+          short_sha="$(git rev-parse --short=7 HEAD)"
+          {
+            echo "image=${IMAGE}"
+            echo "image-reference=${IMAGE}:sha-${GITHUB_SHA}"
+            echo "app-version=${package_version}+sha.${short_sha}"
+          } >> "${GITHUB_OUTPUT}"
+
+  lint:
+    uses: ./.github/workflows/lint.inc.yml
+
+  typecheck:
+    uses: ./.github/workflows/typecheck.inc.yml
+
+  guards:
+    uses: ./.github/workflows/guards.inc.yml
+
+  tests:
+    uses: ./.github/workflows/tests.inc.yml
+
+  build:
+    needs:
+      - metadata
+      - lint
+      - typecheck
+      - guards
+      - tests
+    uses: ./.github/workflows/build.inc.yml
+    with:
+      image: ${{ needs.metadata.outputs.image }}
+      app-version: ${{ needs.metadata.outputs.app-version }}
+      publish: true
+    secrets:
+      registry-username: ${{ secrets.DOCKERHUB_USERNAME }}
+      registry-token: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  deploy:
+    needs:
+      - metadata
+      - build
+    uses: ./.github/workflows/deploy.inc.yml
+    with:
+      image: ${{ needs.metadata.outputs.image-reference }}
+      app-version: ${{ needs.metadata.outputs.app-version }}
+    secrets:
+      ssh-host: ${{ secrets.SSH_HOST }}
+      ssh-user: ${{ secrets.SSH_USER }}
+      ssh-port: ${{ secrets.SSH_PORT }}
+      ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      deploy-directory: ${{ secrets.DEPLOY_DIRECTORY }}
+      prod-port: ${{ secrets.PROD_PORT }}

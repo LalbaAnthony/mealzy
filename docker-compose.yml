@@ -26,6 +26,7 @@ services:
   web-prod:
     profiles:
       - prod
+    image: ${IMAGE}
     build:
       context: .
       dockerfile: Dockerfile.prod
@@ -40,7 +41,8 @@ services:
     ports:
       - '${HOST_BIND}:${PROD_PORT}:${NGINX_PORT}'
     healthcheck:
-      test: ['CMD', 'wget', '--quiet', '--spider', '--tries=1', 'http://127.0.0.1:${NGINX_PORT}/']
+      test:
+        ['CMD', 'wget', '--quiet', '--spider', '--tries=1', 'http://127.0.0.1:${NGINX_PORT}/health']
       interval: 30s
       timeout: 5s
       retries: 3

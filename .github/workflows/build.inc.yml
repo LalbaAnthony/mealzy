@@ -2,16 +2,32 @@ name: build
 
 on:
   workflow_call:
+    inputs:
+      image:
+        description: Fully qualified image name, used for labels and for the published tags
+        required: true
+        type: string
+      app-version:
+        description: Value baked into VITE_APP_VERSION and shown in Settings
+        required: true
+        type: string
+      publish:
+        description: Push the verified image to the registry
+        required: true
+        type: boolean
+    secrets:
+      registry-username:
+        required: false
+      registry-token:
+        required: false
 
 env:
-  HOST_BIND: 127.0.0.1
-  DEV_PORT: '5173'
   PROD_PORT: '8080'
   NGINX_PORT: '8080'
   VITE_APP_NAME: Mealzy
   VITE_APP_SHORT_NAME: Mealzy
   VITE_APP_DESCRIPTION: Offline-first meal planning and shopping list
-  VITE_APP_VERSION: ci
+  LOCAL_TAG: mealzy:ci
 
 jobs:
   build:
@@ -31,31 +47,48 @@ jobs:
         run: npm ci
 
       - name: Build the production bundle
+        env:
+          VITE_APP_VERSION: ${{ inputs.app-version }}
         run: npm run build
 
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3.7.1
+
+      - name: Derive image labels
+        id: meta
+        uses: docker/metadata-action@v5.6.1
+        with:
+          images: ${{ inputs.image }}
+
       - name: Build the production image
-        run: |
-          docker build \
-            --file Dockerfile.prod \
-            --build-arg NGINX_PORT="${NGINX_PORT}" \
-            --build-arg VITE_APP_NAME="${VITE_APP_NAME}" \
-            --build-arg VITE_APP_SHORT_NAME="${VITE_APP_SHORT_NAME}" \
-            --build-arg VITE_APP_DESCRIPTION="${VITE_APP_DESCRIPTION}" \
-            --build-arg VITE_APP_VERSION="${VITE_APP_VERSION}" \
-            --tag mealzy:ci \
-            .
+        uses: docker/build-push-action@v6.10.0
+        with:
+          context: .
+          file: ./Dockerfile.prod
+          build-args: |
+            NGINX_PORT=${{ env.NGINX_PORT }}
+            VITE_APP_NAME=${{ env.VITE_APP_NAME }}
+            VITE_APP_SHORT_NAME=${{ env.VITE_APP_SHORT_NAME }}
+            VITE_APP_DESCRIPTION=${{ env.VITE_APP_DESCRIPTION }}
+            VITE_APP_VERSION=${{ inputs.app-version }}
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ env.LOCAL_TAG }}
+          load: true
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Start the production image
         run: |
           docker run --detach --name mealzy-ci \
             --env NGINX_PORT="${NGINX_PORT}" \
             --publish "${PROD_PORT}:${NGINX_PORT}" \
-            mealzy:ci
+            "${LOCAL_TAG}"
 
       - name: Wait for the application to answer
         run: |
           for attempt in $(seq 1 30); do
-            if curl --silent --fail "http://127.0.0.1:${PROD_PORT}/" > /dev/null; then
+            if curl --silent --fail "http://127.0.0.1:${PROD_PORT}/health" > /dev/null; then
               echo "the application answered on attempt ${attempt}"
               exit 0
             fi
@@ -64,6 +97,10 @@ jobs:
           echo "the application never answered"
           docker logs mealzy-ci
           exit 1
+
+      - name: Check the health endpoint answers without the application shell
+        run: |
+          curl --silent --fail "http://127.0.0.1:${PROD_PORT}/health" | grep -qx "ok"
 
       - name: Check the service worker and manifest are served
         run: |
@@ -77,3 +114,19 @@ jobs:
       - name: Stop the production image
         if: always()
         run: docker rm --force mealzy-ci
+
+      - name: Log in to the registry
+        if: inputs.publish
+        uses: docker/login-action@v3.3.0
+        with:
+          registry: docker.io
+          username: ${{ secrets.registry-username }}
+          password: ${{ secrets.registry-token }}
+
+      - name: Publish the verified image
+        if: inputs.publish
+        run: |
+          docker tag "${LOCAL_TAG}" "${{ inputs.image }}:${{ github.ref_name }}"
+          docker tag "${LOCAL_TAG}" "${{ inputs.image }}:sha-${{ github.sha }}"
+          docker push "${{ inputs.image }}:${{ github.ref_name }}"
+          docker push "${{ inputs.image }}:sha-${{ github.sha }}"

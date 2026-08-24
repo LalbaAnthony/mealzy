@@ -1,9 +1,6 @@
 name: ci
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
 
 permissions:
@@ -33,3 +30,7 @@ jobs:
       - guards
       - tests
     uses: ./.github/workflows/build.inc.yml
+    with:
+      image: docker.io/lalbaanthony/mealzy
+      app-version: ci
+      publish: false

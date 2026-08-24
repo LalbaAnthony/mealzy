@@ -1,0 +1,128 @@
+name: deploy
+
+on:
+  workflow_call:
+    inputs:
+      image:
+        description: Fully qualified image reference to run, tag included
+        required: true
+        type: string
+      app-version:
+        description: Value recorded in the deployed environment file
+        required: true
+        type: string
+    secrets:
+      ssh-host:
+        required: true
+      ssh-user:
+        required: true
+      ssh-port:
+        required: true
+      ssh-private-key:
+        required: true
+      deploy-directory:
+        required: true
+      prod-port:
+        required: true
+
+env:
+  PROJECT_NAME: mealzy
+  HOST_BIND: 127.0.0.1
+  NGINX_PORT: '8080'
+  DEV_PORT: '5173'
+  DEV_WATCH_POLLING: 'false'
+  DEV_WATCH_INTERVAL: '300'
+  VITE_APP_NAME: Mealzy
+  VITE_APP_SHORT_NAME: Mealzy
+  VITE_APP_DESCRIPTION: Offline-first meal planning and shopping list
+
+jobs:
+  deploy:
+    name: pull and restart on the server
+    runs-on: ubuntu-24.04
+    environment: production
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Load the deployment key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.ssh-private-key }}
+
+      - name: Generate the deployment environment file
+        env:
+          IMAGE: ${{ inputs.image }}
+          PROD_PORT: ${{ secrets.prod-port }}
+          VITE_APP_VERSION: ${{ inputs.app-version }}
+        run: |
+          cat > .env <<EOF
+          COMPOSE_PROJECT_NAME=${PROJECT_NAME}
+          HOST_BIND=${HOST_BIND}
+          DEV_PORT=${DEV_PORT}
+          DEV_WATCH_POLLING=${DEV_WATCH_POLLING}
+          DEV_WATCH_INTERVAL=${DEV_WATCH_INTERVAL}
+          IMAGE=${IMAGE}
+          PROD_PORT=${PROD_PORT}
+          NGINX_PORT=${NGINX_PORT}
+          VITE_APP_NAME=${VITE_APP_NAME}
+          VITE_APP_SHORT_NAME=${VITE_APP_SHORT_NAME}
+          VITE_APP_DESCRIPTION=${VITE_APP_DESCRIPTION}
+          VITE_APP_VERSION=${VITE_APP_VERSION}
+          EOF
+
+      - name: Create the deployment directory
+        env:
+          REMOTE: ${{ secrets.ssh-user }}@${{ secrets.ssh-host }}
+          SSH_PORT: ${{ secrets.ssh-port }}
+          DEPLOY_DIRECTORY: ${{ secrets.deploy-directory }}
+        run: |
+          ssh -o StrictHostKeyChecking=accept-new -p "${SSH_PORT}" "${REMOTE}" \
+            "mkdir -p '${DEPLOY_DIRECTORY}'"
+
+      - name: Copy the deployment files
+        env:
+          REMOTE: ${{ secrets.ssh-user }}@${{ secrets.ssh-host }}
+          SSH_PORT: ${{ secrets.ssh-port }}
+          DEPLOY_DIRECTORY: ${{ secrets.deploy-directory }}
+        run: |
+          scp -o StrictHostKeyChecking=accept-new -P "${SSH_PORT}" \
+            docker-compose.yml .env "${REMOTE}:${DEPLOY_DIRECTORY}/"
+
+      - name: Pull the image and restart the service
+        env:
+          REMOTE: ${{ secrets.ssh-user }}@${{ secrets.ssh-host }}
+          SSH_PORT: ${{ secrets.ssh-port }}
+          DEPLOY_DIRECTORY: ${{ secrets.deploy-directory }}
+        run: |
+          ssh -o StrictHostKeyChecking=accept-new -p "${SSH_PORT}" "${REMOTE}" \
+            "DEPLOY_DIRECTORY='${DEPLOY_DIRECTORY}' bash -s" <<'REMOTE_SCRIPT'
+          set -euo pipefail
+          cd "${DEPLOY_DIRECTORY}"
+          docker compose --profile prod pull
+          docker compose --profile prod up --detach --remove-orphans
+          docker image prune --force
+          REMOTE_SCRIPT
+
+      - name: Verify the deployed application answers
+        env:
+          REMOTE: ${{ secrets.ssh-user }}@${{ secrets.ssh-host }}
+          SSH_PORT: ${{ secrets.ssh-port }}
+          DEPLOY_DIRECTORY: ${{ secrets.deploy-directory }}
+          PROD_PORT: ${{ secrets.prod-port }}
+        run: |
+          ssh -o StrictHostKeyChecking=accept-new -p "${SSH_PORT}" "${REMOTE}" \
+            "DEPLOY_DIRECTORY='${DEPLOY_DIRECTORY}' PROD_PORT='${PROD_PORT}' bash -s" <<'REMOTE_SCRIPT'
+          set -euo pipefail
+          cd "${DEPLOY_DIRECTORY}"
+          for attempt in $(seq 1 30); do
+            if curl --silent --fail "http://127.0.0.1:${PROD_PORT}/health" > /dev/null; then
+              echo "the deployment answered on attempt ${attempt}"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "the deployment never answered"
+          docker compose --profile prod logs --tail 50 web-prod
+          exit 1
+          REMOTE_SCRIPT

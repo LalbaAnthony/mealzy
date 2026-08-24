@@ -39,6 +39,7 @@ HOST_BIND=127.0.0.1
 DEV_PORT=5173
 DEV_WATCH_POLLING=true
 DEV_WATCH_INTERVAL=300
+IMAGE=mealzy:local
 PROD_PORT=8080
 NGINX_PORT=8080
 VITE_APP_NAME=Mealzy
@@ -66,6 +67,14 @@ Set `DEV_WATCH_POLLING=true` when the bind mount does not deliver file system ev
 case on Docker Desktop for Windows and macOS; without it nothing reloads. The production profile
 builds the application and serves the static output from nginx as a non-root user. Full details,
 including the variable list, are in [docs/docker.md](docs/docker.md).
+
+## Deployment
+
+Pushing to `main` builds the production image, verifies it by running it, publishes it to Docker Hub
+and deploys it over SSH to a server that only ever pulls a tag CI has already verified. The same
+pipeline reruns monthly so base image security patches reach production without a commit. Setup, the
+required repository secrets and the rollback procedure are in
+[docs/deployment.md](docs/deployment.md).
 
 ## npm scripts
 
@@ -99,6 +108,7 @@ Every explanation lives in `docs/`.
 - [docs/design-system.md](docs/design-system.md) - tokens, primitives, icons and accessibility
 - [docs/docker.md](docs/docker.md) - images, Compose profiles and variables
 - [docs/ci.md](docs/ci.md) - the workflow layout
+- [docs/deployment.md](docs/deployment.md) - how a commit reaches production
 - [docs/pwa.md](docs/pwa.md) - offline behaviour and the manual test procedure
 - [docs/testing.md](docs/testing.md) - test layout and coverage policy
 - [docs/adr/](docs/adr/) - the architecture decision records

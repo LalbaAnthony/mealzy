@@ -25,6 +25,7 @@ Copy `.env.example` to `.env` and fill in every value. All of them are required.
 | `DEV_PORT`             | Compose, `Dockerfile.dev`  | Vite port, inside the container and on the host       |
 | `DEV_WATCH_POLLING`    | Vite dev server            | `true` or `false`, whether the watcher polls          |
 | `DEV_WATCH_INTERVAL`   | Vite dev server            | Polling interval in milliseconds, a positive integer  |
+| `IMAGE`                | Compose                    | Image the production service runs, tag included       |
 | `PROD_PORT`            | Compose                    | Host port for the production service                  |
 | `NGINX_PORT`           | Compose, `Dockerfile.prod` | Port nginx listens on inside the container            |
 | `VITE_APP_NAME`        | Vite build                 | Application name, used in the manifest and page title |
@@ -113,6 +114,9 @@ actually defined in the environment are substituted, so nginx's own `$uri` is le
 ### Nginx behaviour
 
 - **SPA history fallback.** `try_files $uri $uri/ /index.html`, so `/shopping` serves the shell.
+- **`/health` returns the plain body `ok`**, with `no-store` and no access log. It is an exact-match
+  location, so it is matched ahead of the history fallback. See `docs/deployment.md` for why a probe
+  against `/` would prove nothing.
 - **`index.html` and `sw.js` are `no-cache`.** A stale service worker or shell would strand users on
   an old build.
 - **Hashed assets are immutable.** Everything under `/assets/` gets
@@ -125,7 +129,15 @@ actually defined in the environment are substituted, so nginx's own `$uri` is le
   location replaces inherited headers rather than adding to them, the headers are repeated in the
   locations that set their own `Cache-Control`.
 
-The `web-prod` service carries a health check that fetches `/` with `wget` every 30 seconds.
+The `web-prod` service carries a health check that fetches `/health` with `wget` every 30 seconds.
+
+### The `image` key
+
+`web-prod` declares both `image: ${IMAGE}` and `build:`. Locally, `docker compose --profile prod up
+--build` builds and tags the result as `${IMAGE}`, which `.env.example` sets to `mealzy:local`. On the
+production server the same file is used with `IMAGE` pointing at a published registry tag, and
+`docker compose --profile prod pull` fetches it instead of building. One Compose file covers both,
+and no server ever needs the source tree. See `docs/deployment.md`.
 
 ## `.dockerignore`
 
@@ -134,7 +146,11 @@ context stays small and no `.env` can leak into an image.
 
 ## Verification status
 
-`docker compose --profile prod config` validates and confirms that every variable interpolates. The
-images themselves were **not built or run** during development, because no Docker daemon was
-available in that environment. The CI `build.inc.yml` job builds the production image, starts it,
-and asserts that `/`, `/sw.js`, `/manifest.webmanifest` and the history fallback all answer.
+`docker compose --profile prod config` validates and confirms that every variable interpolates.
+`Dockerfile.prod` has since been **built successfully** from a working tree, producing a 94 MB
+runtime image, so the multi-stage build and the non-root permissions are known to hold.
+
+The image has **not been started outside CI**, so the served responses are asserted by the pipeline
+rather than by hand. The `build.inc.yml` job builds the production image, starts it, and asserts that
+`/health`, `/sw.js`, `/manifest.webmanifest` and the history fallback all answer, and `deploy.inc.yml`
+repeats the health probe against the running server after every deployment.

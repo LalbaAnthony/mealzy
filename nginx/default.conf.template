@@ -37,6 +37,14 @@ server {
     add_header Cache-Control "no-cache" always;
   }
 
+  location = /health {
+    access_log off;
+    default_type text/plain;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Cache-Control "no-store" always;
+    return 200 "ok\n";
+  }
+
   location /assets/ {
     add_header X-Content-Type-Options "nosniff" always;
     add_header Cache-Control $mealzy_cache_control always;

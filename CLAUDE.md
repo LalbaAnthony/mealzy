@@ -22,6 +22,7 @@ not update `docs/domain-model.md` is incomplete.
 | Tokens, primitives, icons, accessibility                 | `docs/design-system.md`             |
 | Images, Compose profiles, variables                      | `docs/docker.md`                    |
 | Workflow layout                                          | `docs/ci.md`                        |
+| How does it reach production? Secrets, rollback          | `docs/deployment.md`                |
 | Offline behaviour, manual test procedure                 | `docs/pwa.md`                       |
 | Test layout and coverage policy                          | `docs/testing.md`                   |
 | Why was this decided?                                    | `docs/adr/`                         |
