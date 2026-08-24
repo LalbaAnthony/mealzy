@@ -122,6 +122,13 @@ describe('MdSwitch', () => {
 
     expect(wrapper.emitted('update:modelValue')).toBeUndefined();
   });
+
+  it('renders no label element when the label is omitted', () => {
+    const wrapper = mount(MdSwitch, { props: { modelValue: false } });
+
+    expect(wrapper.find('label').exists()).toBe(false);
+    expect(wrapper.get('[role="switch"]').attributes('aria-checked')).toBe('false');
+  });
 });
 
 describe('MdSegmentedButton', () => {

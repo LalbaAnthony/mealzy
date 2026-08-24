@@ -69,7 +69,7 @@ export interface MdCheckboxProps {
 
 export interface MdSwitchProps {
   modelValue: boolean;
-  label: string;
+  label?: string;
   disabled?: boolean;
 }
 

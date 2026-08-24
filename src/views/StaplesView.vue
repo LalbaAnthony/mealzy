@@ -142,7 +142,6 @@ onMounted(async () => {
         <template #trailing>
           <MdSwitch
             :model-value="staple.enabled"
-            :label="`Include ${catalogue.ingredientName(staple.ingredientId)}`"
             @update:model-value="setEnabled(staple, $event)"
           />
           <MdIconButton icon="edit" label="Edit staple" @click="openEditDialog(staple)" />

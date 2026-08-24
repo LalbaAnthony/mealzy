@@ -2,7 +2,7 @@
 import { useId } from 'vue';
 import type { MdSwitchProps } from '../../types/components';
 
-const props = withDefaults(defineProps<MdSwitchProps>(), { disabled: false });
+const props = withDefaults(defineProps<MdSwitchProps>(), { label: '', disabled: false });
 
 const emit = defineEmits<{ 'update:modelValue': [value: boolean] }>();
 
@@ -17,7 +17,9 @@ function toggle(): void {
 
 <template>
   <div class="md-switch">
-    <label class="md-switch__label" :for="fieldId">{{ props.label }}</label>
+    <label v-if="props.label !== ''" class="md-switch__label" :for="fieldId">
+      {{ props.label }}
+    </label>
     <button
       :id="fieldId"
       class="md-switch__track"

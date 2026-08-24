@@ -60,7 +60,7 @@ nothing else. A primitive that knows what a recipe is would be a defect.
 | `MdTextField`       | label bound by `for`/`id`, `aria-invalid` and `aria-describedby`  |
 | `MdSelect`          | same labelling and error contract as the text field               |
 | `MdCheckbox`        | `hideLabel` moves the label to `aria-label` for dense list rows   |
-| `MdSwitch`          | `role="switch"` with `aria-checked`                               |
+| `MdSwitch`          | `role="switch"` with `aria-checked`, optional visible label       |
 | `MdChip`            | assist, filter and input variants, optionally removable           |
 | `MdSegmentedButton` | `role="group"` with `aria-pressed` per option                     |
 | `MdCard`            | elevated, filled and outlined                                     |
