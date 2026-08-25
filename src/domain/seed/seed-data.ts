@@ -7,7 +7,24 @@ import {
   UNCATEGORIZED_CATEGORY_SORT_ORDER,
 } from '../constants';
 
-const STAPLE_INGREDIENT_NAMES: readonly string[] = ['Salt', 'Pepper', 'Flour', 'Butter'];
+const STAPLE_INGREDIENT_NAMES: readonly string[] = [
+  'Coffee',
+  'Sugar',
+  'Olive oil',
+  'Parchment paper',
+  'Grated cheese',
+  'Salt',
+  'Sunflower oil',
+  'Pepper',
+  'Butter',
+  'Flour',
+  'Milk',
+  'Honey',
+  'Eggs',
+  'Pet food',
+  'Razors',
+  'Balsamic vinegar',
+];
 
 export function buildSeedData(input: SeedDataInput): SeedData {
   const uncategorized: Category = {
