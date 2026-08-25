@@ -18,8 +18,6 @@ const props = defineProps<MdTopAppBarProps>();
 
 <style scoped>
 .md-top-app-bar {
-  position: sticky;
-  inset-block-start: 0;
   display: flex;
   align-items: center;
   gap: var(--md-sys-spacing-2);

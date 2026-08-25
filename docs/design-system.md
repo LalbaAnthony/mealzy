@@ -69,7 +69,7 @@ nothing else. A primitive that knows what a recipe is would be a defect.
 | `MdListItem`        | leading, content, details and trailing slots                             |
 | `MdDialog`          | `role="dialog"`, `aria-modal`, focus trap, Escape and scrim close        |
 | `MdSnackbar`        | inverse surface in both tones, error marked by an icon, live region host |
-| `MdTopAppBar`       | sticky, with leading and action slots                                    |
+| `MdTopAppBar`       | leading and action slots, placed by the shell                            |
 | `MdNavigationBar`   | bottom bar on compact viewports, rail on expanded                        |
 | `MdMenu`            | `role="menu"` with a backdrop and Escape close                           |
 | `MdMenuItem`        | `role="menuitem"`, with a destructive variant                            |
@@ -105,6 +105,25 @@ consequences:
 
 MD3 defines no error snackbar. Deviating from the inverted background for one tone is therefore a
 local invention, and this is the reasoning against it.
+
+### Shell layout
+
+The shell owns the viewport and the document never scrolls. `#app` is `100dvh` with `overflow:
+hidden`, `body` is `overflow: hidden` as well, and `.app-shell__content` is the only scroll
+container, with `overscroll-behavior-y: contain`. The top app bar and the navigation bar sit outside
+that container as ordinary flex items, so neither needs `position: sticky` to stay put.
+
+This is not a preference. With the document scrolling, an installed PWA reproduces two faults that no
+offset can fix. The page ends up marginally taller than the window, so a view with one row still
+scrolls and leaves a band of empty space under the content while the first row slides behind the app
+bar. And on every scroll the compositor moves the page while the fixed FAB and the sticky bars are
+positioned against a viewport whose bottom edge is being recomputed, so the FAB lands on top of the
+navigation bar. Both faults only appear on a view long enough to scroll, which is why `StaplesView`
+looked correct while `MealsView` and `RecipesView` did not.
+
+The consequence to keep in mind: anything absolutely positioned inside a view is now clipped by the
+scroll container rather than overflowing the page. `MdMenu` opened on the last row of a list extends
+into the scroll padding instead of over the navigation bar.
 
 ### Overlay placement
 

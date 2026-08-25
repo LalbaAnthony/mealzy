@@ -11,6 +11,7 @@ html {
 body {
   margin: var(--md-sys-spacing-0);
   min-block-size: 100%;
+  overflow: hidden;
   background-color: var(--md-sys-color-background);
   color: var(--md-sys-color-on-background);
   font-family:
@@ -74,8 +75,9 @@ svg {
 }
 
 #app {
-  min-block-size: 100vh;
-  min-block-size: 100dvh;
+  block-size: 100vh;
+  block-size: 100dvh;
+  overflow: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {
