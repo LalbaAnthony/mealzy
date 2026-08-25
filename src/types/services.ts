@@ -123,6 +123,21 @@ export interface BackupService {
   importDocument(rawJson: string): Promise<DomainResult<void>>;
 }
 
+export interface LocalDataSummary {
+  readonly recipes: number;
+  readonly plannedMeals: number;
+  readonly ingredients: number;
+  readonly categories: number;
+  readonly staples: number;
+  readonly adHocItems: number;
+  readonly purchasedTicks: number;
+}
+
+export interface DataResetService {
+  summarise(): Promise<LocalDataSummary>;
+  eraseEverything(): Promise<void>;
+}
+
 export interface SettingsService {
   getPreferences(): Promise<AppPreferences>;
   setThemePreference(preference: ThemePreference): Promise<AppPreferences>;

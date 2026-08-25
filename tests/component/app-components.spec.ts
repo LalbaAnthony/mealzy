@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import { nextTick } from 'vue';
 import { mount } from '@vue/test-utils';
+import type { LocalDataSummary } from '../../src/types/services';
+import DeleteAllDataDialog from '../../src/components/app/DeleteAllDataDialog.vue';
 import MealListItem from '../../src/components/app/MealListItem.vue';
 import ShoppingLineItem from '../../src/components/app/ShoppingLineItem.vue';
 import EmptyState from '../../src/components/app/EmptyState.vue';
@@ -176,5 +179,137 @@ describe('EmptyState', () => {
     expect(wrapper.get('.md-icon').classes()).toContain('md-icon--shopping_cart');
     expect(wrapper.text()).toContain('Nothing to buy');
     expect(wrapper.text()).toContain('Plan a meal first.');
+  });
+});
+
+describe('DeleteAllDataDialog', () => {
+  const summary: LocalDataSummary = {
+    recipes: 2,
+    plannedMeals: 1,
+    ingredients: 5,
+    categories: 7,
+    staples: 4,
+    adHocItems: 0,
+    purchasedTicks: 3,
+  };
+
+  function mountDialog() {
+    return mount(DeleteAllDataDialog, {
+      props: { open: true, summary, backupExported: false },
+      attachTo: document.body,
+    });
+  }
+
+  function findButton(label: string): HTMLButtonElement {
+    for (const button of document.querySelectorAll('button')) {
+      if (button.textContent.trim() === label) {
+        return button;
+      }
+    }
+    throw new Error(`No button labelled ${label} is on screen.`);
+  }
+
+  function findInput(selector: string): HTMLInputElement {
+    const element = document.querySelector(selector);
+    if (!(element instanceof HTMLInputElement)) {
+      throw new Error(`No input matching ${selector} is on screen.`);
+    }
+    return element;
+  }
+
+  async function acknowledge(): Promise<void> {
+    const checkbox = findInput('input[type="checkbox"]');
+    checkbox.checked = true;
+    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+    await nextTick();
+  }
+
+  async function type(value: string): Promise<void> {
+    const field = findInput('input[type="text"]');
+    field.value = value;
+    field.dispatchEvent(new Event('input', { bubbles: true }));
+    await nextTick();
+  }
+
+  it('BR-20 lists what is about to be destroyed', () => {
+    const wrapper = mountDialog();
+
+    expect(document.body.textContent).toContain('2 recipes');
+    expect(document.body.textContent).toContain('1 planned meal');
+    expect(document.body.textContent).toContain('3 purchased ticks');
+
+    wrapper.unmount();
+  });
+
+  it('BR-20 offers a backup export before anything is deleted', async () => {
+    const wrapper = mountDialog();
+
+    findButton('Export backup now').click();
+    await nextTick();
+
+    expect(wrapper.emitted('export-backup')).toHaveLength(1);
+
+    wrapper.unmount();
+  });
+
+  it('BR-20 unlocks the second step only once the loss is acknowledged', async () => {
+    const wrapper = mountDialog();
+
+    expect(findButton('Continue').disabled).toBe(true);
+
+    await acknowledge();
+
+    expect(findButton('Continue').disabled).toBe(false);
+
+    wrapper.unmount();
+  });
+
+  it('BR-20 confirms only after the confirmation phrase is typed', async () => {
+    const wrapper = mountDialog();
+    await acknowledge();
+    findButton('Continue').click();
+    await nextTick();
+
+    expect(findButton('Delete everything').disabled).toBe(true);
+    expect(document.activeElement).toBe(findInput('input[type="text"]'));
+
+    await type('delete everything');
+    expect(findButton('Delete everything').disabled).toBe(true);
+
+    await type('DELETE');
+    expect(findButton('Delete everything').disabled).toBe(false);
+
+    findButton('Delete everything').click();
+    await nextTick();
+    expect(wrapper.emitted('confirm')).toHaveLength(1);
+
+    wrapper.unmount();
+  });
+
+  it('BR-20 starts again at the first step when it is reopened', async () => {
+    const wrapper = mountDialog();
+    await acknowledge();
+    findButton('Continue').click();
+    await nextTick();
+
+    await wrapper.setProps({ open: false });
+    await wrapper.setProps({ open: true });
+
+    expect(findButton('Continue').disabled).toBe(true);
+    expect(findInput('input[type="checkbox"]').checked).toBe(false);
+
+    wrapper.unmount();
+  });
+
+  it('cancels from the first step without emitting a confirmation', async () => {
+    const wrapper = mountDialog();
+
+    findButton('Cancel').click();
+    await nextTick();
+
+    expect(wrapper.emitted('cancel')).toHaveLength(1);
+    expect(wrapper.emitted('confirm')).toBeUndefined();
+
+    wrapper.unmount();
   });
 });

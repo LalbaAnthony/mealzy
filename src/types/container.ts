@@ -3,6 +3,7 @@ import type {
   AdHocItemService,
   BackupService,
   CategoryService,
+  DataResetService,
   IngredientService,
   MealPlanService,
   RecipeService,
@@ -27,6 +28,7 @@ export interface AppServices {
   readonly adHocItems: AdHocItemService;
   readonly shoppingList: ShoppingListService;
   readonly backup: BackupService;
+  readonly dataReset: DataResetService;
   readonly settings: SettingsService;
   readonly seed: SeedService;
   readonly platform: PlatformServices;

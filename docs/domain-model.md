@@ -171,8 +171,9 @@ contribute to the same line and double the amount.
 `Meat and fish`, `Grocery`, `Frozen`, `Household`, and four enabled staples for salt, pepper, flour
 and butter, each with its ingredient created and categorised under `Grocery`.**
 Rationale: an empty application is hard to evaluate. First run is detected by the absence of a stored
-schema version, so seeding never runs twice and never runs after a backup import. The
-`uncategorized` category cannot be deleted or renamed.
+schema version, so seeding never runs twice and never runs after a backup import. Deleting all local
+data (BR-20) is the one other moment the seed is written, and it writes it explicitly rather than by
+clearing the schema version. The `uncategorized` category cannot be deleted or renamed.
 
 **BR-15 An ad hoc item is a free-text label with an optional quantity and a category. Ad hoc items
 never merge with ingredient lines, even when the labels match.**
@@ -200,3 +201,18 @@ keeps mixed-unit lines for the same ingredient adjacent, since they share a labe
 **BR-19 Export excludes purchased lines.**
 Rationale: the export is for shopping with. A group whose lines are all purchased is omitted
 entirely.
+
+**BR-20 Settings offers a permanent deletion of all local data. It removes every recipe, planned
+meal, ingredient, category, staple and ad hoc item, clears the purchased ticks, resets the
+preferences to their defaults and rewrites the BR-14 seed data, leaving the browser exactly as it is
+on a first run. The action is gated behind an acknowledgement of the loss and a typed confirmation,
+and it offers a backup export inside the flow.**
+Rationale: uninstalling the PWA or clearing site data from browser settings is neither discoverable
+nor precise, so the application owes the user a way to hand a device on, or start over, without
+leaving their data behind. There is no server copy, so the erase is unrecoverable and the friction is
+the feature: a backup export, an explicit acknowledgement and a typed phrase are three separate
+deliberate acts, and none of them is a stray tap. The seed data is rewritten rather than left empty
+because an ingredient must reference a category, so an application with no categories would strand
+the user rather than merely empty their data. Preferences are reset with the rest because a stored
+theme is local data too, and a first-run state that quietly keeps one setting is not a first-run
+state. See [ADR 0011](adr/0011-erasing-local-data-restores-the-first-run-state.md).

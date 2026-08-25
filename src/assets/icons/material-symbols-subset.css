@@ -69,6 +69,10 @@
   content: "\e872";
 }
 
+.md-icon--delete_forever::before {
+  content: "\e92b";
+}
+
 .md-icon--download::before {
   content: "\e171";
 }

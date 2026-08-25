@@ -3,6 +3,7 @@ import type { ServiceDependencies } from '../types/services';
 import { createAdHocItemService } from './adhoc-item-service';
 import { createBackupService } from './backup-service';
 import { createCategoryService } from './category-service';
+import { createDataResetService } from './data-reset-service';
 import { createIngredientService } from './ingredient-service';
 import { createMealPlanService } from './meal-plan-service';
 import { createRecipeService } from './recipe-service';
@@ -24,6 +25,7 @@ export function createServices(
     adHocItems: createAdHocItemService(dependencies),
     shoppingList: createShoppingListService(dependencies),
     backup: createBackupService(dependencies),
+    dataReset: createDataResetService(dependencies),
     settings: createSettingsService(dependencies),
     seed: createSeedService(dependencies),
     platform,

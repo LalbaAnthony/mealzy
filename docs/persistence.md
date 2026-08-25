@@ -142,3 +142,26 @@ An invalid document is rejected with an actionable message and a list of the spe
 violations, and nothing is written, so a broken import is never partially applied. A valid document
 replaces the entire dataset: every store is emptied and refilled. The Settings view puts this behind
 a confirmation dialog that states plainly that current data will be destroyed.
+
+## Deleting all local data
+
+`DataResetService` is the counterpart to the import, for when there is no document to restore from.
+`summarise` counts what is currently stored, which is what the dialog shows the user before anything
+happens, and `eraseEverything` performs the deletion described by BR-20.
+
+The order matters. Referencing records go first, so that no intermediate state has a planned meal
+pointing at a deleted recipe or an ingredient pointing at a deleted category:
+
+1. `mealsPlanned`, then `recipes`, then `staples`, then `adHocItems`, then `ingredients`, then
+   `categories`.
+2. Purchased keys cleared, preferences reset to `DEFAULT_APP_PREFERENCES`.
+3. The BR-14 seed data written back, through the same `writeSeedData` helper `SeedService` uses.
+4. The current schema version written again.
+
+The schema version is deliberately never cleared, so an interrupted erase cannot be mistaken for a
+first run by the next start. See
+[ADR 0011](adr/0011-erasing-local-data-restores-the-first-run-state.md).
+
+The Settings view gates the action behind `DeleteAllDataDialog`, which offers a backup export, then
+requires an acknowledgement and a typed confirmation phrase. As with the import, other open tabs keep
+their loaded stores and are told to reload.

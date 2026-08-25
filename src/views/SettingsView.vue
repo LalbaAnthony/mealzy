@@ -7,6 +7,7 @@ import { useConfirmDialog } from '../composables/useConfirmDialog';
 import { useSettingsStore } from '../stores/settings-store';
 import { useUiStore } from '../stores/ui-store';
 import ConfirmDialog from '../components/app/ConfirmDialog.vue';
+import DeleteAllDataDialog from '../components/app/DeleteAllDataDialog.vue';
 import MdButton from '../components/md/MdButton.vue';
 import MdCard from '../components/md/MdCard.vue';
 import MdSegmentedButton from '../components/md/MdSegmentedButton.vue';
@@ -16,6 +17,8 @@ const ui = useUiStore();
 const confirmDialog = useConfirmDialog();
 
 const fileInput = ref<HTMLInputElement | null>(null);
+const eraseDialogOpen = ref(false);
+const backupExported = ref(false);
 
 const themeOptions: readonly SegmentedOption[] = [
   { value: 'system', label: 'System', icon: 'brightness_auto' },
@@ -54,7 +57,19 @@ async function exportBackup(): Promise<void> {
   const services = useServices();
   const backup = await services.backup.exportDocument();
   services.platform.download.download(backup.fileName, backup.json, 'application/json');
+  backupExported.value = true;
   ui.notifySuccess('Backup downloaded.');
+}
+
+function openEraseDialog(): void {
+  backupExported.value = false;
+  eraseDialogOpen.value = true;
+}
+
+async function eraseAllData(): Promise<void> {
+  eraseDialogOpen.value = false;
+  await settings.eraseAllData();
+  ui.notifySuccess('All local data deleted. Reopen the other tabs to refresh them.');
 }
 
 function pickBackupFile(): void {
@@ -154,6 +169,32 @@ onMounted(async () => {
       <p class="settings-view__body">Version {{ appVersion }}</p>
     </MdCard>
 
+    <MdCard variant="outlined" class="settings-view__danger">
+      <h2 class="settings-view__title settings-view__title--danger">Delete all local data</h2>
+      <p class="settings-view__body">
+        Removes every recipe, meal, ingredient, staple, ad hoc item and purchased tick from this
+        browser, then puts Mealzy back to its first-run state with the default categories and
+        staples. It cannot be undone, and a backup is the only way back.
+      </p>
+      <p class="settings-view__body">
+        Currently stored: {{ settings.dataSummary.recipes }} recipes,
+        {{ settings.dataSummary.plannedMeals }} planned meals,
+        {{ settings.dataSummary.ingredients }} ingredients.
+      </p>
+      <MdButton variant="outlined" icon="delete_forever" @click="openEraseDialog">
+        Delete all local data
+      </MdButton>
+    </MdCard>
+
+    <DeleteAllDataDialog
+      :open="eraseDialogOpen"
+      :summary="settings.dataSummary"
+      :backup-exported="backupExported"
+      @export-backup="exportBackup"
+      @confirm="eraseAllData"
+      @cancel="eraseDialogOpen = false"
+    />
+
     <ConfirmDialog
       :open="confirmDialog.isOpen.value"
       :title="confirmDialog.request.value.title"
@@ -187,6 +228,14 @@ onMounted(async () => {
   line-height: var(--md-sys-typescale-body-medium-line-height);
   color: var(--md-sys-color-on-surface-variant);
   padding-block-end: var(--md-sys-spacing-2);
+}
+
+.settings-view__danger {
+  border-color: var(--md-sys-color-error);
+}
+
+.settings-view__title--danger {
+  color: var(--md-sys-color-error);
 }
 
 .settings-view__buttons {

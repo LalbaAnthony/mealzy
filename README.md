@@ -6,7 +6,9 @@ shopping list from them.
 **All data is local to your browser.** There is no backend, no API and no database server. Recipes,
 planned meals, staples and shopping ticks live in IndexedDB on the device you are using. Nothing is
 uploaded anywhere. Clearing site data deletes everything, so use the backup export in Settings
-before you do.
+before you do. Settings also has a deliberate way out: **Delete all local data** erases everything
+this browser holds and puts Mealzy back to its first-run state, behind a backup prompt, an
+acknowledgement and a typed confirmation.
 
 ## The core loop
 

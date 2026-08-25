@@ -1,7 +1,18 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import type { AppPreferences, StorageStatus, ThemePreference } from '../types/settings';
+import type { LocalDataSummary } from '../types/services';
 import { useServices } from '../app/container';
+
+const EMPTY_SUMMARY: LocalDataSummary = {
+  recipes: 0,
+  plannedMeals: 0,
+  ingredients: 0,
+  categories: 0,
+  staples: 0,
+  adHocItems: 0,
+  purchasedTicks: 0,
+};
 
 export const useSettingsStore = defineStore('settings', () => {
   const preferences = ref<AppPreferences>({ themePreference: 'system' });
@@ -10,11 +21,13 @@ export const useSettingsStore = defineStore('settings', () => {
     usageBytes: null,
     quotaBytes: null,
   });
+  const dataSummary = ref<LocalDataSummary>(EMPTY_SUMMARY);
 
   async function load(): Promise<void> {
     const services = useServices();
     preferences.value = await services.settings.getPreferences();
     storageStatus.value = await services.settings.getStorageStatus();
+    dataSummary.value = await services.dataReset.summarise();
   }
 
   async function setThemePreference(preference: ThemePreference): Promise<void> {
@@ -27,5 +40,18 @@ export const useSettingsStore = defineStore('settings', () => {
     storageStatus.value = await services.settings.getStorageStatus();
   }
 
-  return { preferences, storageStatus, load, setThemePreference, requestPersistence };
+  async function eraseAllData(): Promise<void> {
+    await useServices().dataReset.eraseEverything();
+    await load();
+  }
+
+  return {
+    preferences,
+    storageStatus,
+    dataSummary,
+    load,
+    setThemePreference,
+    requestPersistence,
+    eraseAllData,
+  };
 });

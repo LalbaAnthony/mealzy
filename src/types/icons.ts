@@ -10,6 +10,7 @@ export type IconName =
   | 'content_copy'
   | 'dark_mode'
   | 'delete'
+  | 'delete_forever'
   | 'download'
   | 'edit'
   | 'error'

@@ -1,5 +1,6 @@
 import type { IconName } from './icons';
 import type { MealPlanned } from './meal';
+import type { LocalDataSummary } from './services';
 import type { ShoppingLine } from './shopping';
 import type {
   ButtonVariant,
@@ -144,6 +145,12 @@ export interface ConfirmDialogProps {
   confirmLabel?: string;
   cancelLabel?: string;
   destructive?: boolean;
+}
+
+export interface DeleteAllDataDialogProps {
+  open: boolean;
+  summary: LocalDataSummary;
+  backupExported: boolean;
 }
 
 export interface EmptyStateProps {

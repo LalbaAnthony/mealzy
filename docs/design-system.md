@@ -76,8 +76,14 @@ nothing else. A primitive that knows what a recipe is would be a defect.
 | `MdIcon`            | the only component that touches the icon font                            |
 
 Application-specific components live in `src/components/app/` and compose these primitives:
-`MealListItem`, `ShoppingLineItem`, `ConfirmDialog`, `EmptyState`, `SnackbarHost`, `QuantityField`
-and `PwaUpdatePrompt`.
+`MealListItem`, `ShoppingLineItem`, `ConfirmDialog`, `DeleteAllDataDialog`, `EmptyState`,
+`SnackbarHost`, `QuantityField` and `PwaUpdatePrompt`.
+
+`DeleteAllDataDialog` is the one two-step dialog. `ConfirmDialog` covers every other destructive
+action, but BR-20 asks for more friction than a single button can carry: the first step offers the
+backup export and takes the acknowledgement, the second takes the typed confirmation phrase. It owns
+the step, the checkbox and the typed text, and emits only `export-backup`, `confirm` and `cancel`, so
+the view keeps the service calls. Reopening it always returns to the first step.
 
 ### Snackbar colour
 

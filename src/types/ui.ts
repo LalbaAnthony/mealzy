@@ -17,6 +17,8 @@ export interface ConfirmDialogRequest {
   readonly destructive: boolean;
 }
 
+export type DeleteAllDataStep = 'backup' | 'confirm';
+
 export interface NavigationItem {
   readonly to: string;
   readonly label: string;
