@@ -41,7 +41,6 @@ describe('BR-14 seed data', () => {
       'Honey',
       'Eggs',
       'Pet food',
-      'Razors',
       'Balsamic vinegar',
     ]);
     expect(seed.ingredients.every((ingredient) => ingredient.categoryId === grocery?.id)).toBe(

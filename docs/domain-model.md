@@ -170,7 +170,7 @@ contribute to the same line and double the amount.
 **BR-14 Seed data on first run: the `uncategorized` category, the categories `Produce`, `Dairy`,
 `Meat and fish`, `Grocery`, `Frozen`, `Household`, and one enabled staple for each of coffee, sugar,
 olive oil, parchment paper, grated cheese, salt, sunflower oil, pepper, butter, flour, milk, honey,
-eggs, pet food, razors and balsamic vinegar, each with its ingredient created and categorised under
+eggs, pet food and balsamic vinegar, each with its ingredient created and categorised under
 `Grocery`.**
 Rationale: an empty application is hard to evaluate. First run is detected by the absence of a stored
 schema version, so seeding never runs twice and never runs after a backup import. Deleting all local

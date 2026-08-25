@@ -22,7 +22,6 @@ const STAPLE_INGREDIENT_NAMES: readonly string[] = [
   'Honey',
   'Eggs',
   'Pet food',
-  'Razors',
   'Balsamic vinegar',
 ];
 
