@@ -4,10 +4,16 @@ import type { RouteRecordRaw } from 'vue-router';
 const routes: readonly RouteRecordRaw[] = [
   { path: '/', redirect: '/meals' },
   {
-    path: '/meals',
-    name: 'meals',
-    component: () => import('../views/MealsView.vue'),
-    meta: { title: 'Meals' },
+    path: '/pantry',
+    name: 'pantry',
+    component: () => import('../views/IngredientsView.vue'),
+    meta: { title: 'Pantry' },
+  },
+  {
+    path: '/staples',
+    name: 'staples',
+    component: () => import('../views/StaplesView.vue'),
+    meta: { title: 'Staples' },
   },
   {
     path: '/recipes',
@@ -28,16 +34,10 @@ const routes: readonly RouteRecordRaw[] = [
     meta: { title: 'Shopping list' },
   },
   {
-    path: '/staples',
-    name: 'staples',
-    component: () => import('../views/StaplesView.vue'),
-    meta: { title: 'Staples' },
-  },
-  {
-    path: '/pantry',
-    name: 'pantry',
-    component: () => import('../views/IngredientsView.vue'),
-    meta: { title: 'Pantry' },
+    path: '/meals',
+    name: 'meals',
+    component: () => import('../views/MealsView.vue'),
+    meta: { title: 'Meals' },
   },
   {
     path: '/settings',
