@@ -37,7 +37,6 @@ export const useStaplesStore = defineStore('staples', () => {
       return false;
     }
     await load();
-    ui.notifySuccess('Staple added.');
     return true;
   }
 

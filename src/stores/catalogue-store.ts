@@ -58,7 +58,6 @@ export const useCatalogueStore = defineStore('catalogue', () => {
       return false;
     }
     await load();
-    ui.notifySuccess(`Added the category ${result.value.name}.`);
     return true;
   }
 
@@ -90,7 +89,6 @@ export const useCatalogueStore = defineStore('catalogue', () => {
       return false;
     }
     await load();
-    ui.notifySuccess(`Added ${result.value.name}.`);
     return true;
   }
 

@@ -45,7 +45,6 @@ export const useMealsStore = defineStore('meals', () => {
       return false;
     }
     await load();
-    ui.notifySuccess(`Planned ${result.value.recipeNameSnapshot}.`);
     return true;
   }
 
@@ -66,7 +65,6 @@ export const useMealsStore = defineStore('meals', () => {
       return false;
     }
     await load();
-    ui.notifySuccess(`Marked ${result.value.recipeNameSnapshot} as eaten.`);
     return true;
   }
 
@@ -77,7 +75,6 @@ export const useMealsStore = defineStore('meals', () => {
       return false;
     }
     await load();
-    ui.notifySuccess(`Moved ${result.value.recipeNameSnapshot} back to planned.`);
     return true;
   }
 

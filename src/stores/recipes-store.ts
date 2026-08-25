@@ -39,7 +39,6 @@ export const useRecipesStore = defineStore('recipes', () => {
       return null;
     }
     await load();
-    ui.notifySuccess(`Saved ${result.value.name}.`);
     return result.value.id;
   }
 
@@ -50,7 +49,6 @@ export const useRecipesStore = defineStore('recipes', () => {
       return false;
     }
     await load();
-    ui.notifySuccess(`Saved ${result.value.name}.`);
     return true;
   }
 

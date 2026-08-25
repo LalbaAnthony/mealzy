@@ -49,7 +49,6 @@ export const useShoppingStore = defineStore('shopping', () => {
       return false;
     }
     await load();
-    ui.notifySuccess(`Added ${result.value.label}.`);
     return true;
   }
 
