@@ -8,8 +8,20 @@ import {
 } from '../../src/infrastructure/persistence/in-memory-repository';
 import { createBackupCodec } from '../../src/infrastructure/schemas/backup';
 import { createServices } from '../../src/services/create-services';
+import { buildSeedData } from '../../src/domain/seed/seed-data';
 
 const SCHEMA_VERSION = 1;
+
+const seedNameIds = createTestIdGenerator('seed-name');
+
+export const SEEDED_STAPLE_NAMES: readonly string[] = buildSeedData({
+  generateId: () => seedNameIds.next(),
+  now: 0,
+}).ingredients.map((ingredient) => ingredient.name);
+
+export const SEEDED_STAPLE_LABELS: readonly string[] = [...SEEDED_STAPLE_NAMES].sort(
+  (left, right) => left.localeCompare(right, 'en', { sensitivity: 'base' }),
+);
 
 export function createTestClock(startAt: number, today: string) {
   let current = startAt;

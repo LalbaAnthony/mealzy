@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { createTestHarness, seedCatalogue } from '../../support/test-harness';
+import { SEEDED_STAPLE_NAMES, createTestHarness, seedCatalogue } from '../../support/test-harness';
 
 let harness: ReturnType<typeof createTestHarness>;
 let produceId: string;
@@ -48,9 +48,9 @@ describe('local data summary', () => {
     expect(summary).toStrictEqual({
       recipes: 1,
       plannedMeals: 1,
-      ingredients: 5,
+      ingredients: SEEDED_STAPLE_NAMES.length + 1,
       categories: 7,
-      staples: 4,
+      staples: SEEDED_STAPLE_NAMES.length,
       adHocItems: 1,
       purchasedTicks: 1,
     });
@@ -83,13 +83,10 @@ describe('BR-20 deleting all local data', () => {
     expect(categories.map((category) => category.name).sort()).toStrictEqual(
       categoriesBefore.map((category) => category.name).sort(),
     );
-    expect(staples).toHaveLength(4);
-    expect(ingredients.map((ingredient) => ingredient.name).sort()).toStrictEqual([
-      'Butter',
-      'Flour',
-      'Pepper',
-      'Salt',
-    ]);
+    expect(staples).toHaveLength(SEEDED_STAPLE_NAMES.length);
+    expect(ingredients.map((ingredient) => ingredient.name).sort()).toStrictEqual(
+      [...SEEDED_STAPLE_NAMES].sort(),
+    );
   });
 
   it('resets the stored preferences to the first-run defaults', async () => {
@@ -120,9 +117,9 @@ describe('BR-20 deleting all local data', () => {
     expect(await harness.services.dataReset.summarise()).toStrictEqual({
       recipes: 0,
       plannedMeals: 0,
-      ingredients: 4,
+      ingredients: SEEDED_STAPLE_NAMES.length,
       categories: 7,
-      staples: 4,
+      staples: SEEDED_STAPLE_NAMES.length,
       adHocItems: 0,
       purchasedTicks: 0,
     });

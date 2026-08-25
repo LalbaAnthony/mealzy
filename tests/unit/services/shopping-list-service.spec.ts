@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { createTestHarness, seedCatalogue } from '../../support/test-harness';
+import { SEEDED_STAPLE_LABELS, createTestHarness, seedCatalogue } from '../../support/test-harness';
 
 let harness: ReturnType<typeof createTestHarness>;
 let produceId: string;
@@ -56,14 +56,14 @@ describe('BR-18 grouped snapshot', () => {
     const names = snapshot.groups.map((group) => group.categoryName);
 
     expect(names).toEqual(['Produce', 'Dairy', 'Grocery']);
-    expect(snapshot.totalCount).toBe(6);
+    expect(snapshot.totalCount).toBe(SEEDED_STAPLE_LABELS.length + 2);
   });
 
-  it('includes the four seeded staples', async () => {
+  it('includes every seeded staple', async () => {
     const snapshot = await harness.services.shoppingList.getSnapshot();
     const grocery = snapshot.groups.find((group) => group.categoryName === 'Grocery');
 
-    expect(grocery?.lines.map((line) => line.label)).toEqual(['Butter', 'Flour', 'Pepper', 'Salt']);
+    expect(grocery?.lines.map((line) => line.label)).toEqual(SEEDED_STAPLE_LABELS);
   });
 });
 

@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import type { AppServices } from '../../../src/types/container';
 import type { AppRepositories } from '../../../src/types/persistence';
 import { sortPlannedMeals } from '../../../src/domain/ordering/meal-order';
-import { createTestHarness, seedCatalogue } from '../../support/test-harness';
+import { SEEDED_STAPLE_LABELS, createTestHarness, seedCatalogue } from '../../support/test-harness';
 
 let harness: ReturnType<typeof createTestHarness>;
 let services: AppServices;
@@ -100,11 +100,11 @@ describe('acceptance scenario', () => {
     ]);
   });
 
-  it('lists the four seeded staples', async () => {
+  it('lists every seeded staple', async () => {
     const snapshot = await services.shoppingList.getSnapshot();
     const grocery = snapshot.groups.find((group) => group.categoryName === 'Grocery');
 
-    expect(grocery?.lines.map((line) => line.label)).toEqual(['Butter', 'Flour', 'Pepper', 'Salt']);
+    expect(grocery?.lines.map((line) => line.label)).toEqual(SEEDED_STAPLE_LABELS);
   });
 
   it('keeps ticks across a reload and across adding a fourth meal', async () => {

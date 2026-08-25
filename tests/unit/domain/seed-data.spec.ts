@@ -23,14 +23,26 @@ describe('BR-14 seed data', () => {
     ).toEqual(['Produce', 'Dairy', 'Meat and fish', 'Grocery', 'Frozen', 'Household']);
   });
 
-  it('creates the four staple ingredients under Grocery', () => {
+  it('creates the staple ingredients under Grocery', () => {
     const grocery = seed.categories.find((category) => category.name === 'Grocery');
 
     expect(seed.ingredients.map((ingredient) => ingredient.name)).toEqual([
+      'Coffee',
+      'Sugar',
+      'Olive oil',
+      'Parchment paper',
+      'Grated cheese',
       'Salt',
+      'Sunflower oil',
       'Pepper',
-      'Flour',
       'Butter',
+      'Flour',
+      'Milk',
+      'Honey',
+      'Eggs',
+      'Pet food',
+      'Razors',
+      'Balsamic vinegar',
     ]);
     expect(seed.ingredients.every((ingredient) => ingredient.categoryId === grocery?.id)).toBe(
       true,
@@ -42,8 +54,8 @@ describe('BR-14 seed data', () => {
     expect(seed.ingredients.every((ingredient) => ingredient.updatedAt === 1000)).toBe(true);
   });
 
-  it('creates four enabled staples pointing at those ingredients', () => {
-    expect(seed.staples).toHaveLength(4);
+  it('creates one enabled staple per seeded ingredient', () => {
+    expect(seed.staples).toHaveLength(seed.ingredients.length);
     expect(seed.staples.every((staple) => staple.enabled)).toBe(true);
     expect(seed.staples.every((staple) => staple.defaultQuantity === null)).toBe(true);
     expect(seed.staples.map((staple) => staple.ingredientId)).toEqual(

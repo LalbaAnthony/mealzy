@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { createTestHarness, seedCatalogue } from '../../support/test-harness';
+import { SEEDED_STAPLE_NAMES, createTestHarness, seedCatalogue } from '../../support/test-harness';
 
 let harness: ReturnType<typeof createTestHarness>;
 let groceryId: string;
@@ -21,21 +21,16 @@ beforeEach(async () => {
 });
 
 describe('BR-14 seed data', () => {
-  it('creates the reserved category, six aisles and four enabled staples', async () => {
+  it('creates the reserved category, six aisles and one enabled staple per seeded ingredient', async () => {
     const categories = await harness.services.categories.list();
     const staples = await harness.services.staples.list();
     const ingredients = await harness.services.ingredients.list();
 
     expect(categories).toHaveLength(7);
     expect(categories.some((category) => category.id === 'uncategorized')).toBe(true);
-    expect(staples).toHaveLength(4);
+    expect(staples).toHaveLength(SEEDED_STAPLE_NAMES.length);
     expect(staples.every((staple) => staple.enabled)).toBe(true);
-    expect(ingredients.map((ingredient) => ingredient.name)).toEqual([
-      'Salt',
-      'Pepper',
-      'Flour',
-      'Butter',
-    ]);
+    expect(ingredients.map((ingredient) => ingredient.name)).toEqual(SEEDED_STAPLE_NAMES);
     expect(ingredients.every((ingredient) => ingredient.categoryId === groceryId)).toBe(true);
   });
 
@@ -43,7 +38,7 @@ describe('BR-14 seed data', () => {
     await harness.services.seed.ensureSeeded();
 
     expect(await harness.services.categories.list()).toHaveLength(7);
-    expect(await harness.services.staples.list()).toHaveLength(4);
+    expect(await harness.services.staples.list()).toHaveLength(SEEDED_STAPLE_NAMES.length);
   });
 
   it('refuses to rename or delete the uncategorized category', async () => {
@@ -185,10 +180,10 @@ describe('BR-12 ingredient deletion is blocked while referenced', () => {
 
 describe('BR-13 staple management', () => {
   it('creates, updates and deletes a staple', async () => {
-    const oilId = await createIngredient('Olive oil', groceryId);
+    const riceId = await createIngredient('Rice', groceryId);
 
     const created = await harness.services.staples.create({
-      ingredientId: oilId,
+      ingredientId: riceId,
       defaultQuantity: { amount: 500, unit: 'ml' },
       enabled: true,
     });
@@ -198,14 +193,14 @@ describe('BR-13 staple management', () => {
     }
 
     const updated = await harness.services.staples.update(created.value.id, {
-      ingredientId: oilId,
+      ingredientId: riceId,
       defaultQuantity: null,
       enabled: false,
     });
     expect(updated).toMatchObject({ ok: true, value: { enabled: false, defaultQuantity: null } });
 
     expect(await harness.services.staples.remove(created.value.id)).toMatchObject({ ok: true });
-    expect(await harness.services.staples.list()).toHaveLength(4);
+    expect(await harness.services.staples.list()).toHaveLength(SEEDED_STAPLE_NAMES.length);
   });
 
   it('rejects a second staple for the same ingredient', async () => {
