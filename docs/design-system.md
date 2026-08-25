@@ -52,31 +52,52 @@ stored preference.
 `src/components/md/` holds framework-level primitives. They know about tokens and accessibility and
 nothing else. A primitive that knows what a recipe is would be a defect.
 
-| Component           | Notes                                                                  |
-| ------------------- | ---------------------------------------------------------------------- |
-| `MdButton`          | filled, tonal, elevated, outlined and text variants                    |
-| `MdIconButton`      | standard, filled and tonal; requires an accessible `label`             |
-| `MdFab`             | regular and extended                                                   |
-| `MdTextField`       | label bound by `for`/`id`, `aria-invalid` and `aria-describedby`       |
-| `MdSelect`          | same labelling and error contract as the text field                    |
-| `MdCheckbox`        | `hideLabel` moves the label to `aria-label` for dense list rows        |
-| `MdSwitch`          | `role="switch"` with `aria-checked`, optional visible label            |
-| `MdChip`            | assist, filter and input variants, optionally removable                |
-| `MdSegmentedButton` | `role="group"` with `aria-pressed` per option                          |
-| `MdCard`            | elevated, filled and outlined                                          |
-| `MdList`            | list container with an optional accessible name                        |
-| `MdListItem`        | leading, content, details and trailing slots                           |
-| `MdDialog`          | `role="dialog"`, `aria-modal`, focus trap, Escape and scrim close      |
-| `MdSnackbar`        | rendered inside a live region host, docked clear of the navigation bar |
-| `MdTopAppBar`       | sticky, with leading and action slots                                  |
-| `MdNavigationBar`   | bottom bar on compact viewports, rail on expanded                      |
-| `MdMenu`            | `role="menu"` with a backdrop and Escape close                         |
-| `MdMenuItem`        | `role="menuitem"`, with a destructive variant                          |
-| `MdIcon`            | the only component that touches the icon font                          |
+| Component           | Notes                                                                    |
+| ------------------- | ------------------------------------------------------------------------ |
+| `MdButton`          | filled, tonal, elevated, outlined and text variants                      |
+| `MdIconButton`      | standard, filled and tonal; requires an accessible `label`               |
+| `MdFab`             | regular and extended                                                     |
+| `MdTextField`       | label bound by `for`/`id`, `aria-invalid` and `aria-describedby`         |
+| `MdSelect`          | same labelling and error contract as the text field                      |
+| `MdCheckbox`        | `hideLabel` moves the label to `aria-label` for dense list rows          |
+| `MdSwitch`          | `role="switch"` with `aria-checked`, optional visible label              |
+| `MdChip`            | assist, filter and input variants, optionally removable                  |
+| `MdSegmentedButton` | `role="group"` with `aria-pressed` per option                            |
+| `MdCard`            | elevated, filled and outlined                                            |
+| `MdList`            | list container with an optional accessible name                          |
+| `MdListItem`        | leading, content, details and trailing slots                             |
+| `MdDialog`          | `role="dialog"`, `aria-modal`, focus trap, Escape and scrim close        |
+| `MdSnackbar`        | inverse surface in both tones, error marked by an icon, live region host |
+| `MdTopAppBar`       | sticky, with leading and action slots                                    |
+| `MdNavigationBar`   | bottom bar on compact viewports, rail on expanded                        |
+| `MdMenu`            | `role="menu"` with a backdrop and Escape close                           |
+| `MdMenuItem`        | `role="menuitem"`, with a destructive variant                            |
+| `MdIcon`            | the only component that touches the icon font                            |
 
 Application-specific components live in `src/components/app/` and compose these primitives:
 `MealListItem`, `ShoppingLineItem`, `ConfirmDialog`, `EmptyState`, `SnackbarHost`, `QuantityField`
 and `PwaUpdatePrompt`.
+
+### Snackbar colour
+
+`MdSnackbar` sits on `inverse-surface` with `inverse-on-surface` text, in both tones. That is the
+MD3 snackbar role pair and it deliberately carries the opposite luminance of the surrounding
+surface: a dark bar in the light theme, a light bar in the dark theme. It is not a theming bug.
+
+Because the bar is inverted, foreground roles from the ambient theme do not contrast against it. Two
+consequences:
+
+- The action label uses `inverse-primary`, not `primary`. `primary` shares the polarity of the
+  surface it normally sits on, so on the inverted bar it drops to roughly 2:1 in light and 1.3:1 in
+  dark, which made the only Dismiss control practically invisible.
+- The error tone keeps the same inverted background rather than switching to `error-container`.
+  Doing otherwise gave the two tones opposite polarities, so a neutral and an error snackbar stacked
+  together read as if the theme had flipped between them. Error is signalled by a leading `error`
+  icon in `error-container`, which is the one error role that always opposes `inverse-surface` and
+  so clears contrast in both themes.
+
+MD3 defines no error snackbar. Deviating from the inverted background for one tone is therefore a
+local invention, and this is the reasoning against it.
 
 ### Overlay placement
 

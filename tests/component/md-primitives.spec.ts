@@ -7,6 +7,7 @@ import MdDialog from '../../src/components/md/MdDialog.vue';
 import MdIcon from '../../src/components/md/MdIcon.vue';
 import MdIconButton from '../../src/components/md/MdIconButton.vue';
 import MdSegmentedButton from '../../src/components/md/MdSegmentedButton.vue';
+import MdSnackbar from '../../src/components/md/MdSnackbar.vue';
 import MdSwitch from '../../src/components/md/MdSwitch.vue';
 import MdTextField from '../../src/components/md/MdTextField.vue';
 
@@ -182,5 +183,32 @@ describe('MdDialog', () => {
     expect(wrapper.emitted('close')).toHaveLength(1);
 
     wrapper.unmount();
+  });
+});
+
+describe('MdSnackbar', () => {
+  it('renders both tones on the inverse surface and marks the error tone with an icon', () => {
+    const neutral = mount(MdSnackbar, { props: { message: 'Meal saved' } });
+    const error = mount(MdSnackbar, { props: { message: 'Storage unavailable', tone: 'error' } });
+
+    expect(neutral.classes()).toContain('md-snackbar--neutral');
+    expect(neutral.findComponent(MdIcon).exists()).toBe(false);
+
+    expect(error.classes()).toContain('md-snackbar--error');
+    expect(error.findComponent(MdIcon).props('name')).toBe('error');
+  });
+
+  it('renders the action only when labelled and emits it', async () => {
+    const silent = mount(MdSnackbar, { props: { message: 'Meal saved' } });
+    expect(silent.findComponent(MdButton).exists()).toBe(false);
+
+    const wrapper = mount(MdSnackbar, { props: { message: 'Meal saved', actionLabel: 'Dismiss' } });
+    const action = wrapper.findComponent(MdButton);
+
+    expect(action.props('variant')).toBe('text');
+    expect(action.classes()).toContain('md-snackbar__action');
+
+    await action.trigger('click');
+    expect(wrapper.emitted('action')).toHaveLength(1);
   });
 });

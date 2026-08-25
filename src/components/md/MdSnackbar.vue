@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { MdSnackbarProps } from '../../types/components';
 import MdButton from './MdButton.vue';
+import MdIcon from './MdIcon.vue';
 
 const props = withDefaults(defineProps<MdSnackbarProps>(), {
   tone: 'neutral',
@@ -12,6 +13,7 @@ defineEmits<{ action: [] }>();
 
 <template>
   <div class="md-snackbar" :class="`md-snackbar--${props.tone}`">
+    <MdIcon v-if="props.tone === 'error'" name="error" class="md-snackbar__icon" />
     <p class="md-snackbar__message">{{ props.message }}</p>
     <MdButton
       v-if="props.actionLabel !== ''"
@@ -28,7 +30,6 @@ defineEmits<{ action: [] }>();
 .md-snackbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: var(--md-sys-spacing-4);
   padding-inline: var(--md-sys-spacing-4);
   padding-block: var(--md-sys-spacing-3);
@@ -38,13 +39,22 @@ defineEmits<{ action: [] }>();
   box-shadow: var(--md-sys-elevation-level3);
 }
 
-.md-snackbar--error {
-  background-color: var(--md-sys-color-error-container);
-  color: var(--md-sys-color-on-error-container);
+.md-snackbar__icon {
+  flex: none;
+}
+
+.md-snackbar--error .md-snackbar__icon {
+  color: var(--md-sys-color-error-container);
 }
 
 .md-snackbar__message {
+  flex: 1 1 auto;
   font-size: var(--md-sys-typescale-body-medium-size);
   line-height: var(--md-sys-typescale-body-medium-line-height);
+}
+
+.md-snackbar .md-snackbar__action {
+  flex: none;
+  color: var(--md-sys-color-inverse-primary);
 }
 </style>
