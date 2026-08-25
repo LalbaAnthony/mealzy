@@ -32,6 +32,8 @@ const props = withDefaults(defineProps<MdNavigationBarProps>(), { rail: false })
 }
 
 .md-navigation--bar {
+  position: sticky;
+  inset-block-end: 0;
   justify-content: space-around;
   min-block-size: var(--md-sys-size-navigation-bar);
   padding-block: var(--md-sys-spacing-2);
@@ -41,11 +43,13 @@ const props = withDefaults(defineProps<MdNavigationBarProps>(), { rail: false })
 }
 
 .md-navigation--rail {
+  position: sticky;
+  inset-block-start: 0;
   flex-direction: column;
   align-items: center;
   gap: var(--md-sys-spacing-6);
   inline-size: var(--md-sys-size-navigation-rail);
-  block-size: 100%;
+  block-size: 100vh;
   padding-block: var(--md-sys-spacing-4);
   border-inline-end: 1px solid var(--md-sys-color-outline-variant);
 }

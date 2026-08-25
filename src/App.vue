@@ -53,8 +53,7 @@ onMounted(async () => {
 .app-shell {
   display: flex;
   flex-direction: column;
-  block-size: 100%;
-  overflow: hidden;
+  min-block-size: 100dvh;
   background-color: var(--md-sys-color-background);
 }
 
@@ -67,14 +66,10 @@ onMounted(async () => {
   flex-direction: column;
   flex: 1 1 auto;
   min-inline-size: 0;
-  min-block-size: 0;
 }
 
 .app-shell__content {
   flex: 1 1 auto;
-  min-block-size: 0;
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
   inline-size: 100%;
   max-inline-size: var(--md-sys-size-content-max-width);
   margin-inline: auto;
