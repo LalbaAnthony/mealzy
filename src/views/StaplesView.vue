@@ -211,7 +211,7 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   gap: var(--md-sys-spacing-4);
-  padding-block-end: var(--md-sys-spacing-16);
+  padding-block-end: calc(var(--md-sys-size-fab) + var(--md-sys-spacing-8));
 }
 
 .staples-view__intro {
@@ -222,7 +222,8 @@ onMounted(async () => {
 
 .staples-view__fab {
   position: fixed;
-  inset-block-end: var(--md-sys-spacing-22);
+  inset-block-end: var(--md-sys-inset-floating-bottom);
   inset-inline-end: var(--md-sys-spacing-4);
+  z-index: var(--md-sys-z-index-fab);
 }
 </style>

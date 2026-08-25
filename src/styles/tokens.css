@@ -118,17 +118,20 @@
   --md-sys-spacing-10: 2.5rem;
   --md-sys-spacing-12: 3rem;
   --md-sys-spacing-16: 4rem;
-  --md-sys-spacing-18: 4.5rem;
-  --md-sys-spacing-20: 5rem;
-  --md-sys-spacing-22: 5.5rem;
 
   --md-sys-size-touch-target: 3rem;
   --md-sys-size-icon: 1.5rem;
+  --md-sys-size-fab: 3.5rem;
   --md-sys-size-navigation-rail: 5rem;
   --md-sys-size-navigation-bar: 4rem;
   --md-sys-size-content-max-width: 60rem;
 
+  --md-sys-inset-floating-bottom: calc(
+    var(--md-sys-size-navigation-bar) + var(--md-sys-spacing-4) + env(safe-area-inset-bottom, 0px)
+  );
+
   --md-sys-z-index-navigation: 10;
+  --md-sys-z-index-fab: 15;
   --md-sys-z-index-app-bar: 20;
   --md-sys-z-index-menu: 30;
   --md-sys-z-index-scrim: 40;
@@ -210,4 +213,10 @@
   --md-sys-color-surface-container: #271d1b;
   --md-sys-color-surface-container-high: #322825;
   --md-sys-color-surface-container-highest: #3d3230;
+}
+
+@media (min-width: 840px) {
+  :root {
+    --md-sys-inset-floating-bottom: var(--md-sys-spacing-4);
+  }
 }

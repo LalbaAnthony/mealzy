@@ -18,7 +18,8 @@ codebase may contain a hard-coded colour, spacing value, radius, font size or sh
 | Elevation  | `--md-sys-elevation-level0-5`                            | Ready-made `box-shadow` values                           |
 | Motion     | `--md-sys-motion-duration-*`, `--md-sys-motion-easing-*` | Includes `duration-instant` for reduced motion           |
 | Spacing    | `--md-sys-spacing-0` to `-16`                            | A 4px scale                                              |
-| Size       | `--md-sys-size-*`                                        | Touch target, icon size, navigation sizes, content width |
+| Size       | `--md-sys-size-*`                                        | Touch target, icon, FAB, navigation sizes, content width |
+| Inset      | `--md-sys-inset-*`                                       | Offsets for fixed elements, safe area included           |
 | Z index    | `--md-sys-z-index-*`                                     | Named layers rather than scattered magic numbers         |
 
 The colour scheme is generated from the source colour `#8f4c38`.
@@ -101,15 +102,30 @@ local invention, and this is the reasoning against it.
 
 ### Overlay placement
 
-Two overlays float above the shell and must not collide with each other or with the navigation.
-`PwaUpdatePrompt` is pinned to the top inset, so `SnackbarHost` stays at the bottom. On compact and
-medium viewports the bottom navigation bar occupies that edge, so the host is offset by
-`--md-sys-size-navigation-bar` plus one spacing step plus `env(safe-area-inset-bottom)`, which keeps
-the snackbar clear of both the bar and any content docked just above it. From 840px the navigation
-becomes a rail and the offset falls back to a single spacing step.
+Three things float above the shell and must not collide with each other or with the navigation: the
+floating action button on `RecipesView`, `MealsView` and `StaplesView`, `SnackbarHost`, and
+`PwaUpdatePrompt`. `PwaUpdatePrompt` is pinned to the top inset, so only the bottom edge is
+contested.
 
-`--md-sys-size-navigation-bar` is also the `min-block-size` of `.md-navigation--bar`, so the bar
-height and the snackbar offset cannot drift apart.
+`--md-sys-inset-floating-bottom` is the single answer to how far above the bottom edge a floating
+element sits. On compact and medium viewports the bottom navigation bar occupies that edge, so the
+token resolves to `--md-sys-size-navigation-bar` plus one spacing step plus
+`env(safe-area-inset-bottom)`. The safe area term is the part that matters: on a phone with a
+gesture bar, `.md-navigation--bar` pads itself by that inset and grows well past its
+`min-block-size`, so any offset that ignores the inset leaves the FAB partly behind the bar. From
+840px the navigation becomes a rail and the token falls back to a single spacing step.
+
+The FAB sits at that inset. `SnackbarHost` sits one FAB height plus one spacing step higher, so a
+snackbar never covers the button it may be reporting on. A view that carries a FAB pads its content
+by `--md-sys-size-fab` plus two spacing steps, so the last row can always be scrolled clear of it.
+
+`--md-sys-size-navigation-bar` is the `min-block-size` of `.md-navigation--bar` and
+`--md-sys-size-fab` is the `min-block-size` of `.md-fab`, so a measured height and the offsets
+derived from it cannot drift apart. Nothing here is allowed to be a literal.
+
+A floating element also carries `--md-sys-z-index-fab`, which sits above the navigation bar. The
+offsets are what prevent overlap; the layer only decides the outcome if an unusual inset defeats
+them, and in that case the FAB has to be the one on top.
 
 ## Icons
 
