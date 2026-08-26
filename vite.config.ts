@@ -37,8 +37,8 @@ function requirePositiveIntegerEnv(env: Record<string, string>, key: string): nu
   return parsed;
 }
 
-const themeColor = '#8f4c38';
-const backgroundColor = '#fff8f6';
+const themeColor = '#271d1b';
+const backgroundColor = '#8f4c39';
 
 export default defineConfig(({ mode, command }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_');
