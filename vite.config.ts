@@ -71,7 +71,7 @@ export default defineConfig(({ mode, command }) => {
         registerType: 'prompt',
         injectRegister: null,
         strategies: 'generateSW',
-        includeAssets: ['favicon.svg', 'favicon-32.png', 'apple-touch-icon.png'],
+        includeAssets: ['favicon.ico', 'favicon-32.png', 'apple-touch-icon.png'],
         manifest: {
           name: requireEnv(env, 'VITE_APP_NAME'),
           short_name: requireEnv(env, 'VITE_APP_SHORT_NAME'),
