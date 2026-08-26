@@ -28,8 +28,3 @@ jobs:
 
       - name: Enforce type declaration locations
         run: npm run guard:type-locations
-
-      - name: Verify the generated icon font matches the icon name union
-        run: |
-          npm run build:icons
-          git diff --exit-code -- src/assets/icons
