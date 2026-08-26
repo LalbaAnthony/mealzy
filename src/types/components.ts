@@ -59,6 +59,8 @@ export interface MdSelectProps {
   disabled?: boolean;
   supportingText?: string;
   errorText?: string;
+  placeholder?: string;
+  noMatchesText?: string;
 }
 
 export interface MdCheckboxProps {

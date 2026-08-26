@@ -59,7 +59,7 @@ nothing else. A primitive that knows what a recipe is would be a defect.
 | `MdIconButton`      | standard, filled and tonal; requires an accessible `label`               |
 | `MdFab`             | regular and extended                                                     |
 | `MdTextField`       | label bound by `for`/`id`, `aria-invalid` and `aria-describedby`         |
-| `MdSelect`          | same labelling and error contract as the text field                      |
+| `MdSelect`          | searchable combobox, same labelling and error contract as the text field |
 | `MdCheckbox`        | `hideLabel` moves the label to `aria-label` for dense list rows          |
 | `MdSwitch`          | `role="switch"` with `aria-checked`, optional visible label              |
 | `MdChip`            | assist, filter and input variants, optionally removable                  |
@@ -84,6 +84,46 @@ action, but BR-20 asks for more friction than a single button can carry: the fir
 backup export and takes the acknowledgement, the second takes the typed confirmation phrase. It owns
 the step, the checkbox and the typed text, and emits only `export-backup`, `confirm` and `cancel`, so
 the view keeps the service calls. Reopening it always returns to the first step.
+
+### The select is a combobox
+
+`MdSelect` is not a native `<select>`. It is a WAI-ARIA combobox with list autocomplete: a text
+input that filters the options as you type, over a `role="listbox"` of `role="option"` rows. Every
+call site is searchable, including the two-option and three-option ones. See
+[ADR 0012](adr/0012-mdselect-is-a-searchable-combobox-not-a-native-select.md) for why there is no
+`searchable` prop and no option-count threshold.
+
+The contract it presents to a view is the text field's contract plus the option list: `modelValue`
+carries the option value, `label`, `supportingText` and `errorText` behave exactly as on
+`MdTextField`, and `placeholder` and `noMatchesText` are optional.
+
+Behaviour worth knowing before changing it:
+
+| Interaction            | Result                                                                      |
+| ---------------------- | --------------------------------------------------------------------------- |
+| Click, or Up, or Down  | Opens the list with the current option active                               |
+| Typing                 | Opens the list, filters on a case-insensitive substring of the label        |
+| Up and Down while open | Move the active option, wrapping at both ends                               |
+| Enter while open       | Commits the active option, or closes the list if the filter matched nothing |
+| Enter while closed     | Not intercepted, so a form still submits                                    |
+| Escape while open      | Closes and restores the selection, and does not bubble                      |
+| Tab, or focus leaving  | Closes and restores the selection without emitting                          |
+
+The field shows the selected label while closed and empties for the search while open, keeping the
+selection visible as the placeholder so it is never lost from view.
+
+Two details exist for the sake of `MdDialog` and must survive any rewrite. Escape calls
+`stopPropagation` while the list is open, otherwise closing the list would also close the dialog
+around it. The list is teleported to `body` and positioned against the field's bounding rectangle,
+because `.md-dialog` is a scroll container and would otherwise clip it at its own bottom edge. That
+is a clipping problem, not a stacking one, so no z-index alone can fix it.
+
+The teleported list sits on `--md-sys-z-index-popover`, between the dialog and the snackbar: above
+the dialog it belongs to, below a snackbar that may be reporting a failure. It is positioned below
+the field unless there is more room above, and its height is capped by whichever is smaller, 15rem
+or the space actually available in the chosen direction. The component supplies that space as
+`--md-select-space` in pixels and the cap itself stays in CSS. The options carry no `tabindex`, so
+teleporting them out of the dialog does not take anything out of its focus trap.
 
 ### Snackbar colour
 

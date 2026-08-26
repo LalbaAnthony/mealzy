@@ -1,15 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import { mount } from '@vue/test-utils';
-import { nextTick } from 'vue';
+import { h, nextTick } from 'vue';
 import MdButton from '../../src/components/md/MdButton.vue';
 import MdCheckbox from '../../src/components/md/MdCheckbox.vue';
 import MdDialog from '../../src/components/md/MdDialog.vue';
 import MdIcon from '../../src/components/md/MdIcon.vue';
 import MdIconButton from '../../src/components/md/MdIconButton.vue';
 import MdSegmentedButton from '../../src/components/md/MdSegmentedButton.vue';
+import MdSelect from '../../src/components/md/MdSelect.vue';
 import MdSnackbar from '../../src/components/md/MdSnackbar.vue';
 import MdSwitch from '../../src/components/md/MdSwitch.vue';
 import MdTextField from '../../src/components/md/MdTextField.vue';
+import type { MdSelectProps } from '../../src/types/components';
 
 describe('MdIcon', () => {
   it('renders the icon font class and hides itself from assistive technology', () => {
@@ -79,6 +81,206 @@ describe('MdTextField', () => {
     expect(input.attributes('aria-invalid')).toBe('true');
     expect(wrapper.get('p').text()).toBe('A recipe needs a name.');
     expect(input.attributes('aria-describedby')).toBe(wrapper.get('p').attributes('id'));
+  });
+});
+
+describe('MdSelect', () => {
+  const options = [
+    { value: 'flour', label: 'Flour' },
+    { value: 'milk', label: 'Milk' },
+    { value: 'olive-oil', label: 'Olive oil' },
+  ];
+
+  function mountSelect(props: MdSelectProps) {
+    return mount(MdSelect, { props, global: { stubs: { teleport: true } } });
+  }
+
+  it('binds the label to the combobox and shows the selected option while closed', () => {
+    const wrapper = mountSelect({ modelValue: 'milk', label: 'Ingredient', options });
+
+    const input = wrapper.get('input');
+    expect(wrapper.get('label').attributes('for')).toBe(input.attributes('id'));
+    expect(input.attributes('role')).toBe('combobox');
+    expect(input.attributes('aria-expanded')).toBe('false');
+    expect(input.element.value).toBe('Milk');
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
+  it('opens on click with every option and marks the current one selected', async () => {
+    const wrapper = mountSelect({ modelValue: 'milk', label: 'Ingredient', options });
+    const input = wrapper.get('input');
+
+    await input.trigger('click');
+
+    const rendered = wrapper.findAll('[role="option"]');
+    expect(rendered).toHaveLength(3);
+    expect(rendered[1]?.attributes('aria-selected')).toBe('true');
+    expect(rendered[0]?.attributes('aria-selected')).toBe('false');
+    expect(input.attributes('aria-expanded')).toBe('true');
+    expect(wrapper.get('[role="listbox"]').attributes('id')).toBe(
+      input.attributes('aria-controls'),
+    );
+  });
+
+  it('empties the field for the search and keeps the selection as the placeholder', async () => {
+    const wrapper = mountSelect({ modelValue: 'milk', label: 'Ingredient', options });
+    const input = wrapper.get('input');
+
+    await input.trigger('click');
+
+    expect(input.element.value).toBe('');
+    expect(input.attributes('placeholder')).toBe('Milk');
+  });
+
+  it('filters on a case-insensitive substring and emits the clicked option', async () => {
+    const wrapper = mountSelect({ modelValue: '', label: 'Ingredient', options });
+
+    await wrapper.get('input').setValue('OIL');
+
+    const rendered = wrapper.findAll('[role="option"]');
+    expect(rendered).toHaveLength(1);
+    expect(rendered[0]?.text()).toBe('Olive oil');
+
+    await rendered[0]?.trigger('click');
+    expect(wrapper.emitted('update:modelValue')).toEqual([['olive-oil']]);
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
+  it('reports no matches instead of offering an option', async () => {
+    const wrapper = mountSelect({
+      modelValue: '',
+      label: 'Ingredient',
+      options,
+      noMatchesText: 'Nothing found',
+    });
+
+    await wrapper.get('input').setValue('zzz');
+
+    expect(wrapper.findAll('[role="option"]')).toHaveLength(0);
+    expect(wrapper.get('.md-select__empty').text()).toBe('Nothing found');
+  });
+
+  it('walks the filtered options with the arrow keys and commits on enter', async () => {
+    const wrapper = mountSelect({ modelValue: '', label: 'Ingredient', options });
+    const input = wrapper.get('input');
+
+    await input.trigger('keydown', { key: 'ArrowDown' });
+    expect(input.attributes('aria-activedescendant')).toBeUndefined();
+
+    await input.trigger('keydown', { key: 'ArrowDown' });
+    expect(input.attributes('aria-activedescendant')).toBe(
+      wrapper.findAll('[role="option"]')[0]?.attributes('id'),
+    );
+
+    await input.trigger('keydown', { key: 'ArrowUp' });
+    expect(input.attributes('aria-activedescendant')).toBe(
+      wrapper.findAll('[role="option"]')[2]?.attributes('id'),
+    );
+
+    await input.trigger('keydown', { key: 'Enter' });
+    expect(wrapper.emitted('update:modelValue')).toEqual([['olive-oil']]);
+  });
+
+  it('restores the selected label on escape and on tab without emitting', async () => {
+    const wrapper = mountSelect({ modelValue: 'milk', label: 'Ingredient', options });
+    const input = wrapper.get('input');
+
+    await input.setValue('fl');
+    await input.trigger('keydown', { key: 'Escape' });
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+    expect(input.element.value).toBe('Milk');
+
+    await input.setValue('fl');
+    await input.trigger('keydown', { key: 'Tab' });
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+    expect(input.element.value).toBe('Milk');
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined();
+  });
+
+  it('keeps escape from reaching a surrounding dialog while the list is open', async () => {
+    const escapes: string[] = [];
+    const record = (event: Event): void => {
+      if (event instanceof KeyboardEvent) {
+        escapes.push(event.key);
+      }
+    };
+    document.addEventListener('keydown', record);
+
+    const wrapper = mount(MdSelect, {
+      props: { modelValue: 'milk', label: 'Ingredient', options },
+      attachTo: document.body,
+      global: { stubs: { teleport: true } },
+    });
+    const input = wrapper.get('input');
+
+    await input.trigger('click');
+    await input.trigger('keydown', { key: 'Escape' });
+    expect(escapes).toHaveLength(0);
+
+    await input.trigger('keydown', { key: 'Escape' });
+    expect(escapes).toEqual(['Escape']);
+
+    document.removeEventListener('keydown', record);
+    wrapper.unmount();
+  });
+
+  it('renders the list outside the dialog that clips it', async () => {
+    const wrapper = mount(MdDialog, {
+      props: { open: true, title: 'Edit staple' },
+      slots: { default: h(MdSelect, { modelValue: 'milk', label: 'Unit', options }) },
+      attachTo: document.body,
+    });
+
+    const input = document.querySelector('[role="dialog"] input');
+    input?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await nextTick();
+
+    const listboxes = document.querySelectorAll('[role="listbox"]');
+    expect(listboxes).toHaveLength(1);
+
+    const dialog = document.querySelector('[role="dialog"]');
+    expect(dialog?.contains(listboxes[0] ?? null)).toBe(false);
+
+    wrapper.unmount();
+  });
+
+  it('closes when focus leaves the field', async () => {
+    const wrapper = mountSelect({ modelValue: 'milk', label: 'Ingredient', options });
+    const input = wrapper.get('input');
+
+    await input.trigger('click');
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+
+    await input.trigger('blur');
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+    expect(input.element.value).toBe('Milk');
+  });
+
+  it('exposes the error as the described message', () => {
+    const wrapper = mountSelect({
+      modelValue: '',
+      label: 'Aisle',
+      options,
+      errorText: 'Pick an aisle.',
+    });
+
+    const input = wrapper.get('input');
+    expect(input.attributes('aria-invalid')).toBe('true');
+    expect(wrapper.get('p').text()).toBe('Pick an aisle.');
+    expect(input.attributes('aria-describedby')).toBe(wrapper.get('p').attributes('id'));
+  });
+
+  it('disables the field through the native attribute', () => {
+    const wrapper = mountSelect({
+      modelValue: 'milk',
+      label: 'Ingredient',
+      options,
+      disabled: true,
+    });
+
+    expect(wrapper.get('input').element.disabled).toBe(true);
   });
 });
 

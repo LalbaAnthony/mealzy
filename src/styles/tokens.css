@@ -136,6 +136,7 @@
   --md-sys-z-index-menu: 30;
   --md-sys-z-index-scrim: 40;
   --md-sys-z-index-dialog: 50;
+  --md-sys-z-index-popover: 55;
   --md-sys-z-index-snackbar: 60;
 }
 
