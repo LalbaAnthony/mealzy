@@ -61,6 +61,8 @@ export interface MdSelectProps {
   errorText?: string;
   placeholder?: string;
   noMatchesText?: string;
+  allowCreate?: boolean;
+  createPrefix?: string;
 }
 
 export interface MdCheckboxProps {
