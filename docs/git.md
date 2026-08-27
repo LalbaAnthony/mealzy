@@ -88,3 +88,21 @@ git checkout develop
 
 # Repeat
 ```
+
+### Line endings
+
+`.gitattributes` declares `* text=auto eol=lf`, so every text file is stored and checked out with LF
+on every platform. Known binary extensions are marked `binary` so git never touches them.
+
+This is not a style preference, it is what keeps `npm run format:check` passing on Windows. Prettier
+is configured with `endOfLine: "lf"`, and git on Windows defaults to `core.autocrlf=true`, which
+rewrites the working copy to CRLF at checkout. Without `.gitattributes` those two disagree and every
+file in the repository fails the format check, which fails `npm run verify` and CI.
+
+`.gitattributes` takes precedence over `core.autocrlf`, so nobody has to configure their machine.
+Do not delete it, and do not relax prettier to `endOfLine: "auto"` instead: that would hide the
+mismatch locally while CI still compares against LF.
+
+A working copy checked out before `.gitattributes` existed keeps its CRLF endings, because git does
+not rewrite files that are already up to date. Run `npx prettier --write .` once to normalise it.
+That produces no diff, since git already stored the blobs with LF.
