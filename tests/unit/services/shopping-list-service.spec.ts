@@ -1,9 +1,10 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { SEEDED_STAPLE_LABELS, createTestHarness, seedCatalogue } from '../../support/test-harness';
+import { createTestHarness, seedCatalogue } from '../../support/test-harness';
 
 let harness: ReturnType<typeof createTestHarness>;
 let produceId: string;
 let dairyId: string;
+let groceryId: string;
 
 async function createIngredient(name: string, categoryId: string): Promise<string> {
   const result = await harness.services.ingredients.create({ name, categoryId });
@@ -11,6 +12,26 @@ async function createIngredient(name: string, categoryId: string): Promise<strin
     throw new Error(`Failed to create ingredient ${name}`);
   }
   return result.value.id;
+}
+
+async function createStaple(ingredientId: string): Promise<void> {
+  const result = await harness.services.staples.create({
+    ingredientId,
+    defaultQuantity: null,
+    enabled: true,
+  });
+  if (!result.ok) {
+    throw new Error('staple creation failed');
+  }
+}
+
+async function stapleSeededIngredient(name: string): Promise<void> {
+  const ingredients = await harness.services.ingredients.list();
+  const ingredient = ingredients.find((candidate) => candidate.name === name);
+  if (ingredient === undefined) {
+    throw new Error(`missing seeded ingredient ${name}`);
+  }
+  await createStaple(ingredient.id);
 }
 
 async function planRecipe(
@@ -33,8 +54,9 @@ async function planRecipe(
 
 beforeEach(async () => {
   harness = createTestHarness();
-  const { produce } = await seedCatalogue(harness);
+  const { grocery, produce } = await seedCatalogue(harness);
   produceId = produce.id;
+  groceryId = grocery.id;
   const categories = await harness.services.categories.list();
   const dairy = categories.find((category) => category.name === 'Dairy');
   if (dairy === undefined) {
@@ -47,6 +69,8 @@ describe('BR-18 grouped snapshot', () => {
   it('groups lines by category with uncategorized last', async () => {
     const tomatoId = await createIngredient('Tomato', produceId);
     const creamId = await createIngredient('Cream', dairyId);
+    const riceId = await createIngredient('Rice', groceryId);
+    await createStaple(riceId);
     await planRecipe('Soup', [
       { ingredientId: tomatoId, quantity: { amount: 500, unit: 'g' } },
       { ingredientId: creamId, quantity: { amount: 100, unit: 'g' } },
@@ -56,14 +80,24 @@ describe('BR-18 grouped snapshot', () => {
     const names = snapshot.groups.map((group) => group.categoryName);
 
     expect(names).toEqual(['Produce', 'Dairy', 'Grocery']);
-    expect(snapshot.totalCount).toBe(SEEDED_STAPLE_LABELS.length + 2);
+    expect(snapshot.totalCount).toBe(3);
   });
 
-  it('includes every seeded staple', async () => {
+  it('starts from an empty list because the seed creates no staple', async () => {
+    const snapshot = await harness.services.shoppingList.getSnapshot();
+
+    expect(snapshot.groups).toStrictEqual([]);
+    expect(snapshot.totalCount).toBe(0);
+  });
+
+  it('includes every enabled staple', async () => {
+    await stapleSeededIngredient('Salt');
+    await stapleSeededIngredient('Coffee');
+
     const snapshot = await harness.services.shoppingList.getSnapshot();
     const grocery = snapshot.groups.find((group) => group.categoryName === 'Grocery');
 
-    expect(grocery?.lines.map((line) => line.label)).toEqual(SEEDED_STAPLE_LABELS);
+    expect(grocery?.lines.map((line) => line.label)).toEqual(['Coffee', 'Salt']);
   });
 });
 
@@ -112,6 +146,8 @@ describe('BR-07 eaten meals leave the shopping list', () => {
 
 describe('BR-15 and BR-17 ad hoc items and trip reset', () => {
   it('adds an ad hoc item without merging it with an ingredient', async () => {
+    await stapleSeededIngredient('Salt');
+
     const result = await harness.services.adHocItems.create({
       label: 'Salt',
       quantity: null,
@@ -193,6 +229,7 @@ describe('BR-15 and BR-17 ad hoc items and trip reset', () => {
 
 describe('BR-19 export excludes purchased lines', () => {
   it('renders the grouped plain text list', async () => {
+    await stapleSeededIngredient('Salt');
     const tomatoId = await createIngredient('Tomato', produceId);
     const onionId = await createIngredient('Onion', produceId);
     await planRecipe('Soup', [

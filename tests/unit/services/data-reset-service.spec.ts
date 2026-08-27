@@ -1,5 +1,9 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { SEEDED_STAPLE_NAMES, createTestHarness, seedCatalogue } from '../../support/test-harness';
+import {
+  SEEDED_INGREDIENT_NAMES,
+  createTestHarness,
+  seedCatalogue,
+} from '../../support/test-harness';
 
 let harness: ReturnType<typeof createTestHarness>;
 let produceId: string;
@@ -29,6 +33,14 @@ async function buildSampleState(): Promise<void> {
     quantity: { amount: 2, unit: 'piece' },
     categoryId: produceId,
   });
+  const staple = await harness.services.staples.create({
+    ingredientId: ingredient.value.id,
+    defaultQuantity: null,
+    enabled: true,
+  });
+  if (!staple.ok) {
+    throw new Error('staple creation failed');
+  }
   await harness.services.shoppingList.setPurchased(`ingredient:${ingredient.value.id}:g`, true);
   await harness.services.settings.setThemePreference('dark');
 }
@@ -48,9 +60,9 @@ describe('local data summary', () => {
     expect(summary).toStrictEqual({
       recipes: 1,
       plannedMeals: 1,
-      ingredients: SEEDED_STAPLE_NAMES.length + 1,
+      ingredients: SEEDED_INGREDIENT_NAMES.length + 1,
       categories: 7,
-      staples: SEEDED_STAPLE_NAMES.length,
+      staples: 1,
       adHocItems: 1,
       purchasedTicks: 1,
     });
@@ -83,9 +95,9 @@ describe('BR-20 deleting all local data', () => {
     expect(categories.map((category) => category.name).sort()).toStrictEqual(
       categoriesBefore.map((category) => category.name).sort(),
     );
-    expect(staples).toHaveLength(SEEDED_STAPLE_NAMES.length);
+    expect(staples).toStrictEqual([]);
     expect(ingredients.map((ingredient) => ingredient.name).sort()).toStrictEqual(
-      [...SEEDED_STAPLE_NAMES].sort(),
+      [...SEEDED_INGREDIENT_NAMES].sort(),
     );
   });
 
@@ -117,9 +129,9 @@ describe('BR-20 deleting all local data', () => {
     expect(await harness.services.dataReset.summarise()).toStrictEqual({
       recipes: 0,
       plannedMeals: 0,
-      ingredients: SEEDED_STAPLE_NAMES.length,
+      ingredients: SEEDED_INGREDIENT_NAMES.length,
       categories: 7,
-      staples: SEEDED_STAPLE_NAMES.length,
+      staples: 0,
       adHocItems: 0,
       purchasedTicks: 0,
     });

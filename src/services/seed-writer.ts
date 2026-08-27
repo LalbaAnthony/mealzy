@@ -1,10 +1,12 @@
 import type { ServiceDependencies } from '../types/services';
+import { SEED_CATALOGUE } from '../domain/seed/seed-catalogue';
 import { buildSeedData } from '../domain/seed/seed-data';
 
 export async function writeSeedData(dependencies: ServiceDependencies): Promise<void> {
-  const { categories, ingredients, staples } = dependencies.repositories;
+  const { categories, ingredients } = dependencies.repositories;
 
   const seed = buildSeedData({
+    catalogue: SEED_CATALOGUE,
     generateId: () => dependencies.ids.next(),
     now: dependencies.clock.now(),
   });
@@ -14,8 +16,5 @@ export async function writeSeedData(dependencies: ServiceDependencies): Promise<
   }
   for (const ingredient of seed.ingredients) {
     await ingredients.put(ingredient);
-  }
-  for (const staple of seed.staples) {
-    await staples.put(staple);
   }
 }

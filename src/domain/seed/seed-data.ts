@@ -1,29 +1,30 @@
 import type { Category, Ingredient } from '../../types/ingredient';
-import type { SeedData, SeedDataInput } from '../../types/seed';
-import type { Staple } from '../../types/shopping';
+import type { SeedCatalogue, SeedData, SeedDataInput } from '../../types/seed';
 import {
   UNCATEGORIZED_CATEGORY_ID,
   UNCATEGORIZED_CATEGORY_NAME,
   UNCATEGORIZED_CATEGORY_SORT_ORDER,
 } from '../constants';
 
-const STAPLE_INGREDIENT_NAMES: readonly string[] = [
-  'Coffee',
-  'Sugar',
-  'Olive oil',
-  'Parchment paper',
-  'Grated cheese',
-  'Salt',
-  'Sunflower oil',
-  'Pepper',
-  'Butter',
-  'Flour',
-  'Milk',
-  'Honey',
-  'Eggs',
-  'Pet food',
-  'Balsamic vinegar',
-];
+function buildCategoriesByKey(
+  catalogue: SeedCatalogue,
+  generateId: () => string,
+): ReadonlyMap<string, Category> {
+  const categoriesByKey = new Map<string, Category>();
+
+  for (const seedCategory of catalogue.categories) {
+    if (categoriesByKey.has(seedCategory.key)) {
+      throw new Error(`The seed catalogue declares the category key "${seedCategory.key}" twice.`);
+    }
+    categoriesByKey.set(seedCategory.key, {
+      id: generateId(),
+      name: seedCategory.name,
+      sortOrder: seedCategory.sortOrder,
+    });
+  }
+
+  return categoriesByKey;
+}
 
 export function buildSeedData(input: SeedDataInput): SeedData {
   const uncategorized: Category = {
@@ -31,31 +32,28 @@ export function buildSeedData(input: SeedDataInput): SeedData {
     name: UNCATEGORIZED_CATEGORY_NAME,
     sortOrder: UNCATEGORIZED_CATEGORY_SORT_ORDER,
   };
-  const produce: Category = { id: input.generateId(), name: 'Produce', sortOrder: 1 };
-  const dairy: Category = { id: input.generateId(), name: 'Dairy', sortOrder: 2 };
-  const meatAndFish: Category = { id: input.generateId(), name: 'Meat and fish', sortOrder: 3 };
-  const grocery: Category = { id: input.generateId(), name: 'Grocery', sortOrder: 4 };
-  const frozen: Category = { id: input.generateId(), name: 'Frozen', sortOrder: 5 };
-  const household: Category = { id: input.generateId(), name: 'Household', sortOrder: 6 };
 
-  const ingredients: readonly Ingredient[] = STAPLE_INGREDIENT_NAMES.map((name) => ({
-    id: input.generateId(),
-    name,
-    categoryId: grocery.id,
-    createdAt: input.now,
-    updatedAt: input.now,
-  }));
+  const categoriesByKey = buildCategoriesByKey(input.catalogue, input.generateId);
 
-  const staples: readonly Staple[] = ingredients.map((ingredient) => ({
-    id: input.generateId(),
-    ingredientId: ingredient.id,
-    defaultQuantity: null,
-    enabled: true,
-  }));
+  const ingredients: readonly Ingredient[] = input.catalogue.ingredients.map((seedIngredient) => {
+    const category = categoriesByKey.get(seedIngredient.categoryKey);
+    if (category === undefined) {
+      throw new Error(
+        `The seed ingredient "${seedIngredient.name}" refers to the unknown category key "${seedIngredient.categoryKey}".`,
+      );
+    }
+
+    return {
+      id: input.generateId(),
+      name: seedIngredient.name,
+      categoryId: category.id,
+      createdAt: input.now,
+      updatedAt: input.now,
+    };
+  });
 
   return {
-    categories: [uncategorized, produce, dairy, meatAndFish, grocery, frozen, household],
+    categories: [uncategorized, ...categoriesByKey.values()],
     ingredients,
-    staples,
   };
 }

@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Coffee",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Sugar",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Olive oil",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Parchment paper",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Grated cheese",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Salt",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Sunflower oil",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Pepper",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Butter",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Flour",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Milk",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Honey",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Eggs",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Pet food",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Balsamic vinegar",
+    "categoryKey": "grocery"
+  }
+]

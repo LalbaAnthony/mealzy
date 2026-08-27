@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import type { AppServices } from '../../../src/types/container';
 import type { AppRepositories } from '../../../src/types/persistence';
 import { sortPlannedMeals } from '../../../src/domain/ordering/meal-order';
-import { SEEDED_STAPLE_LABELS, createTestHarness, seedCatalogue } from '../../support/test-harness';
+import { createTestHarness, seedCatalogue } from '../../support/test-harness';
 
 let harness: ReturnType<typeof createTestHarness>;
 let services: AppServices;
@@ -44,6 +44,22 @@ async function createRecipeAndPlan(
   return meal.value.id;
 }
 
+async function stapleSeededIngredient(name: string): Promise<void> {
+  const ingredients = await services.ingredients.list();
+  const ingredient = ingredients.find((candidate) => candidate.name === name);
+  if (ingredient === undefined) {
+    throw new Error(`missing seeded ingredient ${name}`);
+  }
+  const staple = await services.staples.create({
+    ingredientId: ingredient.id,
+    defaultQuantity: null,
+    enabled: true,
+  });
+  if (!staple.ok) {
+    throw new Error(`could not staple ${name}`);
+  }
+}
+
 function reloadTheApplication(): void {
   harness = createTestHarness(repositories);
   services = harness.services;
@@ -62,6 +78,9 @@ beforeEach(async () => {
     throw new Error('missing dairy');
   }
   dairyId = dairy.id;
+
+  await stapleSeededIngredient('Coffee');
+  await stapleSeededIngredient('Salt');
 
   tomatoId = await createIngredient('Tomato', produceId);
   onionId = await createIngredient('Onion', produceId);
@@ -100,11 +119,11 @@ describe('acceptance scenario', () => {
     ]);
   });
 
-  it('lists every seeded staple', async () => {
+  it('lists the enabled staples in their aisle', async () => {
     const snapshot = await services.shoppingList.getSnapshot();
     const grocery = snapshot.groups.find((group) => group.categoryName === 'Grocery');
 
-    expect(grocery?.lines.map((line) => line.label)).toEqual(SEEDED_STAPLE_LABELS);
+    expect(grocery?.lines.map((line) => line.label)).toEqual(['Coffee', 'Salt']);
   });
 
   it('keeps ticks across a reload and across adding a fourth meal', async () => {

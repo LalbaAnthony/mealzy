@@ -51,6 +51,26 @@ deterministic and fast.
 
 Pinia stores and composables call `useServices()`. They never import a concrete repository.
 
+## Seed content is data, not code
+
+The BR-14 first-run content lives in two JSON files, `src/domain/seed/categories.json` and
+`src/domain/seed/ingredients.json`. `seed-catalogue.ts` imports them and exposes them as the typed
+`SEED_CATALOGUE`, which is the only place the shipped content is named.
+
+`buildSeedData` takes the catalogue as an argument, exactly as it takes the clock and the identifier
+generator, so it stays pure and every catalogue shape is testable. It generates the identifiers,
+stamps the timestamps, prepends the reserved `uncategorized` category and joins each ingredient to
+its category by the `key` its catalogue entry declares. An unknown key or a key declared twice throws:
+a broken catalogue is a packaging defect, not a business failure. There is no zod schema over these
+files, because they are bundled at build time and the assignment in `seed-catalogue.ts` is what
+typechecks them. See [ADR 0014](adr/0014-seed-content-lives-in-json-data-files.md).
+
+The seed writes categories and ingredients only. Staples are never seeded, so the shopping list is
+empty until the user adds one.
+
+Adding an aisle or an ingredient to the first-run data is an edit to a JSON file. No TypeScript
+changes.
+
 ## State management
 
 Pinia setup-style stores hold view state and delegate all logic to services. A store containing a

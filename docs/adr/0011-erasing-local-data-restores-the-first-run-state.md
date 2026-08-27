@@ -38,8 +38,9 @@ explicit acknowledgement that the data is going, and a typed confirmation phrase
 
 ## Consequences
 
-- After an erase the application is immediately usable, with the default aisles and staples, rather
-  than needing a category invented before the first ingredient.
+- After an erase the application is immediately usable, with the default aisles and the seeded
+  ingredient catalogue, rather than needing a category invented before the first ingredient. The
+  staples list comes back empty, exactly as on a first run.
 - Clearing the schema version to trigger the seed on the next start was rejected. It would leave a
   window in which the database holds data with no version, which the migration runner reads as a
   first run, and an erase interrupted inside that window is indistinguishable from a fresh install

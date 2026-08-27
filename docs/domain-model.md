@@ -168,14 +168,22 @@ staple. A second staple for the same ingredient is rejected, because two staples
 contribute to the same line and double the amount.
 
 **BR-14 Seed data on first run: the `uncategorized` category, the categories `Produce`, `Dairy`,
-`Meat and fish`, `Grocery`, `Frozen`, `Household`, and one enabled staple for each of coffee, sugar,
-olive oil, parchment paper, grated cheese, salt, sunflower oil, pepper, butter, flour, milk, honey,
-eggs, pet food and balsamic vinegar, each with its ingredient created and categorised under
-`Grocery`.**
-Rationale: an empty application is hard to evaluate. First run is detected by the absence of a stored
-schema version, so seeding never runs twice and never runs after a backup import. Deleting all local
-data (BR-20) is the one other moment the seed is written, and it writes it explicitly rather than by
-clearing the schema version. The `uncategorized` category cannot be deleted or renamed.
+`Meat and fish`, `Grocery`, `Frozen`, `Household`, and an ingredient for each of coffee, sugar, olive
+oil, parchment paper, grated cheese, salt, sunflower oil, pepper, butter, flour, milk, honey, eggs,
+pet food and balsamic vinegar, all categorised under `Grocery`. The seed creates no staple: the
+staples list starts empty and is the user's to fill (BR-13).**
+Rationale: an empty application is hard to evaluate, but a shopping list that already carries fifteen
+lines nobody asked for is worse than an empty one, because the first act of every new user would be
+to delete them. Seeding the ingredient catalogue gives something to plan recipes with; deciding what
+is bought every week is a personal judgement the application is not entitled to make. First run is
+detected by the absence of a stored schema version, so seeding never runs twice and never runs after
+a backup import. Deleting all local data (BR-20) is the one other moment the seed is written, and it
+writes it explicitly rather than by clearing the schema version. The `uncategorized` category cannot
+be deleted or renamed. The content of this rule is data: the aisles are listed in
+`src/domain/seed/categories.json` and the ingredients in `src/domain/seed/ingredients.json`, each
+pointing at its aisle by key. Changing what first run contains is an edit to those files and to this
+paragraph, not to the builder. See
+[ADR 0014](adr/0014-seed-content-lives-in-json-data-files.md).
 
 **BR-15 An ad hoc item is a free-text label with an optional quantity and a category. Ad hoc items
 never merge with ingredient lines, even when the labels match.**

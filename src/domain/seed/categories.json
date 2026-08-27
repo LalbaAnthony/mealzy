@@ -1,0 +1,32 @@
+[
+  {
+    "key": "produce",
+    "name": "Produce",
+    "sortOrder": 1
+  },
+  {
+    "key": "dairy",
+    "name": "Dairy",
+    "sortOrder": 2
+  },
+  {
+    "key": "meat-and-fish",
+    "name": "Meat and fish",
+    "sortOrder": 3
+  },
+  {
+    "key": "grocery",
+    "name": "Grocery",
+    "sortOrder": 4
+  },
+  {
+    "key": "frozen",
+    "name": "Frozen",
+    "sortOrder": 5
+  },
+  {
+    "key": "household",
+    "name": "Household",
+    "sortOrder": 6
+  }
+]
