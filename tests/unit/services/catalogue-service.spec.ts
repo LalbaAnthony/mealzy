@@ -103,6 +103,33 @@ describe('category management', () => {
   });
 });
 
+describe('BR-21 an ingredient created from a search lands in uncategorized', () => {
+  it('creates the searched name under the reserved category', async () => {
+    const result = await harness.services.ingredients.createFromSearch('  Fresh   basil ');
+
+    expect(result).toMatchObject({
+      ok: true,
+      value: { name: 'Fresh basil', categoryId: 'uncategorized' },
+    });
+  });
+
+  it('rejects a name that already exists, whatever its category', async () => {
+    await createIngredient('Basil', produceId);
+
+    expect(await harness.services.ingredients.createFromSearch('basil')).toMatchObject({
+      ok: false,
+      error: { code: 'ingredient-name-duplicate' },
+    });
+  });
+
+  it('rejects an empty search', async () => {
+    expect(await harness.services.ingredients.createFromSearch('   ')).toMatchObject({
+      ok: false,
+      error: { code: 'ingredient-name-required' },
+    });
+  });
+});
+
 describe('BR-12 ingredient deletion is blocked while referenced', () => {
   it('lists the recipes and staples that block deletion', async () => {
     const tomatoId = await createIngredient('Tomato', produceId);

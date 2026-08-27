@@ -160,6 +160,71 @@ describe('MdSelect', () => {
     expect(wrapper.get('.md-select__empty').text()).toBe('Nothing found');
   });
 
+  it('offers to create the typed name when nothing matches, and emits the trimmed text', async () => {
+    const wrapper = mountSelect({
+      modelValue: '',
+      label: 'Ingredient',
+      options,
+      allowCreate: true,
+      createPrefix: 'Add',
+    });
+
+    await wrapper.get('input').setValue('  Basil  ');
+
+    const rendered = wrapper.findAll('[role="option"]');
+    expect(rendered).toHaveLength(1);
+    expect(rendered[0]?.text()).toBe('Add "Basil"');
+    expect(wrapper.find('.md-select__empty').exists()).toBe(false);
+
+    await rendered[0]?.trigger('click');
+    expect(wrapper.emitted('create')).toEqual([['Basil']]);
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined();
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+  });
+
+  it('offers to create alongside a partial match and reaches it with the arrow keys', async () => {
+    const wrapper = mountSelect({
+      modelValue: '',
+      label: 'Ingredient',
+      options,
+      allowCreate: true,
+    });
+    const input = wrapper.get('input');
+
+    await input.setValue('mil');
+    expect(wrapper.findAll('[role="option"]').map((row) => row.text())).toEqual([
+      'Milk',
+      'Add "mil"',
+    ]);
+
+    await input.trigger('keydown', { key: 'ArrowDown' });
+    await input.trigger('keydown', { key: 'Enter' });
+
+    expect(wrapper.emitted('create')).toEqual([['mil']]);
+  });
+
+  it('does not offer to create an exact match, whatever its case', async () => {
+    const wrapper = mountSelect({
+      modelValue: '',
+      label: 'Ingredient',
+      options,
+      allowCreate: true,
+    });
+
+    await wrapper.get('input').setValue('MILK');
+
+    expect(wrapper.findAll('[role="option"]').map((row) => row.text())).toEqual(['Milk']);
+  });
+
+  it('keeps the create row out of the list unless it is allowed', async () => {
+    const wrapper = mountSelect({ modelValue: '', label: 'Ingredient', options });
+
+    await wrapper.get('input').setValue('zzz');
+
+    expect(wrapper.findAll('[role="option"]')).toHaveLength(0);
+    expect(wrapper.emitted('create')).toBeUndefined();
+  });
+
   it('walks the filtered options with the arrow keys and commits on enter', async () => {
     const wrapper = mountSelect({ modelValue: '', label: 'Ingredient', options });
     const input = wrapper.get('input');

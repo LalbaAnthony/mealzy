@@ -97,17 +97,27 @@ The contract it presents to a view is the text field's contract plus the option 
 carries the option value, `label`, `supportingText` and `errorText` behave exactly as on
 `MdTextField`, and `placeholder` and `noMatchesText` are optional.
 
+`allowCreate` adds one more row at the end of the list when the search matches no option label
+exactly, reading `${createPrefix} "${search}"`, with `createPrefix` defaulting to `Add`. It is a real
+`role="option"`, so the arrow keys and Enter reach it like any other row, and it replaces the
+`noMatchesText` row rather than sitting next to it. Committing it emits `create` with the trimmed
+search text and closes the list. It never emits `update:modelValue`: the value does not exist yet,
+and creating it is the caller's job. `RecipeEditView` and `StaplesView` are the two call sites, both
+through `useIngredientQuickCreate`; see [ADR 0013](adr/0013-creating-a-missing-option-from-the-select.md)
+and BR-21.
+
 Behaviour worth knowing before changing it:
 
-| Interaction            | Result                                                                      |
-| ---------------------- | --------------------------------------------------------------------------- |
-| Click, or Up, or Down  | Opens the list with the current option active                               |
-| Typing                 | Opens the list, filters on a case-insensitive substring of the label        |
-| Up and Down while open | Move the active option, wrapping at both ends                               |
-| Enter while open       | Commits the active option, or closes the list if the filter matched nothing |
-| Enter while closed     | Not intercepted, so a form still submits                                    |
-| Escape while open      | Closes and restores the selection, and does not bubble                      |
-| Tab, or focus leaving  | Closes and restores the selection without emitting                          |
+| Interaction             | Result                                                                      |
+| ----------------------- | --------------------------------------------------------------------------- |
+| Click, or Up, or Down   | Opens the list with the current option active                               |
+| Typing                  | Opens the list, filters on a case-insensitive substring of the label        |
+| Up and Down while open  | Move the active option, wrapping at both ends                               |
+| Enter while open        | Commits the active option, or closes the list if the filter matched nothing |
+| Enter on the create row | Emits `create` with the trimmed search and closes the list                  |
+| Enter while closed      | Not intercepted, so a form still submits                                    |
+| Escape while open       | Closes and restores the selection, and does not bubble                      |
+| Tab, or focus leaving   | Closes and restores the selection without emitting                          |
 
 The field shows the selected label while closed and empties for the search while open, keeping the
 selection visible as the placeholder so it is never lost from view.

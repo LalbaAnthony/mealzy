@@ -74,6 +74,7 @@ export interface CategoryService {
 export interface IngredientService {
   list(): Promise<readonly Ingredient[]>;
   create(draft: IngredientDraft): Promise<DomainResult<Ingredient>>;
+  createFromSearch(name: string): Promise<DomainResult<Ingredient>>;
   update(id: IngredientId, draft: IngredientDraft): Promise<DomainResult<Ingredient>>;
   remove(id: IngredientId): Promise<DomainResult<void>>;
 }

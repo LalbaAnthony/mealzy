@@ -92,6 +92,16 @@ export const useCatalogueStore = defineStore('catalogue', () => {
     return true;
   }
 
+  async function createIngredientFromSearch(name: string): Promise<IngredientId | null> {
+    const result = await useServices().ingredients.createFromSearch(name);
+    if (!result.ok) {
+      ui.notifyError(result.error);
+      return null;
+    }
+    await load();
+    return result.value.id;
+  }
+
   async function updateIngredient(id: IngredientId, draft: IngredientDraft): Promise<boolean> {
     const result = await useServices().ingredients.update(id, draft);
     if (!result.ok) {
@@ -128,6 +138,7 @@ export const useCatalogueStore = defineStore('catalogue', () => {
     renameCategory,
     removeCategory,
     createIngredient,
+    createIngredientFromSearch,
     updateIngredient,
     removeIngredient,
   };
