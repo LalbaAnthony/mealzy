@@ -22,13 +22,13 @@ A global, referenced entity. Recipes point at ingredients by identifier; free-te
 on recipes are forbidden because they make aggregation unreliable. See
 [ADR 0002](adr/0002-ingredients-as-referenced-entities.md).
 
-| Field        | Type           | Notes                                |
-| ------------ | -------------- | ------------------------------------ |
-| `id`         | `IngredientId` |                                      |
-| `name`       | `string`       | Non-empty, unique case-insensitively |
-| `categoryId` | `CategoryId`   | Must reference an existing category  |
-| `createdAt`  | `EpochMillis`  |                                      |
-| `updatedAt`  | `EpochMillis`  |                                      |
+| Field        | Type           | Notes                                                                                             |
+| ------------ | -------------- | ------------------------------------------------------------------------------------------------- |
+| `id`         | `IngredientId` |                                                                                                   |
+| `name`       | `string`       | Non-empty, unique case-insensitively                                                              |
+| `categoryId` | `CategoryId`   | Must reference an existing category. `uncategorized` when created from a picker search, see BR-21 |
+| `createdAt`  | `EpochMillis`  |                                                                                                   |
+| `updatedAt`  | `EpochMillis`  |                                                                                                   |
 
 ### Recipe
 
@@ -218,3 +218,17 @@ because an ingredient must reference a category, so an application with no categ
 the user rather than merely empty their data. Preferences are reset with the rest because a stored
 theme is local data too, and a first-run state that quietly keeps one setting is not a first-run
 state. See [ADR 0011](adr/0011-erasing-local-data-restores-the-first-run-state.md).
+
+**BR-21 An ingredient picker offers to create the searched name when the search matches no existing
+ingredient. The created ingredient is placed in the `uncategorized` category and is selected
+immediately. Every other ingredient rule still applies, so a name that duplicates an existing one is
+refused rather than created.**
+Rationale: the pantry is not a list a user sits down and fills in, it is discovered while writing a
+recipe or a staple. Sending them to the Pantry tab to add "Basil", then back to the recipe they were
+in the middle of, loses the row they were editing for no gain, since the same validation runs either
+way. The aisle is the one thing the picker cannot know, and guessing it would be worse than leaving
+it unset: `uncategorized` sorts last on the shopping list (BR-18) and reads as an explicit "not filed
+yet", so the user can categorise it later from the Pantry tab, or never. Case-insensitive duplicate
+detection means the offer to create is hidden when the typed text already names an ingredient, so the
+common near-miss is a selection rather than a rejected creation. See
+[ADR 0013](adr/0013-creating-a-missing-option-from-the-select.md).

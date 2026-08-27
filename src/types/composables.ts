@@ -1,4 +1,5 @@
 import type { ComputedRef, Ref } from 'vue';
+import type { IngredientId } from './identifiers';
 import type { ConfirmDialogRequest, UnitOption, ViewportClass } from './ui';
 
 export interface ViewportApi {
@@ -35,4 +36,8 @@ export interface PwaUpdateApi {
 
 export interface UnitOptionsApi {
   readonly unitOptions: readonly UnitOption[];
+}
+
+export interface IngredientQuickCreateApi {
+  readonly createFromSearch: (name: string) => Promise<IngredientId | null>;
 }

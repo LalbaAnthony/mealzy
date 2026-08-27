@@ -10,9 +10,11 @@ const props = withDefaults(defineProps<MdSelectProps>(), {
   errorText: '',
   placeholder: '',
   noMatchesText: 'No matches',
+  allowCreate: false,
+  createPrefix: 'Add',
 });
 
-const emit = defineEmits<{ 'update:modelValue': [value: string] }>();
+const emit = defineEmits<{ 'update:modelValue': [value: string]; create: [name: string] }>();
 
 const fieldId = useId();
 const labelId = `${fieldId}-label`;
@@ -39,19 +41,33 @@ const selectedOption = computed<SelectOption | null>(
 );
 const selectedLabel = computed(() => selectedOption.value?.label ?? '');
 
+const trimmedQuery = computed(() => query.value.trim());
+
 const filteredOptions = computed<readonly SelectOption[]>(() => {
-  const needle = query.value.trim().toLowerCase();
+  const needle = trimmedQuery.value.toLowerCase();
   if (needle === '') {
     return props.options;
   }
   return props.options.filter((option) => option.label.toLowerCase().includes(needle));
 });
 
-const activeOption = computed<SelectOption | null>(
-  () => filteredOptions.value[activeIndex.value] ?? null,
-);
+const canCreate = computed(() => {
+  if (!props.allowCreate || trimmedQuery.value === '') {
+    return false;
+  }
+  const needle = trimmedQuery.value.toLowerCase();
+  return !props.options.some((option) => option.label.trim().toLowerCase() === needle);
+});
+
+const createIndex = computed(() => filteredOptions.value.length);
+const rowCount = computed(() => filteredOptions.value.length + (canCreate.value ? 1 : 0));
+const createActive = computed(() => canCreate.value && activeIndex.value === createIndex.value);
+const createLabel = computed(() => `${props.createPrefix} "${trimmedQuery.value}"`);
+
 const activeDescendant = computed(() =>
-  activeOption.value === null ? undefined : optionId(activeIndex.value),
+  activeIndex.value >= 0 && activeIndex.value < rowCount.value
+    ? optionId(activeIndex.value)
+    : undefined,
 );
 
 const displayValue = computed(() => (open.value ? query.value : selectedLabel.value));
@@ -107,8 +123,26 @@ function commit(option: SelectOption): void {
   closeList();
 }
 
+function requestCreate(): void {
+  emit('create', trimmedQuery.value);
+  closeList();
+}
+
+function commitActive(): void {
+  if (createActive.value) {
+    requestCreate();
+    return;
+  }
+  const option = filteredOptions.value[activeIndex.value];
+  if (option === undefined) {
+    closeList();
+    return;
+  }
+  commit(option);
+}
+
 function moveActive(delta: number): void {
-  const count = filteredOptions.value.length;
+  const count = rowCount.value;
   if (count === 0) {
     activeIndex.value = -1;
     return;
@@ -127,7 +161,7 @@ function onInput(event: Event): void {
   }
   query.value = target.value;
   open.value = true;
-  activeIndex.value = filteredOptions.value.length === 0 ? -1 : 0;
+  activeIndex.value = rowCount.value === 0 ? -1 : 0;
 }
 
 function onKeydown(event: KeyboardEvent): void {
@@ -142,12 +176,7 @@ function onKeydown(event: KeyboardEvent): void {
   }
   if (event.key === 'Enter' && open.value) {
     event.preventDefault();
-    const option = activeOption.value;
-    if (option === null) {
-      closeList();
-      return;
-    }
-    commit(option);
+    commitActive();
     return;
   }
   if (event.key === 'Escape' && open.value) {
@@ -243,7 +272,20 @@ onBeforeUnmount(untrackViewport);
         >
           {{ option.label }}
         </li>
-        <li v-if="filteredOptions.length === 0" class="md-select__empty" role="presentation">
+        <li
+          v-if="canCreate"
+          :id="optionId(createIndex)"
+          class="md-select__option md-select__option--create"
+          :class="{ 'md-select__option--active': createActive }"
+          role="option"
+          :aria-selected="false"
+          @mousedown.prevent
+          @click="requestCreate"
+        >
+          <MdIcon name="add" />
+          {{ createLabel }}
+        </li>
+        <li v-if="rowCount === 0" class="md-select__empty" role="presentation">
           {{ props.noMatchesText }}
         </li>
       </ul>
@@ -351,6 +393,11 @@ onBeforeUnmount(untrackViewport);
 .md-select__option--active {
   outline: 2px solid var(--md-sys-color-primary);
   outline-offset: -2px;
+}
+
+.md-select__option--create {
+  gap: var(--md-sys-spacing-2);
+  color: var(--md-sys-color-primary);
 }
 
 .md-select__empty {

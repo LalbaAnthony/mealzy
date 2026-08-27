@@ -5,6 +5,7 @@ import type { RecipeIngredientRowState } from '../types/ui';
 import type { Unit } from '../types/units';
 import { formatOptionalQuantity } from '../domain/units/format';
 import { useConfirmDialog } from '../composables/useConfirmDialog';
+import { useIngredientQuickCreate } from '../composables/useIngredientQuickCreate';
 import { useUnitOptions } from '../composables/useUnitOptions';
 import { useCatalogueStore } from '../stores/catalogue-store';
 import { useStaplesStore } from '../stores/staples-store';
@@ -24,6 +25,7 @@ const staples = useStaplesStore();
 const catalogue = useCatalogueStore();
 const confirmDialog = useConfirmDialog();
 const { unitOptions } = useUnitOptions();
+const ingredientQuickCreate = useIngredientQuickCreate();
 
 const dialogOpen = ref(false);
 const editingId = ref<string | null>(null);
@@ -35,6 +37,13 @@ const dialogTitle = computed(() => (editingId.value === null ? 'Add a staple' : 
 function toUnit(value: string): Unit {
   const match = unitOptions.find((option) => option.value === value);
   return match === undefined ? 'g' : match.value;
+}
+
+async function createIngredientForForm(searched: string): Promise<void> {
+  const createdId = await ingredientQuickCreate.createFromSearch(searched);
+  if (createdId !== null) {
+    form.value.ingredientId = createdId;
+  }
 }
 
 function describeStaple(staple: Staple): string {
@@ -171,6 +180,8 @@ onMounted(async () => {
         v-model="form.ingredientId"
         label="Ingredient"
         :options="catalogue.ingredientOptions"
+        allow-create
+        @create="createIngredientForForm"
       />
       <p v-else>Add an ingredient from the Pantry tab first.</p>
       <MdTextField

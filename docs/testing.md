@@ -51,8 +51,11 @@ deterministic time and identifiers, and the suite runs in about a second.
 
 Every business rule has at least one test naming it. Searching for `BR-` across `tests/` lists them.
 Rules are tested at the layer that owns them: BR-01 through BR-06 and BR-14 through BR-19 largely in
-the domain, BR-04, BR-07 through BR-13 and BR-20 in the services, and the user-facing halves of
-BR-06, BR-07, BR-09, BR-16 and BR-20 in the component tests. BR-20 is split deliberately: the service
+the domain, BR-04, BR-07 through BR-13, BR-20 and BR-21 in the services, and the user-facing halves
+of BR-06, BR-07, BR-09, BR-16 and BR-20 in the component tests. BR-21 is the one rule whose picker
+affordance is tested without naming it: the create row belongs to `MdSelect`, which knows nothing
+about ingredients, so it is covered by the primitive tests and the rule itself by
+`catalogue-service.spec.ts`. BR-20 is split deliberately: the service
 test proves what survives an erase, and the component test proves the gates that stand in front of
 it.
 

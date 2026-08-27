@@ -5,6 +5,7 @@ import type { RecipeIngredientDraft } from '../types/services';
 import type { RecipeIngredientRowState } from '../types/ui';
 import type { Unit } from '../types/units';
 import { formatOptionalQuantity } from '../domain/units/format';
+import { useIngredientQuickCreate } from '../composables/useIngredientQuickCreate';
 import { useUnitOptions } from '../composables/useUnitOptions';
 import { useCatalogueStore } from '../stores/catalogue-store';
 import { useRecipesStore } from '../stores/recipes-store';
@@ -22,6 +23,7 @@ const recipes = useRecipesStore();
 const catalogue = useCatalogueStore();
 const ui = useUiStore();
 const { unitOptions } = useUnitOptions();
+const ingredientQuickCreate = useIngredientQuickCreate();
 
 const recipeId = computed(() => String(route.params.id));
 const isNew = computed(() => recipeId.value === 'new');
@@ -43,6 +45,16 @@ function addRow(): void {
     return;
   }
   rows.value = [...rows.value, { ingredientId: firstIngredient.value, amount: '', unit: 'g' }];
+}
+
+async function createIngredientForRow(
+  row: RecipeIngredientRowState,
+  searched: string,
+): Promise<void> {
+  const createdId = await ingredientQuickCreate.createFromSearch(searched);
+  if (createdId !== null) {
+    row.ingredientId = createdId;
+  }
 }
 
 function removeRow(index: number): void {
@@ -134,6 +146,8 @@ onMounted(async () => {
             v-model="row.ingredientId"
             label="Ingredient"
             :options="catalogue.ingredientOptions"
+            allow-create
+            @create="createIngredientForRow(row, $event)"
           />
           <MdTextField
             v-model="row.amount"
