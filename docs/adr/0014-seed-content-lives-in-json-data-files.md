@@ -43,8 +43,9 @@ The files are not validated with zod at runtime.
 
 - Editing first-run content is editing JSON. The builder stays a fixed piece of logic that no content
   change touches.
-- Ingredients are filed by key, so a seeded ingredient can move to another aisle without code. The
-  catalogue currently files all fifteen under `grocery`.
+- Ingredients are filed by key, so a seeded ingredient can move to another aisle without code, and
+  the catalogue can grow without the builder changing. It has since done both: the fifteen
+  ingredients under `grocery` this ADR was written against are now 644 spread over sixteen aisles.
 - The reserved category stays in `src/domain/constants.ts` rather than in the JSON. Its identity is
   referenced across the codebase and BR-15 falls back to it, so it is not content.
 - No zod schema. These files are bundled at build time, not read from the network or from storage, so

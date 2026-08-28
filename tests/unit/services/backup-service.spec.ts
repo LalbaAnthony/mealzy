@@ -1,21 +1,15 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { createTestHarness, seedCatalogue } from '../../support/test-harness';
+import { createTestHarness, seedCatalogue, seededIngredientId } from '../../support/test-harness';
 
 let harness: ReturnType<typeof createTestHarness>;
 let produceId: string;
 
 async function buildSampleState(): Promise<void> {
-  const ingredient = await harness.services.ingredients.create({
-    name: 'Tomato',
-    categoryId: produceId,
-  });
-  if (!ingredient.ok) {
-    throw new Error('ingredient creation failed');
-  }
+  const tomatoId = await seededIngredientId(harness, 'Tomato');
   const recipe = await harness.services.recipes.create({
     name: 'Soup',
     notes: 'warm',
-    ingredients: [{ ingredientId: ingredient.value.id, quantity: { amount: 500, unit: 'g' } }],
+    ingredients: [{ ingredientId: tomatoId, quantity: { amount: 500, unit: 'g' } }],
   });
   if (!recipe.ok) {
     throw new Error('recipe creation failed');
@@ -29,7 +23,7 @@ async function buildSampleState(): Promise<void> {
     quantity: { amount: 2, unit: 'piece' },
     categoryId: produceId,
   });
-  await harness.services.shoppingList.setPurchased(`ingredient:${ingredient.value.id}:g`, true);
+  await harness.services.shoppingList.setPurchased(`ingredient:${tomatoId}:g`, true);
   await harness.services.settings.setThemePreference('dark');
 }
 

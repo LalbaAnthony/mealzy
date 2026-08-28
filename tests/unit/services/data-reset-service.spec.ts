@@ -1,25 +1,22 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
+  SEEDED_CATEGORY_COUNT,
   SEEDED_INGREDIENT_NAMES,
+  UNSEEDED_CATEGORY_NAME,
   createTestHarness,
   seedCatalogue,
+  seededIngredientId,
 } from '../../support/test-harness';
 
 let harness: ReturnType<typeof createTestHarness>;
 let produceId: string;
 
 async function buildSampleState(): Promise<void> {
-  const ingredient = await harness.services.ingredients.create({
-    name: 'Tomato',
-    categoryId: produceId,
-  });
-  if (!ingredient.ok) {
-    throw new Error('ingredient creation failed');
-  }
+  const tomatoId = await seededIngredientId(harness, 'Tomato');
   const recipe = await harness.services.recipes.create({
     name: 'Soup',
     notes: 'warm',
-    ingredients: [{ ingredientId: ingredient.value.id, quantity: { amount: 500, unit: 'g' } }],
+    ingredients: [{ ingredientId: tomatoId, quantity: { amount: 500, unit: 'g' } }],
   });
   if (!recipe.ok) {
     throw new Error('recipe creation failed');
@@ -34,14 +31,14 @@ async function buildSampleState(): Promise<void> {
     categoryId: produceId,
   });
   const staple = await harness.services.staples.create({
-    ingredientId: ingredient.value.id,
+    ingredientId: tomatoId,
     defaultQuantity: null,
     enabled: true,
   });
   if (!staple.ok) {
     throw new Error('staple creation failed');
   }
-  await harness.services.shoppingList.setPurchased(`ingredient:${ingredient.value.id}:g`, true);
+  await harness.services.shoppingList.setPurchased(`ingredient:${tomatoId}:g`, true);
   await harness.services.settings.setThemePreference('dark');
 }
 
@@ -60,8 +57,8 @@ describe('local data summary', () => {
     expect(summary).toStrictEqual({
       recipes: 1,
       plannedMeals: 1,
-      ingredients: SEEDED_INGREDIENT_NAMES.length + 1,
-      categories: 7,
+      ingredients: SEEDED_INGREDIENT_NAMES.length,
+      categories: SEEDED_CATEGORY_COUNT,
       staples: 1,
       adHocItems: 1,
       purchasedTicks: 1,
@@ -84,7 +81,7 @@ describe('BR-20 deleting all local data', () => {
   it('restores the first-run seed data', async () => {
     await buildSampleState();
     const categoriesBefore = await harness.services.categories.list();
-    const created = await harness.services.categories.create('Bakery');
+    const created = await harness.services.categories.create(UNSEEDED_CATEGORY_NAME);
     expect(created).toMatchObject({ ok: true });
 
     await harness.services.dataReset.eraseEverything();
@@ -118,7 +115,7 @@ describe('BR-20 deleting all local data', () => {
     await harness.services.seed.ensureSeeded();
 
     expect(await harness.repositories.meta.getSchemaVersion()).toBe(harness.schemaVersion);
-    expect(await harness.services.categories.list()).toHaveLength(7);
+    expect(await harness.services.categories.list()).toHaveLength(SEEDED_CATEGORY_COUNT);
   });
 
   it('leaves a summary of nothing but the seed data behind', async () => {
@@ -130,7 +127,7 @@ describe('BR-20 deleting all local data', () => {
       recipes: 0,
       plannedMeals: 0,
       ingredients: SEEDED_INGREDIENT_NAMES.length,
-      categories: 7,
+      categories: SEEDED_CATEGORY_COUNT,
       staples: 0,
       adHocItems: 0,
       purchasedTicks: 0,

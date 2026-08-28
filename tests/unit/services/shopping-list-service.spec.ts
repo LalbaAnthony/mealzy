@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { createTestHarness, seedCatalogue } from '../../support/test-harness';
+import { createTestHarness, seedCatalogue, seededIngredientId } from '../../support/test-harness';
 
 let harness: ReturnType<typeof createTestHarness>;
-let produceId: string;
 let dairyId: string;
 let groceryId: string;
 
@@ -26,12 +25,7 @@ async function createStaple(ingredientId: string): Promise<void> {
 }
 
 async function stapleSeededIngredient(name: string): Promise<void> {
-  const ingredients = await harness.services.ingredients.list();
-  const ingredient = ingredients.find((candidate) => candidate.name === name);
-  if (ingredient === undefined) {
-    throw new Error(`missing seeded ingredient ${name}`);
-  }
-  await createStaple(ingredient.id);
+  await createStaple(await seededIngredientId(harness, name));
 }
 
 async function planRecipe(
@@ -54,8 +48,7 @@ async function planRecipe(
 
 beforeEach(async () => {
   harness = createTestHarness();
-  const { grocery, produce } = await seedCatalogue(harness);
-  produceId = produce.id;
+  const { grocery } = await seedCatalogue(harness);
   groceryId = grocery.id;
   const categories = await harness.services.categories.list();
   const dairy = categories.find((category) => category.name === 'Dairy');
@@ -67,8 +60,8 @@ beforeEach(async () => {
 
 describe('BR-18 grouped snapshot', () => {
   it('groups lines by category with uncategorized last', async () => {
-    const tomatoId = await createIngredient('Tomato', produceId);
-    const creamId = await createIngredient('Cream', dairyId);
+    const tomatoId = await seededIngredientId(harness, 'Tomato');
+    const creamId = await seededIngredientId(harness, 'Cream');
     const riceId = await createIngredient('Rice', groceryId);
     await createStaple(riceId);
     await planRecipe('Soup', [
@@ -103,13 +96,13 @@ describe('BR-18 grouped snapshot', () => {
 
 describe('BR-16 purchased state survives recomputation', () => {
   it('persists a tick and keeps it when another meal is added', async () => {
-    const tomatoId = await createIngredient('Tomato', produceId);
+    const tomatoId = await seededIngredientId(harness, 'Tomato');
     await planRecipe('Soup', [{ ingredientId: tomatoId, quantity: { amount: 500, unit: 'g' } }]);
 
     const key = `ingredient:${tomatoId}:g`;
     await harness.services.shoppingList.setPurchased(key, true);
 
-    const creamId = await createIngredient('Cream', dairyId);
+    const creamId = await seededIngredientId(harness, 'Cream');
     await planRecipe('Gratin', [{ ingredientId: creamId, quantity: { amount: 200, unit: 'g' } }]);
 
     const snapshot = await harness.services.shoppingList.getSnapshot();
@@ -118,7 +111,7 @@ describe('BR-16 purchased state survives recomputation', () => {
   });
 
   it('unticks a line', async () => {
-    const tomatoId = await createIngredient('Tomato', produceId);
+    const tomatoId = await seededIngredientId(harness, 'Tomato');
     await planRecipe('Soup', [{ ingredientId: tomatoId, quantity: { amount: 500, unit: 'g' } }]);
     const key = `ingredient:${tomatoId}:g`;
 
@@ -132,7 +125,7 @@ describe('BR-16 purchased state survives recomputation', () => {
 
 describe('BR-07 eaten meals leave the shopping list', () => {
   it('drops the ingredients of an eaten meal', async () => {
-    const tomatoId = await createIngredient('Tomato', produceId);
+    const tomatoId = await seededIngredientId(harness, 'Tomato');
     const mealId = await planRecipe('Soup', [
       { ingredientId: tomatoId, quantity: { amount: 500, unit: 'g' } },
     ]);
@@ -175,7 +168,7 @@ describe('BR-15 and BR-17 ad hoc items and trip reset', () => {
       throw new Error('ad hoc creation failed');
     }
 
-    const tomatoId = await createIngredient('Tomato', produceId);
+    const tomatoId = await seededIngredientId(harness, 'Tomato');
     await planRecipe('Soup', [{ ingredientId: tomatoId, quantity: { amount: 500, unit: 'g' } }]);
 
     await harness.services.shoppingList.setPurchased(`adhoc:${purchased.value.id}`, true);
@@ -230,8 +223,8 @@ describe('BR-15 and BR-17 ad hoc items and trip reset', () => {
 describe('BR-19 export excludes purchased lines', () => {
   it('renders the grouped plain text list', async () => {
     await stapleSeededIngredient('Salt');
-    const tomatoId = await createIngredient('Tomato', produceId);
-    const onionId = await createIngredient('Onion', produceId);
+    const tomatoId = await seededIngredientId(harness, 'Tomato');
+    const onionId = await seededIngredientId(harness, 'Onion');
     await planRecipe('Soup', [
       { ingredientId: tomatoId, quantity: { amount: 500, unit: 'g' } },
       { ingredientId: onionId, quantity: null },

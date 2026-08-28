@@ -167,15 +167,17 @@ Rationale: "I already have plenty of flour this month" should not require deleti
 staple. A second staple for the same ingredient is rejected, because two staples would each
 contribute to the same line and double the amount.
 
-**BR-14 Seed data on first run: the `uncategorized` category, the categories `Produce`, `Dairy`,
-`Meat and fish`, `Grocery`, `Frozen`, `Household`, and an ingredient for each of coffee, sugar, olive
-oil, parchment paper, grated cheese, salt, sunflower oil, pepper, butter, flour, milk, honey, eggs,
-pet food and balsamic vinegar, all categorised under `Grocery`. The seed creates no staple: the
-staples list starts empty and is the user's to fill (BR-13).**
-Rationale: an empty application is hard to evaluate, but a shopping list that already carries fifteen
-lines nobody asked for is worse than an empty one, because the first act of every new user would be
-to delete them. Seeding the ingredient catalogue gives something to plan recipes with; deciding what
-is bought every week is a personal judgement the application is not entitled to make. First run is
+**BR-14 Seed data on first run: the `uncategorized` category, the sixteen aisles `Produce`, `Dairy`,
+`Meat and fish`, `Grocery`, `Frozen`, `Household`, `Bakery`, `Beverages`, `Canned and preserved`,
+`Grains and legumes`, `Spices and herbs`, `Sauces and condiments`, `Charcuterie`, `Nuts and seeds`,
+`Baking` and `Eggs` in that order, and a catalogue of 644 ingredients, each filed under the aisle its
+entry names. The seed creates no staple: the staples list starts empty and is the user's to fill
+(BR-13).**
+Rationale: an empty application is hard to evaluate, and a catalogue that already covers an ordinary
+supermarket means the first recipe can be written without stopping to type ingredients in. A
+shopping list seeded the same way would be worse than an empty one, because the first act of every
+new user would be to delete it, so the seed stops at the catalogue: deciding what is bought every
+week is a personal judgement the application is not entitled to make. First run is
 detected by the absence of a stored schema version, so seeding never runs twice and never runs after
 a backup import. Deleting all local data (BR-20) is the one other moment the seed is written, and it
 writes it explicitly rather than by clearing the schema version. The `uncategorized` category cannot

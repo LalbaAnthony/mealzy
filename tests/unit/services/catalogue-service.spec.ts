@@ -1,8 +1,13 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
+  NEXT_CATEGORY_SORT_ORDER,
+  SEEDED_CATEGORY_COUNT,
   SEEDED_INGREDIENT_NAMES,
+  UNSEEDED_CATEGORY_NAME,
+  UNSEEDED_INGREDIENT_NAME,
   createTestHarness,
   seedCatalogue,
+  seededIngredientId,
 } from '../../support/test-harness';
 
 let harness: ReturnType<typeof createTestHarness>;
@@ -17,6 +22,10 @@ async function createIngredient(name: string, categoryId: string): Promise<strin
   return result.value.id;
 }
 
+async function seededTomatoId(): Promise<string> {
+  return seededIngredientId(harness, 'Tomato');
+}
+
 async function createStaple(ingredientId: string): Promise<string> {
   const result = await harness.services.staples.create({
     ingredientId,
@@ -29,15 +38,6 @@ async function createStaple(ingredientId: string): Promise<string> {
   return result.value.id;
 }
 
-async function seededIngredientId(name: string): Promise<string> {
-  const ingredients = await harness.services.ingredients.list();
-  const ingredient = ingredients.find((candidate) => candidate.name === name);
-  if (ingredient === undefined) {
-    throw new Error(`missing seeded ingredient ${name}`);
-  }
-  return ingredient.id;
-}
-
 beforeEach(async () => {
   harness = createTestHarness();
   const { grocery, produce } = await seedCatalogue(harness);
@@ -46,14 +46,15 @@ beforeEach(async () => {
 });
 
 describe('BR-14 seed data', () => {
-  it('creates the reserved category, six aisles and the catalogue ingredients', async () => {
+  it('creates the reserved category, the aisles and the catalogue ingredients', async () => {
     const categories = await harness.services.categories.list();
     const ingredients = await harness.services.ingredients.list();
+    const categoryIds = new Set(categories.map((category) => category.id));
 
-    expect(categories).toHaveLength(7);
+    expect(categories).toHaveLength(SEEDED_CATEGORY_COUNT);
     expect(categories.some((category) => category.id === 'uncategorized')).toBe(true);
     expect(ingredients.map((ingredient) => ingredient.name)).toEqual(SEEDED_INGREDIENT_NAMES);
-    expect(ingredients.every((ingredient) => ingredient.categoryId === groceryId)).toBe(true);
+    expect(ingredients.every((ingredient) => categoryIds.has(ingredient.categoryId))).toBe(true);
   });
 
   it('creates no staple', async () => {
@@ -63,7 +64,7 @@ describe('BR-14 seed data', () => {
   it('does not seed twice', async () => {
     await harness.services.seed.ensureSeeded();
 
-    expect(await harness.services.categories.list()).toHaveLength(7);
+    expect(await harness.services.categories.list()).toHaveLength(SEEDED_CATEGORY_COUNT);
     expect(await harness.services.ingredients.list()).toHaveLength(SEEDED_INGREDIENT_NAMES.length);
   });
 
@@ -81,9 +82,12 @@ describe('BR-14 seed data', () => {
 
 describe('category management', () => {
   it('creates a category with the next sort order', async () => {
-    const result = await harness.services.categories.create('Bakery');
+    const result = await harness.services.categories.create(UNSEEDED_CATEGORY_NAME);
 
-    expect(result).toMatchObject({ ok: true, value: { name: 'Bakery', sortOrder: 7 } });
+    expect(result).toMatchObject({
+      ok: true,
+      value: { name: UNSEEDED_CATEGORY_NAME, sortOrder: NEXT_CATEGORY_SORT_ORDER },
+    });
   });
 
   it('rejects a duplicate category name', async () => {
@@ -109,7 +113,7 @@ describe('category management', () => {
   });
 
   it('deletes an unused category', async () => {
-    const created = await harness.services.categories.create('Bakery');
+    const created = await harness.services.categories.create(UNSEEDED_CATEGORY_NAME);
     if (!created.ok) {
       throw new Error('category creation failed');
     }
@@ -140,7 +144,9 @@ describe('BR-21 an ingredient created from a search lands in uncategorized', () 
   });
 
   it('rejects a name that already exists, whatever its category', async () => {
-    await createIngredient('Basil', produceId);
+    const ingredients = await harness.services.ingredients.list();
+    const basil = ingredients.find((ingredient) => ingredient.name === 'Basil');
+    expect(basil?.categoryId).not.toBe('uncategorized');
 
     expect(await harness.services.ingredients.createFromSearch('basil')).toMatchObject({
       ok: false,
@@ -158,7 +164,7 @@ describe('BR-21 an ingredient created from a search lands in uncategorized', () 
 
 describe('BR-12 ingredient deletion is blocked while referenced', () => {
   it('lists the recipes and staples that block deletion', async () => {
-    const tomatoId = await createIngredient('Tomato', produceId);
+    const tomatoId = await seededTomatoId();
     await harness.services.recipes.create({
       name: 'Salad',
       notes: '',
@@ -174,7 +180,7 @@ describe('BR-12 ingredient deletion is blocked while referenced', () => {
   });
 
   it('blocks deletion of a staple ingredient and names the staple', async () => {
-    const saltId = await seededIngredientId('Salt');
+    const saltId = await seededIngredientId(harness, 'Salt');
     await createStaple(saltId);
 
     const result = await harness.services.ingredients.remove(saltId);
@@ -186,24 +192,27 @@ describe('BR-12 ingredient deletion is blocked while referenced', () => {
   });
 
   it('deletes an unreferenced ingredient', async () => {
-    const tomatoId = await createIngredient('Tomato', produceId);
+    const tomatoId = await seededTomatoId();
 
     expect(await harness.services.ingredients.remove(tomatoId)).toMatchObject({ ok: true });
   });
 
   it('rejects duplicate ingredient names and unknown categories', async () => {
-    await createIngredient('Tomato', produceId);
+    await seededTomatoId();
 
     expect(
       await harness.services.ingredients.create({ name: ' tomato ', categoryId: produceId }),
     ).toMatchObject({ ok: false, error: { code: 'ingredient-name-duplicate' } });
     expect(
-      await harness.services.ingredients.create({ name: 'Leek', categoryId: 'ghost' }),
+      await harness.services.ingredients.create({
+        name: UNSEEDED_INGREDIENT_NAME,
+        categoryId: 'ghost',
+      }),
     ).toMatchObject({ ok: false, error: { code: 'ingredient-category-unknown' } });
   });
 
   it('updates an ingredient and stamps the update time', async () => {
-    const tomatoId = await createIngredient('Tomato', produceId);
+    const tomatoId = await seededTomatoId();
     harness.advanceTo(9000);
 
     const result = await harness.services.ingredients.update(tomatoId, {
@@ -254,7 +263,7 @@ describe('BR-13 staple management', () => {
   });
 
   it('rejects a second staple for the same ingredient', async () => {
-    const saltId = await seededIngredientId('Salt');
+    const saltId = await seededIngredientId(harness, 'Salt');
     await createStaple(saltId);
 
     expect(

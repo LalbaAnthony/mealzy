@@ -34,6 +34,24 @@ clock frozen at a known timestamp with an `advanceTo` helper, a sequential ident
 the real backup codec. Services are therefore tested against their real implementations with
 deterministic time and identifiers, and the suite runs in about a second.
 
+## Service tests run against the real seed catalogue
+
+`seedCatalogue(harness)` writes the shipped BR-14 catalogue, so a service test starts with every
+aisle and every seeded ingredient already present. Two consequences follow, and both are enforced by
+helpers rather than by convention.
+
+A test never creates an ingredient the catalogue already contains, because ingredient names are
+unique case-insensitively and the create is refused. It reaches for the seeded one with
+`seededIngredientId(harness, name)`, which throws
+a message naming the missing ingredient if the catalogue ever drops it. `UNSEEDED_INGREDIENT_NAME`
+and `UNSEEDED_CATEGORY_NAME` are the names reserved for the cases that genuinely need to create
+something new, such as proving that an unknown category is refused.
+
+A test never hard-codes how much the seed contains. `SEEDED_INGREDIENT_NAMES`,
+`SEEDED_CATEGORY_COUNT` and `NEXT_CATEGORY_SORT_ORDER` are derived from `SEED_CATALOGUE`, so growing
+`categories.json` or `ingredients.json` does not touch a single assertion. The catalogue grew from
+fifteen ingredients to 644 without any of these tests changing shape.
+
 ## What the aggregation tests cover
 
 `tests/unit/domain/aggregate-shopping-list.spec.ts` covers, at minimum:

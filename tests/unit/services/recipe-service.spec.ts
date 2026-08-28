@@ -1,21 +1,11 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { createTestHarness, seedCatalogue } from '../../support/test-harness';
+import { createTestHarness, seedCatalogue, seededIngredientId } from '../../support/test-harness';
 
 let harness: ReturnType<typeof createTestHarness>;
-let produceId: string;
-
-async function createIngredient(name: string): Promise<string> {
-  const result = await harness.services.ingredients.create({ name, categoryId: produceId });
-  if (!result.ok) {
-    throw new Error(`Failed to create ingredient ${name}`);
-  }
-  return result.value.id;
-}
 
 beforeEach(async () => {
   harness = createTestHarness();
-  const { produce } = await seedCatalogue(harness);
-  produceId = produce.id;
+  await seedCatalogue(harness);
 });
 
 describe('BR-01 recipe names are unique', () => {
@@ -39,7 +29,7 @@ describe('BR-01 recipe names are unique', () => {
 
 describe('BR-02 and BR-03 recipe ingredients', () => {
   it('stores an ingredient without a quantity', async () => {
-    const tomatoId = await createIngredient('Tomato');
+    const tomatoId = await seededIngredientId(harness, 'Tomato');
     const result = await harness.services.recipes.create({
       name: 'Salad',
       notes: '',
@@ -53,7 +43,7 @@ describe('BR-02 and BR-03 recipe ingredients', () => {
   });
 
   it('rejects the same ingredient twice', async () => {
-    const tomatoId = await createIngredient('Tomato');
+    const tomatoId = await seededIngredientId(harness, 'Tomato');
     const result = await harness.services.recipes.create({
       name: 'Salad',
       notes: '',

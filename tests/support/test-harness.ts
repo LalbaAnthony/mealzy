@@ -21,6 +21,18 @@ export const SEEDED_INGREDIENT_NAMES: readonly string[] = buildSeedData({
   now: 0,
 }).ingredients.map((ingredient) => ingredient.name);
 
+export const SEEDED_CATEGORY_COUNT: number = SEED_CATALOGUE.categories.length + 1;
+
+export const NEXT_CATEGORY_SORT_ORDER: number =
+  SEED_CATALOGUE.categories.reduce(
+    (highest, category) => Math.max(highest, category.sortOrder),
+    0,
+  ) + 1;
+
+export const UNSEEDED_CATEGORY_NAME = 'Deli counter';
+
+export const UNSEEDED_INGREDIENT_NAME = 'Sourdough starter';
+
 export function createTestClock(startAt: number, today: string) {
   let current = startAt;
   const clock: Clock = {
@@ -109,4 +121,16 @@ export async function seedCatalogue(harness: ReturnType<typeof createTestHarness
     throw new Error('Seed data is missing the expected categories.');
   }
   return { grocery, produce };
+}
+
+export async function seededIngredientId(
+  harness: ReturnType<typeof createTestHarness>,
+  name: string,
+): Promise<string> {
+  const ingredients = await harness.services.ingredients.list();
+  const ingredient = ingredients.find((candidate) => candidate.name === name);
+  if (ingredient === undefined) {
+    throw new Error(`The seed catalogue no longer contains the ingredient "${name}".`);
+  }
+  return ingredient.id;
 }

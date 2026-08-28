@@ -25,12 +25,12 @@ describe('BR-14 seed data', () => {
     });
   });
 
-  it('creates the six named shopping aisles in order', () => {
+  it('creates every shopping aisle the catalogue declares, in order', () => {
     expect(
       seed.categories
         .filter((category) => category.id !== 'uncategorized')
         .map((category) => category.name),
-    ).toEqual(['Produce', 'Dairy', 'Meat and fish', 'Grocery', 'Frozen', 'Household']);
+    ).toEqual(SEED_CATALOGUE.categories.map((category) => category.name));
   });
 
   it('carries the sort order declared in the category catalogue', () => {
@@ -38,31 +38,22 @@ describe('BR-14 seed data', () => {
       seed.categories
         .filter((category) => category.id !== 'uncategorized')
         .map((category) => category.sortOrder),
-    ).toEqual([1, 2, 3, 4, 5, 6]);
+    ).toEqual(SEED_CATALOGUE.categories.map((category) => category.sortOrder));
   });
 
-  it('creates the catalogue ingredients under Grocery', () => {
-    const grocery = seed.categories.find((category) => category.name === 'Grocery');
+  it('creates every catalogue ingredient under the aisle its key names', () => {
+    const categoryIdByKey = new Map(
+      SEED_CATALOGUE.categories.map((category) => [
+        category.key,
+        seed.categories.find((built) => built.name === category.name)?.id,
+      ]),
+    );
 
-    expect(seed.ingredients.map((ingredient) => ingredient.name)).toEqual([
-      'Coffee',
-      'Sugar',
-      'Olive oil',
-      'Parchment paper',
-      'Grated cheese',
-      'Salt',
-      'Sunflower oil',
-      'Pepper',
-      'Butter',
-      'Flour',
-      'Milk',
-      'Honey',
-      'Eggs',
-      'Pet food',
-      'Balsamic vinegar',
-    ]);
-    expect(seed.ingredients.every((ingredient) => ingredient.categoryId === grocery?.id)).toBe(
-      true,
+    expect(seed.ingredients.map((ingredient) => ingredient.name)).toEqual(
+      SEED_CATALOGUE.ingredients.map((ingredient) => ingredient.name),
+    );
+    expect(seed.ingredients.map((ingredient) => ingredient.categoryId)).toEqual(
+      SEED_CATALOGUE.ingredients.map((ingredient) => categoryIdByKey.get(ingredient.categoryKey)),
     );
   });
 

@@ -2,13 +2,12 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import type { AppServices } from '../../../src/types/container';
 import type { AppRepositories } from '../../../src/types/persistence';
 import { sortPlannedMeals } from '../../../src/domain/ordering/meal-order';
-import { createTestHarness, seedCatalogue } from '../../support/test-harness';
+import { createTestHarness, seedCatalogue, seededIngredientId } from '../../support/test-harness';
 
 let harness: ReturnType<typeof createTestHarness>;
 let services: AppServices;
 let repositories: AppRepositories;
 
-let produceId = '';
 let dairyId = '';
 let tomatoId = '';
 let onionId = '';
@@ -17,14 +16,6 @@ let soupMealId = '';
 let stewMealId = '';
 let gratinMealId = '';
 let bulbsId = '';
-
-async function createIngredient(name: string, categoryId: string): Promise<string> {
-  const result = await services.ingredients.create({ name, categoryId });
-  if (!result.ok) {
-    throw new Error(`could not create ${name}`);
-  }
-  return result.value.id;
-}
 
 async function createRecipeAndPlan(
   name: string,
@@ -45,13 +36,8 @@ async function createRecipeAndPlan(
 }
 
 async function stapleSeededIngredient(name: string): Promise<void> {
-  const ingredients = await services.ingredients.list();
-  const ingredient = ingredients.find((candidate) => candidate.name === name);
-  if (ingredient === undefined) {
-    throw new Error(`missing seeded ingredient ${name}`);
-  }
   const staple = await services.staples.create({
-    ingredientId: ingredient.id,
+    ingredientId: await seededIngredientId(harness, name),
     defaultQuantity: null,
     enabled: true,
   });
@@ -70,8 +56,7 @@ beforeEach(async () => {
   services = harness.services;
   repositories = harness.repositories;
 
-  const { produce } = await seedCatalogue(harness);
-  produceId = produce.id;
+  await seedCatalogue(harness);
   const categories = await services.categories.list();
   const dairy = categories.find((category) => category.name === 'Dairy');
   if (dairy === undefined) {
@@ -82,9 +67,9 @@ beforeEach(async () => {
   await stapleSeededIngredient('Coffee');
   await stapleSeededIngredient('Salt');
 
-  tomatoId = await createIngredient('Tomato', produceId);
-  onionId = await createIngredient('Onion', produceId);
-  creamId = await createIngredient('Cream', dairyId);
+  tomatoId = await seededIngredientId(harness, 'Tomato');
+  onionId = await seededIngredientId(harness, 'Onion');
+  creamId = await seededIngredientId(harness, 'Cream');
 
   soupMealId = await createRecipeAndPlan('Tomato soup', [
     { ingredientId: tomatoId, quantity: { amount: 500, unit: 'g' } },
