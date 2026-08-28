@@ -28,5 +28,55 @@
     "key": "household",
     "name": "Household",
     "sortOrder": 6
+  },
+  {
+    "key": "bakery",
+    "name": "Bakery",
+    "sortOrder": 7
+  },
+  {
+    "key": "beverages",
+    "name": "Beverages",
+    "sortOrder": 8
+  },
+  {
+    "key": "canned-and-preserved",
+    "name": "Canned and preserved",
+    "sortOrder": 9
+  },
+  {
+    "key": "grains-and-legumes",
+    "name": "Grains and legumes",
+    "sortOrder": 10
+  },
+  {
+    "key": "spices-and-herbs",
+    "name": "Spices and herbs",
+    "sortOrder": 11
+  },
+  {
+    "key": "sauces-and-condiments",
+    "name": "Sauces and condiments",
+    "sortOrder": 12
+  },
+  {
+    "key": "charcuterie",
+    "name": "Charcuterie",
+    "sortOrder": 13
+  },
+  {
+    "key": "nuts-and-seeds",
+    "name": "Nuts and seeds",
+    "sortOrder": 14
+  },
+  {
+    "key": "baking",
+    "name": "Baking",
+    "sortOrder": 15
+  },
+  {
+    "key": "eggs",
+    "name": "Eggs",
+    "sortOrder": 16
   }
 ]

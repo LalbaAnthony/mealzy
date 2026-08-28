@@ -1,5 +1,773 @@
 [
   {
+    "name": "Apple",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Banana",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Pear",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Orange",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Lemon",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Lime",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Grapefruit",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Strawberry",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Raspberry",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Blueberry",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Blackberry",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Cherry",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Peach",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Nectarine",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Plum",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Apricot",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Grape",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Kiwi",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Pineapple",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Mango",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Papaya",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Pomegranate",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Watermelon",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Cantaloupe",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Fig",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Date",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Coconut",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Avocado",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Tomato",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Cherry tomato",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Cucumber",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Zucchini",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Eggplant",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Bell pepper",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Red chili pepper",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Jalapeño",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Broccoli",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Cauliflower",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Brussels sprouts",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Cabbage",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Red cabbage",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Savoy cabbage",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Spinach",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Kale",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Lettuce",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Romaine",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Arugula",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Watercress",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Swiss chard",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Celery",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Fennel",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Leek",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Carrot",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Parsnip",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Turnip",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Radish",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Beetroot",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Sweet potato",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Potato",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Red potato",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Shallot",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Onion",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Red onion",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Garlic",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Ginger",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Fresh turmeric",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Green bean",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Peas",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Corn",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Artichoke",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Asparagus",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Mushroom",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Portobello mushroom",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Chanterelle",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Oyster mushroom",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Truffle",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Pumpkin",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Butternut squash",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Acorn squash",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Bok choy",
+    "categoryKey": "produce"
+  },
+  {
+    "name": "Milk",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Whole milk",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Skim milk",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Semi-skimmed milk",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Goat milk",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Buttermilk",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Cream",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Heavy cream",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Sour cream",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Crème fraîche",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Greek yogurt",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Plain yogurt",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Vanilla yogurt",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Strawberry yogurt",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Cottage cheese",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Ricotta",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Mascarpone",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Cream cheese",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Mozzarella",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Fresh mozzarella",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Burrata",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Feta",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Halloumi",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Cheddar",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Gouda",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Emmental",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Gruyère",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Comté",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Parmesan",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Pecorino",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Roquefort",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Blue cheese",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Camembert",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Brie",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Reblochon",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Goat cheese",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Sheep cheese",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Raclette cheese",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Gorgonzola",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Provolone",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Monterey Jack",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Swiss cheese",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Queso fresco",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Condensed milk",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Evaporated milk",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Kefir",
+    "categoryKey": "dairy"
+  },
+  {
+    "name": "Chicken breast",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Chicken thigh",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Chicken drumstick",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Whole chicken",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Turkey breast",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Turkey thigh",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Duck breast",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Duck leg",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Goose",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Rabbit",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Beef steak",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Beef tenderloin",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Beef sirloin",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Beef ribeye",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Beef chuck",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Beef brisket",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Beef mince",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Veal cutlet",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Veal shoulder",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Pork chop",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Pork tenderloin",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Pork belly",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Pork shoulder",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Pork loin",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Lamb chop",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Lamb leg",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Lamb shoulder",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Mutton",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Bacon",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Beef bacon",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Ham",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Sausage",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Chicken sausage",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Italian sausage",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Chorizo",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Salmon fillet",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Smoked salmon",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Fresh tuna",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Tuna steak",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Cod",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Haddock",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Pollock",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Hake",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Sea bass",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Sea bream",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Mackerel",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Sardine",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Anchovy",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Trout",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Smoked trout",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Halibut",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Swordfish",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Monkfish",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Prawns",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Shrimp",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Scampi",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Langoustine",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Lobster",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Crab",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Mussels",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Clams",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Oysters",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Squid",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Octopus",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Scallops",
+    "categoryKey": "meat-and-fish"
+  },
+  {
+    "name": "Smoked haddock",
+    "categoryKey": "meat-and-fish"
+  },
+  {
     "name": "Coffee",
     "categoryKey": "grocery"
   },
@@ -8,7 +776,35 @@
     "categoryKey": "grocery"
   },
   {
+    "name": "Brown sugar",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Icing sugar",
+    "categoryKey": "grocery"
+  },
+  {
     "name": "Olive oil",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Extra virgin olive oil",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Sunflower oil",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Rapeseed oil",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Sesame oil",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Coconut oil",
     "categoryKey": "grocery"
   },
   {
@@ -24,7 +820,11 @@
     "categoryKey": "grocery"
   },
   {
-    "name": "Sunflower oil",
+    "name": "Sea salt",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Fleur de sel",
     "categoryKey": "grocery"
   },
   {
@@ -32,7 +832,11 @@
     "categoryKey": "grocery"
   },
   {
-    "name": "Butter",
+    "name": "Black pepper",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "White pepper",
     "categoryKey": "grocery"
   },
   {
@@ -40,11 +844,1727 @@
     "categoryKey": "grocery"
   },
   {
-    "name": "Milk",
+    "name": "All-purpose flour",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Whole wheat flour",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Corn flour",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Cornstarch",
     "categoryKey": "grocery"
   },
   {
     "name": "Honey",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Maple syrup",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Agave syrup",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Balsamic vinegar",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Apple cider vinegar",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "White vinegar",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Red wine vinegar",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Soy sauce",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Fish sauce",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Sesame seeds",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Tomato paste",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Vanilla extract",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Cocoa powder",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Chocolate chips",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Dark chocolate",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Milk chocolate",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "White chocolate",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Instant coffee",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Tea",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Green tea",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Black tea",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Herbal tea",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Breadcrumbs",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Panko",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Semolina",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Polenta",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Vegetable stock",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Chicken stock",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Beef stock",
+    "categoryKey": "grocery"
+  },
+  {
+    "name": "Frozen peas",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen green beans",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen spinach",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen broccoli",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen cauliflower",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen corn",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen mixed vegetables",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen berries",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen strawberries",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen raspberries",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen blueberries",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen mango",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen pineapple",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen cherries",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen peaches",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen edamame",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen sweet potato fries",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen french fries",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen hash browns",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen onion",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen herbs",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen mushrooms",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen artichoke hearts",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen puff pastry",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen pie crust",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen pizza dough",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen bread",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen dumplings",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen ravioli",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen gnocchi",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen chicken nuggets",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen chicken wings",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen fish sticks",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen cod",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen salmon",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen shrimp",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen calamari",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen mussels",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen meatballs",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen beef burger",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen veggie burger",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen falafel",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Frozen fruit mix",
+    "categoryKey": "frozen"
+  },
+  {
+    "name": "Dish soap",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Dishwasher tablets",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Laundry detergent",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Fabric softener",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Sponge",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Scrub sponge",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Steel wool",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Paper towels",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Napkins",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Tissues",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Trash bags",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Freezer bags",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Food storage bags",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Cling film",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Aluminum foil",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Baking paper",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Cleaning spray",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Glass cleaner",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Disinfectant",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Bleach",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Floor cleaner",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Toilet cleaner",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Descaler",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Oven cleaner",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Degreaser",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Hand soap",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Hand sanitizer",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Rubber gloves",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Kitchen gloves",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Toothpicks",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Wooden skewers",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Candles",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Matches",
+    "categoryKey": "household"
+  },
+  {
+    "name": "Baguette",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Sourdough bread",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Whole wheat bread",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Rye bread",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Multigrain bread",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Ciabatta",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Focaccia",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Brioche",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Croissant",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Pain au chocolat",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Bagel",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "English muffin",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Burger bun",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Hot dog bun",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Pita bread",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Naan",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Tortilla",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Wraps",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Flatbread",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Garlic bread",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Cornbread",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Challah",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Pretzel",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Bread rolls",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Sandwich bread",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Toast bread",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Panettone",
+    "categoryKey": "bakery"
+  },
+  {
+    "name": "Still water",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Sparkling water",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Mineral water",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Orange juice",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Apple juice",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Grape juice",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Cranberry juice",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Tomato juice",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Lemonade",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Iced tea",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Cola",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Lemon soda",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Ginger ale",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Tonic water",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Coconut water",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Almond drink",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Oat drink",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Soy drink",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Rice drink",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Hot chocolate",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Espresso",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Americano",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Cappuccino",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Latte Macchiato",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Mocha",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Chai tea",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Kombucha",
+    "categoryKey": "beverages"
+  },
+  {
+    "name": "Canned tomatoes",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Crushed tomatoes",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Diced tomatoes",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned corn",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned peas",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned beans",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned chickpeas",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned lentils",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned kidney beans",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned black beans",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned tuna",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned sardines",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned anchovies",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned coconut milk",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned coconut cream",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned mushrooms",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned artichokes",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned peaches",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned pears",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned pineapple",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Canned cherries",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Tomato passata",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Tomato sauce",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Roasted peppers",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Pickled cucumbers",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Pickled onions",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Pickled jalapeños",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Sauerkraut",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Green olives",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Black olives",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Capers",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Sun-dried tomatoes",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Fruit compote",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Applesauce",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Jam",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Strawberry jam",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Raspberry jam",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Apricot jam",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Orange marmalade",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Peanut butter",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "Almond butter",
+    "categoryKey": "canned-and-preserved"
+  },
+  {
+    "name": "White rice",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Brown rice",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Basmati rice",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Jasmine rice",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Arborio rice",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Sushi rice",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Wild rice",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Quinoa",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Bulgur",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Millet",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Buckwheat",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Barley",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Pearl barley",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Oats",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Rolled oats",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Steel-cut oats",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Rye flakes",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Wheat berries",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Farro",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Spelt grains",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Freekeh",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Amaranth",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Cornmeal",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Lentils",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Green lentils",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Brown lentils",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Red lentils",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Black lentils",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Split peas",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Yellow split peas",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Chickpeas",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Dried chickpeas",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Kidney beans",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Black beans",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Cannellini beans",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Pinto beans",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Navy beans",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Soybeans",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Fava beans",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Mung beans",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Adzuki beans",
+    "categoryKey": "grains-and-legumes"
+  },
+  {
+    "name": "Basil",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Parsley",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Cilantro",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Mint",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Dill",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Chives",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Rosemary",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Thyme",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Sage",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Oregano",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Tarragon",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Marjoram",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Bay leaves",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Lemongrass",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Kaffir lime leaves",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Saffron",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Cumin",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Coriander seeds",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Paprika",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Smoked paprika",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Cayenne",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Chili flakes",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Turmeric",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Curry powder",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Garam masala",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Cardamom",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Cinnamon",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Nutmeg",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Cloves",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Allspice",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Star anise",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Fennel seeds",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Mustard seeds",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Caraway seeds",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Fenugreek",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Sumac",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Za'atar",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Herbes de Provence",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Five-spice powder",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Ginger powder",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Garlic powder",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Onion powder",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Celery salt",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Celery seeds",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Juniper berries",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Black peppercorns",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "White peppercorns",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Sichuan peppercorns",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Vanilla bean",
+    "categoryKey": "spices-and-herbs"
+  },
+  {
+    "name": "Mayonnaise",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Ketchup",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Dijon mustard",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Yellow mustard",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Whole grain mustard",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Honey mustard",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Hot sauce",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Sriracha",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Tabasco",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Barbecue sauce",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Worcestershire sauce",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Teriyaki sauce",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Hoisin sauce",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Oyster sauce",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Sweet chili sauce",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Chili sauce",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Harissa",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Pesto",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Green pesto",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Red pesto",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Tapenade",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Tzatziki",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Hummus",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Tahini",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Aioli",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Ranch dressing",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Caesar dressing",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Vinaigrette",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Thousand island dressing",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Salsa",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Guacamole",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Chutney",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Mango chutney",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Relish",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Horseradish",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Wasabi",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Miso paste",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Red miso",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "White miso",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Gochujang",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Sambal oelek",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Curry paste",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Red curry paste",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Green curry paste",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Black bean sauce",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Teriyaki glaze",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Caramel sauce",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Chocolate sauce",
+    "categoryKey": "sauces-and-condiments"
+  },
+  {
+    "name": "Prosciutto",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Salami Milano",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Salami Napoli",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Mortadella",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Coppa",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Pancetta",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Guanciale",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Speck",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Bresaola",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Saucisson",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Andouille",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Andouillette",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Chorizo Iberico",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Serrano ham",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Parma ham",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Cooked ham",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Country ham",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Pastrami",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Corned beef",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Smoked ham",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Smoked turkey",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Smoked chicken",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Pâté",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Chicken liver pâté",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Duck pâté",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Terrine",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Rillettes",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Pork rillettes",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Duck rillettes",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Mousse de foie",
+    "categoryKey": "charcuterie"
+  },
+  {
+    "name": "Almonds",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Walnuts",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Pecans",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Cashews",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Pistachios",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Hazelnuts",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Macadamia nuts",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Brazil nuts",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Peanuts",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Pine nuts",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Chestnuts",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Coconut flakes",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Desiccated coconut",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Pumpkin seeds",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Sunflower seeds",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Black sesame seeds",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Chia seeds",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Flax seeds",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Hemp seeds",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Poppy seeds",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Tahini paste",
+    "categoryKey": "nuts-and-seeds"
+  },
+  {
+    "name": "Baking powder",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Baking soda",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Active dry yeast",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Fresh yeast",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Instant yeast",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Cream of tartar",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Gelatin sheets",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Gelatin powder",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Agar agar",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Xanthan gum",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Guar gum",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Almond flour",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Coconut flour",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Hazelnut flour",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Bread flour",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Pastry flour",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Cake flour",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Tapioca starch",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Potato starch",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Arrowroot starch",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Fondant",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Marzipan",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Royal icing",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Sprinkles",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Food coloring",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Meringue powder",
+    "categoryKey": "baking"
+  },
+  {
+    "name": "Chicken eggs",
+    "categoryKey": "eggs"
+  },
+  {
+    "name": "Free-range eggs",
+    "categoryKey": "eggs"
+  },
+  {
+    "name": "Organic eggs",
+    "categoryKey": "eggs"
+  },
+  {
+    "name": "Large eggs",
+    "categoryKey": "eggs"
+  },
+  {
+    "name": "Medium eggs",
+    "categoryKey": "eggs"
+  },
+  {
+    "name": "Small eggs",
+    "categoryKey": "eggs"
+  },
+  {
+    "name": "Duck eggs",
+    "categoryKey": "eggs"
+  },
+  {
+    "name": "Quail eggs",
+    "categoryKey": "eggs"
+  },
+  {
+    "name": "Liquid egg whites",
+    "categoryKey": "eggs"
+  },
+  {
+    "name": "Liquid egg yolks",
+    "categoryKey": "eggs"
+  },
+  {
+    "name": "Pasteurized eggs",
+    "categoryKey": "eggs"
+  },
+  {
+    "name": "Butter",
     "categoryKey": "grocery"
   },
   {
@@ -53,10 +2573,6 @@
   },
   {
     "name": "Pet food",
-    "categoryKey": "grocery"
-  },
-  {
-    "name": "Balsamic vinegar",
     "categoryKey": "grocery"
   }
 ]
