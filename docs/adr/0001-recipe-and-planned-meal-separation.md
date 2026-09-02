@@ -12,8 +12,8 @@ status belongs to an occasion rather than to the template.
 
 ## Decision
 
-`Recipe` and `MealPlanned` are distinct entities. `Recipe` is a reusable template holding name, notes
-and ingredients. `MealPlanned` is an instance holding `recipeId`, schedule, `manualOrder`, `status`
+`Recipe` and `MealPlanned` are distinct entities. `Recipe` is a reusable template holding name, notes,
+instructions and ingredients. `MealPlanned` is an instance holding `recipeId`, schedule, `manualOrder`, `status`
 and `eatenAt`.
 
 `MealPlanned` also carries `recipeNameSnapshot`, a copy of the recipe name at the time of planning.

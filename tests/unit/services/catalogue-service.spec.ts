@@ -168,6 +168,7 @@ describe('BR-12 ingredient deletion is blocked while referenced', () => {
     await harness.services.recipes.create({
       name: 'Salad',
       notes: '',
+      instructions: '',
       ingredients: [{ ingredientId: tomatoId, quantity: null }],
     });
 

@@ -52,6 +52,17 @@ export interface MdTextFieldProps {
   step?: string;
 }
 
+export interface MdTextAreaProps {
+  modelValue: string;
+  label: string;
+  placeholder?: string;
+  disabled?: boolean;
+  required?: boolean;
+  supportingText?: string;
+  errorText?: string;
+  rows?: number;
+}
+
 export interface MdSelectProps {
   modelValue: string;
   label: string;

@@ -37,6 +37,7 @@ export interface RecipeIngredientDraft {
 export interface RecipeDraft {
   readonly name: string;
   readonly notes: string;
+  readonly instructions: string;
   readonly ingredients: readonly RecipeIngredientDraft[];
 }
 

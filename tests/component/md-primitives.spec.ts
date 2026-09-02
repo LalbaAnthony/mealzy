@@ -10,6 +10,7 @@ import MdSegmentedButton from '../../src/components/md/MdSegmentedButton.vue';
 import MdSelect from '../../src/components/md/MdSelect.vue';
 import MdSnackbar from '../../src/components/md/MdSnackbar.vue';
 import MdSwitch from '../../src/components/md/MdSwitch.vue';
+import MdTextArea from '../../src/components/md/MdTextArea.vue';
 import MdTextField from '../../src/components/md/MdTextField.vue';
 import type { MdSelectProps } from '../../src/types/components';
 
@@ -81,6 +82,46 @@ describe('MdTextField', () => {
     expect(input.attributes('aria-invalid')).toBe('true');
     expect(wrapper.get('p').text()).toBe('A recipe needs a name.');
     expect(input.attributes('aria-describedby')).toBe(wrapper.get('p').attributes('id'));
+  });
+});
+
+describe('MdTextArea', () => {
+  it('binds the label to the textarea and emits on input', async () => {
+    const wrapper = mount(MdTextArea, {
+      props: { modelValue: '', label: 'Instructions', rows: 6 },
+    });
+
+    const textarea = wrapper.get('textarea');
+    const label = wrapper.get('label');
+    expect(label.attributes('for')).toBe(textarea.attributes('id'));
+    expect(textarea.attributes('rows')).toBe('6');
+
+    await textarea.setValue('Simmer for twenty minutes.');
+    expect(wrapper.emitted('update:modelValue')).toEqual([['Simmer for twenty minutes.']]);
+  });
+
+  it('exposes the error as the described message', () => {
+    const wrapper = mount(MdTextArea, {
+      props: { modelValue: '', label: 'Instructions', errorText: 'Something is wrong.' },
+    });
+
+    const textarea = wrapper.get('textarea');
+    expect(textarea.attributes('aria-invalid')).toBe('true');
+    expect(wrapper.get('p').text()).toBe('Something is wrong.');
+    expect(textarea.attributes('aria-describedby')).toBe(wrapper.get('p').attributes('id'));
+  });
+
+  it('prefers the error over the supporting text', () => {
+    const wrapper = mount(MdTextArea, {
+      props: {
+        modelValue: '',
+        label: 'Instructions',
+        supportingText: 'Optional',
+        errorText: 'Something is wrong.',
+      },
+    });
+
+    expect(wrapper.get('p').text()).toBe('Something is wrong.');
   });
 });
 

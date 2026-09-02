@@ -4,7 +4,12 @@ import { createTestHarness, seedCatalogue } from '../../support/test-harness';
 let harness: ReturnType<typeof createTestHarness>;
 
 async function createRecipe(name: string): Promise<string> {
-  const result = await harness.services.recipes.create({ name, notes: '', ingredients: [] });
+  const result = await harness.services.recipes.create({
+    name,
+    notes: '',
+    instructions: '',
+    ingredients: [],
+  });
   if (!result.ok) {
     throw new Error(`Failed to create recipe ${name}`);
   }
@@ -148,6 +153,7 @@ describe('BR-07 and BR-08 eaten status', () => {
     await harness.services.recipes.update(recipeId, {
       name: 'New Name',
       notes: '',
+      instructions: '',
       ingredients: [],
     });
     const result = await harness.services.meals.markPlanned(mealId);

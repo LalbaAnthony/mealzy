@@ -61,6 +61,7 @@ export function createRecipeService(dependencies: ServiceDependencies): RecipeSe
         id: dependencies.ids.next(),
         name: validation.value.name,
         notes: validation.value.notes,
+        instructions: validation.value.instructions,
         ingredients: validation.value.ingredients,
         createdAt: now,
         updatedAt: now,
@@ -89,6 +90,7 @@ export function createRecipeService(dependencies: ServiceDependencies): RecipeSe
         ...existing,
         name: validation.value.name,
         notes: validation.value.notes,
+        instructions: validation.value.instructions,
         ingredients: validation.value.ingredients,
         updatedAt: dependencies.clock.now(),
       };

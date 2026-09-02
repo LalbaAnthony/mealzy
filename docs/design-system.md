@@ -59,6 +59,7 @@ nothing else. A primitive that knows what a recipe is would be a defect.
 | `MdIconButton`      | standard, filled and tonal; requires an accessible `label`               |
 | `MdFab`             | regular and extended                                                     |
 | `MdTextField`       | label bound by `for`/`id`, `aria-invalid` and `aria-describedby`         |
+| `MdTextArea`        | the multi-line counterpart, same labelling and error contract, `rows`    |
 | `MdSelect`          | searchable combobox, same labelling and error contract as the text field |
 | `MdCheckbox`        | `hideLabel` moves the label to `aria-label` for dense list rows          |
 | `MdSwitch`          | `role="switch"` with `aria-checked`, optional visible label              |

@@ -34,14 +34,15 @@ on recipes are forbidden because they make aggregation unreliable. See
 
 A reusable template.
 
-| Field         | Type                          | Notes                                |
-| ------------- | ----------------------------- | ------------------------------------ |
-| `id`          | `RecipeId`                    |                                      |
-| `name`        | `string`                      | Non-empty, unique case-insensitively |
-| `notes`       | `string`                      | May be empty                         |
-| `ingredients` | `readonly RecipeIngredient[]` | Each ingredient at most once         |
-| `createdAt`   | `EpochMillis`                 |                                      |
-| `updatedAt`   | `EpochMillis`                 |                                      |
+| Field          | Type                          | Notes                                |
+| -------------- | ----------------------------- | ------------------------------------ |
+| `id`           | `RecipeId`                    |                                      |
+| `name`         | `string`                      | Non-empty, unique case-insensitively |
+| `notes`        | `string`                      | May be empty                         |
+| `instructions` | `string`                      | May be empty                         |
+| `ingredients`  | `readonly RecipeIngredient[]` | Each ingredient at most once         |
+| `createdAt`    | `EpochMillis`                 |                                      |
+| `updatedAt`    | `EpochMillis`                 |                                      |
 
 A `RecipeIngredient` is `{ ingredientId, quantity }` where `quantity` is `Quantity | null`. A null
 quantity is valid and means "some, unspecified".

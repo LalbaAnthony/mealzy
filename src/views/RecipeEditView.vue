@@ -15,6 +15,7 @@ import MdButton from '../components/md/MdButton.vue';
 import MdCard from '../components/md/MdCard.vue';
 import MdIconButton from '../components/md/MdIconButton.vue';
 import MdSelect from '../components/md/MdSelect.vue';
+import MdTextArea from '../components/md/MdTextArea.vue';
 import MdTextField from '../components/md/MdTextField.vue';
 
 const route = useRoute();
@@ -30,6 +31,7 @@ const isNew = computed(() => recipeId.value === 'new');
 
 const name = ref('');
 const notes = ref('');
+const instructions = ref('');
 const rows = ref<RecipeIngredientRowState[]>([]);
 
 const hasIngredients = computed(() => catalogue.ingredientOptions.length > 0);
@@ -83,6 +85,7 @@ async function save(): Promise<void> {
   const draft = {
     name: name.value,
     notes: notes.value,
+    instructions: instructions.value,
     ingredients: buildDraftIngredients(),
   };
 
@@ -117,6 +120,7 @@ onMounted(async () => {
   }
   name.value = existing.name;
   notes.value = existing.notes;
+  instructions.value = existing.instructions;
   rows.value = existing.ingredients.map((recipeIngredient) => ({
     ingredientId: recipeIngredient.ingredientId,
     amount: recipeIngredient.quantity === null ? '' : String(recipeIngredient.quantity.amount),
@@ -128,7 +132,8 @@ onMounted(async () => {
 <template>
   <form class="recipe-edit" @submit.prevent="save">
     <MdTextField v-model="name" label="Recipe name" required />
-    <MdTextField v-model="notes" label="Notes" placeholder="Optional" />
+    <MdTextArea v-model="notes" label="Notes" placeholder="Optional" :rows="3" />
+    <MdTextArea v-model="instructions" label="Instructions" placeholder="Optional" :rows="6" />
 
     <section class="recipe-edit__ingredients">
       <h2 class="recipe-edit__heading">Ingredients</h2>

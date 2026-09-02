@@ -13,11 +13,13 @@ describe('BR-01 recipe names are unique', () => {
     const first = await harness.services.recipes.create({
       name: 'Tomato Soup',
       notes: '',
+      instructions: '',
       ingredients: [],
     });
     const second = await harness.services.recipes.create({
       name: '  tomato soup ',
       notes: '',
+      instructions: '',
       ingredients: [],
     });
 
@@ -33,6 +35,7 @@ describe('BR-02 and BR-03 recipe ingredients', () => {
     const result = await harness.services.recipes.create({
       name: 'Salad',
       notes: '',
+      instructions: '',
       ingredients: [{ ingredientId: tomatoId, quantity: null }],
     });
 
@@ -47,6 +50,7 @@ describe('BR-02 and BR-03 recipe ingredients', () => {
     const result = await harness.services.recipes.create({
       name: 'Salad',
       notes: '',
+      instructions: '',
       ingredients: [
         { ingredientId: tomatoId, quantity: null },
         { ingredientId: tomatoId, quantity: { amount: 2, unit: 'piece' } },
@@ -62,6 +66,7 @@ describe('BR-04 recipe name snapshots', () => {
     const created = await harness.services.recipes.create({
       name: 'Old Name',
       notes: '',
+      instructions: '',
       ingredients: [],
     });
     if (!created.ok) {
@@ -72,6 +77,7 @@ describe('BR-04 recipe name snapshots', () => {
     await harness.services.recipes.update(created.value.id, {
       name: 'New Name',
       notes: '',
+      instructions: '',
       ingredients: [],
     });
 
@@ -83,6 +89,7 @@ describe('BR-04 recipe name snapshots', () => {
     const created = await harness.services.recipes.create({
       name: 'Old Name',
       notes: '',
+      instructions: '',
       ingredients: [],
     });
     if (!created.ok) {
@@ -101,6 +108,7 @@ describe('BR-04 recipe name snapshots', () => {
     await harness.services.recipes.update(created.value.id, {
       name: 'New Name',
       notes: '',
+      instructions: '',
       ingredients: [],
     });
 
@@ -114,6 +122,7 @@ describe('BR-11 recipe deletion', () => {
     const created = await harness.services.recipes.create({
       name: 'Soup',
       notes: '',
+      instructions: '',
       ingredients: [],
     });
     if (!created.ok) {
@@ -141,6 +150,7 @@ describe('BR-11 recipe deletion', () => {
     const created = await harness.services.recipes.create({
       name: 'Soup',
       notes: '',
+      instructions: '',
       ingredients: [],
     });
     if (!created.ok) {
@@ -170,7 +180,12 @@ describe('BR-11 recipe deletion', () => {
       error: { code: 'entity-not-found' },
     });
     expect(
-      await harness.services.recipes.update('ghost', { name: 'X', notes: '', ingredients: [] }),
+      await harness.services.recipes.update('ghost', {
+        name: 'X',
+        notes: '',
+        instructions: '',
+        ingredients: [],
+      }),
     ).toMatchObject({ ok: false, error: { code: 'entity-not-found' } });
   });
 
@@ -178,6 +193,7 @@ describe('BR-11 recipe deletion', () => {
     const created = await harness.services.recipes.create({
       name: 'Soup',
       notes: 'warm',
+      instructions: 'Simmer for twenty minutes.',
       ingredients: [],
     });
     if (!created.ok) {
@@ -187,6 +203,7 @@ describe('BR-11 recipe deletion', () => {
     expect(await harness.services.recipes.getById(created.value.id)).toMatchObject({
       name: 'Soup',
       notes: 'warm',
+      instructions: 'Simmer for twenty minutes.',
     });
     expect(await harness.services.recipes.getById('ghost')).toBeNull();
   });

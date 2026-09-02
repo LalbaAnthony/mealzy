@@ -64,7 +64,7 @@ describe('name helpers', () => {
 describe('BR-01 recipe name', () => {
   it('rejects an empty name', () => {
     const result = validateRecipeDraft({
-      draft: { name: '   ', notes: '', ingredients: [] },
+      draft: { name: '   ', notes: '', instructions: '', ingredients: [] },
       existingRecipes: [],
       ingredients: [],
       recipeIdInEdit: null,
@@ -75,7 +75,7 @@ describe('BR-01 recipe name', () => {
 
   it('rejects a duplicate name ignoring case and surrounding spaces', () => {
     const result = validateRecipeDraft({
-      draft: { name: '  tomato SOUP ', notes: '', ingredients: [] },
+      draft: { name: '  tomato SOUP ', notes: '', instructions: '', ingredients: [] },
       existingRecipes: [makeRecipe({ id: 'other', name: 'Tomato Soup' })],
       ingredients: [],
       recipeIdInEdit: null,
@@ -86,7 +86,7 @@ describe('BR-01 recipe name', () => {
 
   it('allows a recipe to keep its own name while editing', () => {
     const result = validateRecipeDraft({
-      draft: { name: 'Tomato Soup', notes: '', ingredients: [] },
+      draft: { name: 'Tomato Soup', notes: '', instructions: '', ingredients: [] },
       existingRecipes: [makeRecipe({ id: 'self', name: 'Tomato Soup' })],
       ingredients: [],
       recipeIdInEdit: 'self',
@@ -95,9 +95,14 @@ describe('BR-01 recipe name', () => {
     expect(result.ok).toBe(true);
   });
 
-  it('normalises the name and trims the notes', () => {
+  it('normalises the name and trims the notes and the instructions', () => {
     const result = validateRecipeDraft({
-      draft: { name: '  Tomato   Soup ', notes: '  tasty  ', ingredients: [] },
+      draft: {
+        name: '  Tomato   Soup ',
+        notes: '  tasty  ',
+        instructions: '  Simmer for twenty minutes.  ',
+        ingredients: [],
+      },
       existingRecipes: [],
       ingredients: [],
       recipeIdInEdit: null,
@@ -105,7 +110,12 @@ describe('BR-01 recipe name', () => {
 
     expect(result).toEqual({
       ok: true,
-      value: { name: 'Tomato Soup', notes: 'tasty', ingredients: [] },
+      value: {
+        name: 'Tomato Soup',
+        notes: 'tasty',
+        instructions: 'Simmer for twenty minutes.',
+        ingredients: [],
+      },
     });
   });
 });
@@ -113,7 +123,12 @@ describe('BR-01 recipe name', () => {
 describe('BR-02 recipe ingredients reference existing ingredients', () => {
   it('rejects an unknown ingredient', () => {
     const result = validateRecipeDraft({
-      draft: { name: 'Soup', notes: '', ingredients: [{ ingredientId: 'ghost', quantity: null }] },
+      draft: {
+        name: 'Soup',
+        notes: '',
+        instructions: '',
+        ingredients: [{ ingredientId: 'ghost', quantity: null }],
+      },
       existingRecipes: [],
       ingredients: [flour],
       recipeIdInEdit: null,
@@ -127,7 +142,12 @@ describe('BR-02 recipe ingredients reference existing ingredients', () => {
 
   it('accepts an ingredient with no quantity', () => {
     const result = validateRecipeDraft({
-      draft: { name: 'Soup', notes: '', ingredients: [{ ingredientId: 'flour', quantity: null }] },
+      draft: {
+        name: 'Soup',
+        notes: '',
+        instructions: '',
+        ingredients: [{ ingredientId: 'flour', quantity: null }],
+      },
       existingRecipes: [],
       ingredients: [flour],
       recipeIdInEdit: null,
@@ -141,6 +161,7 @@ describe('BR-02 recipe ingredients reference existing ingredients', () => {
       draft: {
         name: 'Soup',
         notes: '',
+        instructions: '',
         ingredients: [{ ingredientId: 'flour', quantity: { amount: 0, unit: 'g' } }],
       },
       existingRecipes: [],
@@ -161,6 +182,7 @@ describe('BR-03 an ingredient appears at most once per recipe', () => {
       draft: {
         name: 'Soup',
         notes: '',
+        instructions: '',
         ingredients: [
           { ingredientId: 'flour', quantity: null },
           { ingredientId: 'flour', quantity: { amount: 2, unit: 'g' } },
@@ -182,6 +204,7 @@ describe('BR-03 an ingredient appears at most once per recipe', () => {
       draft: {
         name: 'Soup',
         notes: '',
+        instructions: '',
         ingredients: [
           { ingredientId: 'flour', quantity: null },
           { ingredientId: 'sugar', quantity: null },

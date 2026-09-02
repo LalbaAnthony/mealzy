@@ -23,6 +23,7 @@ export function makeRecipe(overrides: Partial<Recipe>): Recipe {
     id: 'recipe-1',
     name: 'Recipe',
     notes: '',
+    instructions: '',
     ingredients: [],
     createdAt: 0,
     updatedAt: 0,

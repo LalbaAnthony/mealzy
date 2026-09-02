@@ -16,6 +16,7 @@ async function buildSampleState(): Promise<void> {
   const recipe = await harness.services.recipes.create({
     name: 'Soup',
     notes: 'warm',
+    instructions: '',
     ingredients: [{ ingredientId: tomatoId, quantity: { amount: 500, unit: 'g' } }],
   });
   if (!recipe.ok) {

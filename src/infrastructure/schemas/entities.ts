@@ -49,6 +49,7 @@ export const recipeSchema = z
     id: z.string().min(1),
     name: z.string().min(1),
     notes: z.string(),
+    instructions: z.string(),
     ingredients: z.array(recipeIngredientSchema).readonly(),
     createdAt: z.number().int(),
     updatedAt: z.number().int(),

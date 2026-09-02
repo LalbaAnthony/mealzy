@@ -24,7 +24,7 @@ async function createRecipeAndPlan(
     quantity: { amount: number; unit: 'g' | 'kg' | 'piece' } | null;
   }[],
 ): Promise<string> {
-  const recipe = await services.recipes.create({ name, notes: '', ingredients });
+  const recipe = await services.recipes.create({ name, notes: '', instructions: '', ingredients });
   if (!recipe.ok) {
     throw new Error(`could not create recipe ${name}`);
   }

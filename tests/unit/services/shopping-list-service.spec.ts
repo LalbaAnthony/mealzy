@@ -32,7 +32,12 @@ async function planRecipe(
   name: string,
   ingredients: readonly { ingredientId: string; quantity: { amount: number; unit: 'g' } | null }[],
 ): Promise<string> {
-  const recipe = await harness.services.recipes.create({ name, notes: '', ingredients });
+  const recipe = await harness.services.recipes.create({
+    name,
+    notes: '',
+    instructions: '',
+    ingredients,
+  });
   if (!recipe.ok) {
     throw new Error('recipe creation failed');
   }

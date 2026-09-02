@@ -76,6 +76,7 @@ export function validateRecipeDraft(input: RecipeValidationInput): DomainResult<
   return ok({
     name,
     notes: input.draft.notes.trim(),
+    instructions: input.draft.instructions.trim(),
     ingredients: resolved.map((entry) => ({
       ingredientId: entry.ingredient.id,
       quantity: entry.quantity,
