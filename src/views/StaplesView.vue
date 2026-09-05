@@ -32,6 +32,7 @@ const editingId = ref<string | null>(null);
 const form = ref<RecipeIngredientRowState>({ ingredientId: '', amount: '', unit: 'g' });
 
 const hasIngredients = computed(() => catalogue.ingredientOptions.length > 0);
+const canSubmit = computed(() => hasIngredients.value && form.value.ingredientId !== '');
 const dialogTitle = computed(() => (editingId.value === null ? 'Add a staple' : 'Edit staple'));
 
 function toUnit(value: string): Unit {
@@ -57,11 +58,7 @@ function describeStaple(staple: Staple): string {
 
 function openCreateDialog(): void {
   editingId.value = null;
-  form.value = {
-    ingredientId: catalogue.ingredientOptions[0]?.value ?? '',
-    amount: '',
-    unit: 'g',
-  };
+  form.value = { ingredientId: '', amount: '', unit: 'g' };
   dialogOpen.value = true;
 }
 
@@ -180,6 +177,7 @@ onMounted(async () => {
         v-model="form.ingredientId"
         label="Ingredient"
         :options="catalogue.ingredientOptions"
+        placeholder="Choose an ingredient"
         allow-create
         @create="createIngredientForForm"
       />
@@ -200,7 +198,7 @@ onMounted(async () => {
       />
       <template #actions>
         <MdButton variant="text" @click="dialogOpen = false">Cancel</MdButton>
-        <MdButton :disabled="!hasIngredients" @click="submit">Save</MdButton>
+        <MdButton :disabled="!canSubmit" @click="submit">Save</MdButton>
       </template>
     </MdDialog>
 
