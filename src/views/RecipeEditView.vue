@@ -140,6 +140,7 @@ onMounted(async () => {
         <div class="recipe-edit__row">
           <MdSelect
             v-model="row.ingredientId"
+            class="recipe-edit__field recipe-edit__field--ingredient"
             label="Ingredient"
             :options="catalogue.ingredientOptions"
             allow-create
@@ -147,6 +148,7 @@ onMounted(async () => {
           />
           <MdTextField
             v-model="row.amount"
+            class="recipe-edit__field recipe-edit__field--amount"
             label="Amount"
             type="number"
             min="0"
@@ -155,11 +157,17 @@ onMounted(async () => {
           />
           <MdSelect
             :model-value="row.unit"
+            class="recipe-edit__field recipe-edit__field--unit"
             label="Unit"
             :options="unitOptions"
             @update:model-value="row.unit = toUnit($event)"
           />
-          <MdIconButton icon="delete" label="Remove this ingredient" @click="removeRow(index)" />
+          <MdIconButton
+            class="recipe-edit__remove"
+            icon="delete"
+            label="Remove this ingredient"
+            @click="removeRow(index)"
+          />
         </div>
       </MdCard>
 
@@ -197,9 +205,22 @@ onMounted(async () => {
 
 .recipe-edit__row {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: var(--md-sys-spacing-3);
   align-items: end;
+}
+
+.recipe-edit__field {
+  min-width: 0;
+}
+
+.recipe-edit__field--ingredient {
+  grid-column: 1 / -1;
+}
+
+.recipe-edit__remove {
+  grid-column: 1 / -1;
+  justify-self: start;
 }
 
 .recipe-edit__actions {
@@ -211,6 +232,11 @@ onMounted(async () => {
 @media (min-width: 600px) {
   .recipe-edit__row {
     grid-template-columns: 2fr 1fr 1fr auto;
+  }
+
+  .recipe-edit__field--ingredient,
+  .recipe-edit__remove {
+    grid-column: auto;
   }
 }
 </style>
