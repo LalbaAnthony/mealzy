@@ -4,7 +4,6 @@ import { useRoute, useRouter } from 'vue-router';
 import type { RecipeIngredientDraft } from '../types/services';
 import type { RecipeIngredientRowState } from '../types/ui';
 import type { Unit } from '../types/units';
-import { formatOptionalQuantity } from '../domain/units/format';
 import { useIngredientQuickCreate } from '../composables/useIngredientQuickCreate';
 import { useUnitOptions } from '../composables/useUnitOptions';
 import { useCatalogueStore } from '../stores/catalogue-store';
@@ -71,14 +70,6 @@ function buildDraftIngredients(): RecipeIngredientDraft[] {
     }
     return { ingredientId: row.ingredientId, quantity: { amount, unit: row.unit } };
   });
-}
-
-function previewQuantity(index: number): string {
-  const draft = buildDraftIngredients()[index];
-  if (draft === undefined) {
-    return '';
-  }
-  return formatOptionalQuantity(draft.quantity);
 }
 
 async function save(): Promise<void> {
@@ -161,11 +152,6 @@ onMounted(async () => {
             min="0"
             step="any"
             placeholder="Any amount"
-            :supporting-text="
-              previewQuantity(index) === ''
-                ? 'Leave empty for an unspecified amount'
-                : previewQuantity(index)
-            "
           />
           <MdSelect
             :model-value="row.unit"

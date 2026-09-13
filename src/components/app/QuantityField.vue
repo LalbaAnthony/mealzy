@@ -23,7 +23,6 @@ const { unitOptions } = useUnitOptions();
       min="0"
       step="any"
       placeholder="Any amount"
-      supporting-text="Leave empty for an unspecified amount"
       @update:model-value="emit('update:amount', $event)"
     />
     <MdSelect

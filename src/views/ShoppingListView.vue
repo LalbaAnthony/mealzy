@@ -158,14 +158,7 @@ onMounted(async () => {
 
     <MdDialog :open="adHocDialogOpen" title="Add a one-off item" @close="adHocDialogOpen = false">
       <MdTextField v-model="adHocLabel" label="Item" placeholder="Toilet paper" required />
-      <MdTextField
-        v-model="adHocAmount"
-        label="How many"
-        type="number"
-        min="0"
-        step="any"
-        supporting-text="Leave empty for an unspecified amount"
-      />
+      <MdTextField v-model="adHocAmount" label="How many" type="number" min="0" step="any" />
       <MdSelect v-model="adHocCategoryId" label="Aisle" :options="catalogue.categoryOptions" />
       <template #actions>
         <MdButton variant="text" @click="adHocDialogOpen = false">Cancel</MdButton>

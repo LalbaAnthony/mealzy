@@ -182,14 +182,7 @@ onMounted(async () => {
         @create="createIngredientForForm"
       />
       <p v-else>Add an ingredient from the Pantry tab first.</p>
-      <MdTextField
-        v-model="form.amount"
-        label="Default amount"
-        type="number"
-        min="0"
-        step="any"
-        supporting-text="Leave empty for an unspecified amount"
-      />
+      <MdTextField v-model="form.amount" label="Default amount" type="number" min="0" step="any" />
       <MdSelect
         :model-value="form.unit"
         label="Unit"
