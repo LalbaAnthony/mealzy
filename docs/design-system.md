@@ -184,6 +184,29 @@ A floating element also carries `--md-sys-z-index-fab`, which sits above the nav
 offsets are what prevent overlap; the layer only decides the outcome if an unusual inset defeats
 them, and in that case the FAB has to be the one on top.
 
+### Dialog placement
+
+`MdDialog` is a top sheet below 840px and a centred card from 840px, the same breakpoint at which the
+navigation becomes a rail. Below it the surface is full bleed and flush with the top edge: the scrim
+carries no padding, the surface drops its `26rem` cap, and only the bottom two corners stay
+`extra-large`. From 840px the scrim recovers its padding and centres the surface, which recovers both
+the width cap and the full corner radius.
+
+The reason is the soft keyboard. A centred dialog on a phone is pushed into the lower half of the
+screen, where the keyboard then covers the fields being filled, and the title can leave the viewport
+entirely. Anchoring to the top keeps the first fields above the keyboard whatever its height, without
+the component having to measure anything. The `90vh` cap is deliberately unchanged: it is a cap on
+the layout viewport, so long content still scrolls inside the surface rather than off screen.
+
+`env(safe-area-inset-top)` is absorbed by the surface's own `padding-block-start`, not by the scrim,
+so the dialog background fills the status bar strip instead of leaving a band of scrim above a sheet
+that is supposed to be flush.
+
+Two consequences to keep in mind. There is less scrim left to click, so Escape and an explicit
+cancel action stay the only reliable ways out on a phone and every dialog must offer one. And because
+`MdSelect` places its teleported list below the field unless there is more room above, a top-anchored
+dialog makes below the usual choice, which is the direction that reads naturally.
+
 ## Icons
 
 In-application icons come from the Material Symbols Rounded font, self-hosted from the

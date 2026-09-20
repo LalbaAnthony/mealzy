@@ -99,9 +99,8 @@ watch(
   position: fixed;
   inset: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding: var(--md-sys-spacing-4);
   background-color: color-mix(in srgb, var(--md-sys-color-scrim) 40%, transparent);
   z-index: var(--md-sys-z-index-dialog);
 }
@@ -111,14 +110,29 @@ watch(
   flex-direction: column;
   gap: var(--md-sys-spacing-4);
   inline-size: 100%;
-  max-inline-size: 26rem;
   max-block-size: 90vh;
   overflow-y: auto;
-  padding: var(--md-sys-spacing-6);
-  border-radius: var(--md-sys-shape-corner-extra-large);
+  padding-inline: var(--md-sys-spacing-6);
+  padding-block: calc(var(--md-sys-spacing-6) + env(safe-area-inset-top, 0px))
+    var(--md-sys-spacing-6);
+  border-end-start-radius: var(--md-sys-shape-corner-extra-large);
+  border-end-end-radius: var(--md-sys-shape-corner-extra-large);
   background-color: var(--md-sys-color-surface-container-high);
   color: var(--md-sys-color-on-surface);
   box-shadow: var(--md-sys-elevation-level3);
+}
+
+@media (min-width: 840px) {
+  .md-dialog__scrim {
+    align-items: center;
+    padding: var(--md-sys-spacing-4);
+  }
+
+  .md-dialog {
+    max-inline-size: 26rem;
+    padding-block: var(--md-sys-spacing-6);
+    border-radius: var(--md-sys-shape-corner-extra-large);
+  }
 }
 
 .md-dialog__title {
