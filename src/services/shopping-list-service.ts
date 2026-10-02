@@ -6,6 +6,7 @@ import type {
 } from '../types/services';
 import { aggregateShoppingList } from '../domain/aggregation/aggregate-shopping-list';
 import { groupShoppingList } from '../domain/aggregation/group-shopping-list';
+import { layoutShoppingList } from '../domain/aggregation/layout-shopping-list';
 import { shoppingLineKeyForAdHocItem } from '../domain/aggregation/shopping-line-key';
 import { buildShoppingListText } from '../domain/export/shopping-list-text';
 
@@ -45,6 +46,7 @@ export function createShoppingListService(dependencies: ServiceDependencies): Sh
 
     return {
       groups,
+      layout: layoutShoppingList(groups),
       lines,
       purchasedCount: lines.filter((line) => line.purchased).length,
       totalCount: lines.length,

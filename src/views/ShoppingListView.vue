@@ -125,11 +125,23 @@ onMounted(async () => {
     </MdCard>
 
     <template v-if="!shopping.isEmpty">
-      <section v-for="group in shopping.snapshot.groups" :key="group.categoryId">
+      <section v-for="group in shopping.snapshot.layout.aisles" :key="group.categoryId">
         <h2 class="shopping-view__group-title">{{ group.categoryName }}</h2>
         <MdList :label="group.categoryName">
           <ShoppingLineItem
             v-for="line in group.lines"
+            :key="line.key"
+            :line="line"
+            :source-labels="sourceLabels(line)"
+            @toggle-purchased="shopping.setPurchased(line.key, $event)"
+          />
+        </MdList>
+      </section>
+      <section v-if="shopping.snapshot.layout.purchased.length > 0">
+        <h2 class="shopping-view__group-title">In the cart</h2>
+        <MdList label="In the cart">
+          <ShoppingLineItem
+            v-for="line in shopping.snapshot.layout.purchased"
             :key="line.key"
             :line="line"
             :source-labels="sourceLabels(line)"

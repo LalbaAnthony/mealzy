@@ -9,6 +9,7 @@ import { useUiStore } from './ui-store';
 
 const EMPTY_SNAPSHOT: ShoppingListSnapshot = {
   groups: [],
+  layout: { aisles: [], purchased: [] },
   lines: [],
   purchasedCount: 0,
   totalCount: 0,

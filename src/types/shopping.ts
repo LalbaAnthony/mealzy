@@ -64,6 +64,11 @@ export interface ShoppingListGroup {
   readonly lines: readonly ShoppingLine[];
 }
 
+export interface ShoppingListLayout {
+  readonly aisles: readonly ShoppingListGroup[];
+  readonly purchased: readonly ShoppingLine[];
+}
+
 export interface ShoppingListGroupingInput {
   readonly lines: readonly ShoppingLine[];
   readonly categories: readonly Category[];

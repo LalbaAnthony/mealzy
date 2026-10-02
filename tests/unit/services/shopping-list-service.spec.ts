@@ -128,6 +128,25 @@ describe('BR-16 purchased state survives recomputation', () => {
   });
 });
 
+describe('BR-22 purchased lines on screen', () => {
+  it('lists a ticked line after every aisle and keeps the BR-18 groups intact', async () => {
+    const tomatoId = await seededIngredientId(harness, 'Tomato');
+    const creamId = await seededIngredientId(harness, 'Cream');
+    await planRecipe('Soup', [
+      { ingredientId: tomatoId, quantity: { amount: 500, unit: 'g' } },
+      { ingredientId: creamId, quantity: { amount: 100, unit: 'g' } },
+    ]);
+    const key = `ingredient:${tomatoId}:g`;
+
+    await harness.services.shoppingList.setPurchased(key, true);
+
+    const snapshot = await harness.services.shoppingList.getSnapshot();
+    expect(snapshot.layout.aisles.map((group) => group.categoryName)).toEqual(['Dairy']);
+    expect(snapshot.layout.purchased.map((line) => line.key)).toEqual([key]);
+    expect(snapshot.groups.map((group) => group.categoryName)).toEqual(['Produce', 'Dairy']);
+  });
+});
+
 describe('BR-07 eaten meals leave the shopping list', () => {
   it('drops the ingredients of an eaten meal', async () => {
     const tomatoId = await seededIngredientId(harness, 'Tomato');

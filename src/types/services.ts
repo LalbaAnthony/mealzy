@@ -11,7 +11,13 @@ import type {
 import type { Category, Ingredient } from './ingredient';
 import type { MealPlanned, MealSlot } from './meal';
 import type { Recipe } from './recipe';
-import type { AdHocItem, ShoppingLine, ShoppingListGroup, Staple } from './shopping';
+import type {
+  AdHocItem,
+  ShoppingLine,
+  ShoppingListGroup,
+  ShoppingListLayout,
+  Staple,
+} from './shopping';
 import type { Quantity } from './units';
 import type { DomainResult } from './validation';
 import type { BackupExport } from './backup';
@@ -60,6 +66,7 @@ export interface AdHocItemDraft {
 
 export interface ShoppingListSnapshot {
   readonly groups: readonly ShoppingListGroup[];
+  readonly layout: ShoppingListLayout;
   readonly lines: readonly ShoppingLine[];
   readonly purchasedCount: number;
   readonly totalCount: number;

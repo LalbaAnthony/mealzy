@@ -8,6 +8,7 @@ browser API dependency. It is covered to 100 percent branch coverage.
 
 - `aggregateShoppingList(input)` produces the lines.
 - `groupShoppingList(input)` groups and orders them for display (BR-18).
+- `layoutShoppingList(groups)` moves purchased lines out of their aisle for the shopping view (BR-22).
 - `buildShoppingListText(input)` renders the plain text export (BR-19).
 
 ## Inputs
@@ -141,3 +142,9 @@ when the category no longer exists. Groups are ordered by `Category.sortOrder`, 
 forced last regardless of its sort order, and ties broken by category name. Within a group, lines are
 ordered alphabetically by label using a case-insensitive English collation, with the line key as a
 deterministic tie-breaker.
+
+## Purchased lines on screen
+
+`layoutShoppingList` takes the BR-18 groups and splits them for the shopping view (BR-22). `aisles` holds every group with its purchased lines removed, and drops a group that is left with no line. `purchased` holds the purchased lines of every group, concatenated in group order, so they are already ordered by aisle and then by label without a second sort.
+
+The snapshot carries both the BR-18 `groups` and this `layout`. The export (BR-19) reads `groups` and the counts read `lines`; only the shopping view reads `layout`. Purchased state itself is untouched: a line is in `purchased` because its key is in the persisted set, exactly as in step 8 above.
