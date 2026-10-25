@@ -42,6 +42,7 @@ const formDate = ref('');
 const formSlot = ref('');
 
 const hasRecipes = computed(() => recipes.recipes.length > 0);
+const canSubmitPlan = computed(() => hasRecipes.value && formRecipeId.value !== '');
 
 function toSlot(value: string): MealSlot | null {
   if (value === 'lunch' || value === 'dinner') {
@@ -61,7 +62,7 @@ function onFilterChange(value: string): void {
 }
 
 function openPlanDialog(): void {
-  formRecipeId.value = recipes.recipeOptions[0]?.value ?? '';
+  formRecipeId.value = '';
   formDate.value = '';
   formSlot.value = '';
   planDialogOpen.value = true;
@@ -178,6 +179,7 @@ onMounted(async () => {
         v-if="hasRecipes"
         v-model="formRecipeId"
         label="Recipe"
+        placeholder="Choose a recipe"
         :options="recipes.recipeOptions"
       />
       <p v-else>There are no recipes yet. Create one from the Recipes tab first.</p>
@@ -185,7 +187,7 @@ onMounted(async () => {
       <MdSelect v-model="formSlot" label="Slot" :options="slotOptions" />
       <template #actions>
         <MdButton variant="text" @click="planDialogOpen = false">Cancel</MdButton>
-        <MdButton :disabled="!hasRecipes" @click="submitPlan">Plan</MdButton>
+        <MdButton :disabled="!canSubmitPlan" @click="submitPlan">Plan</MdButton>
       </template>
     </MdDialog>
 

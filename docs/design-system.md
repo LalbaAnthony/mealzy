@@ -123,6 +123,10 @@ Behaviour worth knowing before changing it:
 The field shows the selected label while closed and empties for the search while open, keeping the
 selection visible as the placeholder so it is never lost from view.
 
+A required select opens empty. `MealsView` does not pre-select the first recipe, `IngredientsView` does not pre-select the first aisle for a new ingredient, and `ShoppingListView` does not pre-select an aisle for a one-off item. Pre-selecting whatever happened to sort first is a guess the user never made, and it is indistinguishable from a deliberate choice, so it is silently accepted on submit. The field instead shows a `placeholder` naming the choice, and the dialog's confirming action is disabled while the value is empty, which is the only way an empty required select can be expressed: `MdSelect` has no empty option to fall back on, and submitting one would surface `meal-recipe-unknown` or `ingredient-category-unknown`, both of which describe a deleted record rather than an unanswered question.
+
+Editing is unaffected: an existing ingredient opens on its own aisle. The empty state belongs to creation only.
+
 Two details exist for the sake of `MdDialog` and must survive any rewrite. Escape calls
 `stopPropagation` while the list is open, otherwise closing the list would also close the dialog
 around it. The list is teleported to `body` and positioned against the field's bounding rectangle,
@@ -186,26 +190,13 @@ them, and in that case the FAB has to be the one on top.
 
 ### Dialog placement
 
-`MdDialog` is a top sheet below 840px and a centred card from 840px, the same breakpoint at which the
-navigation becomes a rail. Below it the surface is full bleed and flush with the top edge: the scrim
-carries no padding, the surface drops its `26rem` cap, and only the bottom two corners stay
-`extra-large`. From 840px the scrim recovers its padding and centres the surface, which recovers both
-the width cap and the full corner radius.
+`MdDialog` is a top sheet below 840px and a centred card from 840px, the same breakpoint at which the navigation becomes a rail. Below it the surface is full bleed and flush with the top edge: the scrim carries no padding, the surface drops its `26rem` cap, and only the bottom two corners stay `extra-large`. From 840px the scrim recovers its padding and centres the surface, which recovers both the width cap and the full corner radius.
 
-The reason is the soft keyboard. A centred dialog on a phone is pushed into the lower half of the
-screen, where the keyboard then covers the fields being filled, and the title can leave the viewport
-entirely. Anchoring to the top keeps the first fields above the keyboard whatever its height, without
-the component having to measure anything. The `90vh` cap is deliberately unchanged: it is a cap on
-the layout viewport, so long content still scrolls inside the surface rather than off screen.
+The reason is the soft keyboard. A centred dialog on a phone is pushed into the lower half of the screen, where the keyboard then covers the fields being filled, and the title can leave the viewport entirely. Anchoring to the top keeps the first fields above the keyboard whatever its height, without the component having to measure anything. The `90vh` cap is deliberately unchanged: it is a cap on the layout viewport, so long content still scrolls inside the surface rather than off screen.
 
-`env(safe-area-inset-top)` is absorbed by the surface's own `padding-block-start`, not by the scrim,
-so the dialog background fills the status bar strip instead of leaving a band of scrim above a sheet
-that is supposed to be flush.
+`env(safe-area-inset-top)` is absorbed by the surface's own `padding-block-start`, not by the scrim, so the dialog background fills the status bar strip instead of leaving a band of scrim above a sheet that is supposed to be flush.
 
-Two consequences to keep in mind. There is less scrim left to click, so Escape and an explicit
-cancel action stay the only reliable ways out on a phone and every dialog must offer one. And because
-`MdSelect` places its teleported list below the field unless there is more room above, a top-anchored
-dialog makes below the usual choice, which is the direction that reads naturally.
+Two consequences to keep in mind. There is less scrim left to click, so Escape and an explicit cancel action stay the only reliable ways out on a phone and every dialog must offer one. And because `MdSelect` places its teleported list below the field unless there is more room above, a top-anchored dialog makes below the usual choice, which is the direction that reads naturally.
 
 ## Icons
 

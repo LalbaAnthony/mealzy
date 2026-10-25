@@ -27,6 +27,8 @@ const adHocLabel = ref('');
 const adHocAmount = ref('');
 const adHocCategoryId = ref('');
 
+const canSubmitAdHoc = computed(() => adHocCategoryId.value !== '');
+
 const summary = computed(
   () => `${String(shopping.remainingCount)} left of ${String(shopping.snapshot.totalCount)} items`,
 );
@@ -54,7 +56,7 @@ function sourceLabels(line: ShoppingLine): string[] {
 function openAdHocDialog(): void {
   adHocLabel.value = '';
   adHocAmount.value = '';
-  adHocCategoryId.value = catalogue.categoryOptions[0]?.value ?? '';
+  adHocCategoryId.value = '';
   adHocDialogOpen.value = true;
 }
 
@@ -171,10 +173,15 @@ onMounted(async () => {
     <MdDialog :open="adHocDialogOpen" title="Add a one-off item" @close="adHocDialogOpen = false">
       <MdTextField v-model="adHocLabel" label="Item" placeholder="Toilet paper" required />
       <MdTextField v-model="adHocAmount" label="How many" type="number" min="0" step="any" />
-      <MdSelect v-model="adHocCategoryId" label="Aisle" :options="catalogue.categoryOptions" />
+      <MdSelect
+        v-model="adHocCategoryId"
+        label="Aisle"
+        placeholder="Choose an aisle"
+        :options="catalogue.categoryOptions"
+      />
       <template #actions>
         <MdButton variant="text" @click="adHocDialogOpen = false">Cancel</MdButton>
-        <MdButton @click="submitAdHoc">Add</MdButton>
+        <MdButton :disabled="!canSubmitAdHoc" @click="submitAdHoc">Add</MdButton>
       </template>
     </MdDialog>
 

@@ -31,6 +31,7 @@ const ingredientDialogTitle = computed(() =>
 const categoryDialogTitle = computed(() =>
   editingCategoryId.value === null ? 'Add an aisle' : 'Rename aisle',
 );
+const canSubmitIngredient = computed(() => ingredientCategoryId.value !== '');
 
 function isReserved(category: Category): boolean {
   return category.id === UNCATEGORIZED_CATEGORY_ID;
@@ -39,8 +40,7 @@ function isReserved(category: Category): boolean {
 function openIngredientDialog(ingredient: Ingredient | null): void {
   editingIngredientId.value = ingredient?.id ?? null;
   ingredientName.value = ingredient?.name ?? '';
-  ingredientCategoryId.value =
-    ingredient?.categoryId ?? catalogue.categoryOptions[0]?.value ?? UNCATEGORIZED_CATEGORY_ID;
+  ingredientCategoryId.value = ingredient?.categoryId ?? '';
   ingredientDialogOpen.value = true;
 }
 
@@ -187,10 +187,15 @@ onMounted(async () => {
       @close="ingredientDialogOpen = false"
     >
       <MdTextField v-model="ingredientName" label="Name" required />
-      <MdSelect v-model="ingredientCategoryId" label="Aisle" :options="catalogue.categoryOptions" />
+      <MdSelect
+        v-model="ingredientCategoryId"
+        label="Aisle"
+        placeholder="Choose an aisle"
+        :options="catalogue.categoryOptions"
+      />
       <template #actions>
         <MdButton variant="text" @click="ingredientDialogOpen = false">Cancel</MdButton>
-        <MdButton @click="submitIngredient">Save</MdButton>
+        <MdButton :disabled="!canSubmitIngredient" @click="submitIngredient">Save</MdButton>
       </template>
     </MdDialog>
 
